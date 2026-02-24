@@ -14,9 +14,9 @@
 Want to see more about the wedding?: [Here are the photos!](https://idanhassonphotographer.pic-time.com/-2207)
 
 ### 🎥 The Wedding Video
-*(Click to watch!)*
+*(Click to watch on YouTube!)*
 <br>
-[![Watch the Wedding Video](https://img.youtube.com/vi/bKf9_9C-JPE/maxresdefault.jpg)](https://youtu.be/bKf9_9C-JPE)
+[![Watch the Wedding Video](https://img.youtube.com/vi/bKf9_9C-JPE/0.jpg)](https://youtu.be/bKf9_9C-JPE)
 
 ## 📖 The Concept
 Why send a boring paper invitation when you can make your guests work for it? 
