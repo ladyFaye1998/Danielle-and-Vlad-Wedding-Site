@@ -1,0 +1,236 @@
+@import url('spoon.css');
+@import url('cup.css');
+@import url('kettle.css');
+@import url('clock.css');
+
+
+/* Left Section - Window and Shelf with Dynamic Positioning */
+.main__left {
+    grid-area: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    height: 100%;
+}
+
+/* Window positioned correctly */
+.main__left__window {
+    position: absolute;
+    top: 15%; /* Start at 15% from top */
+    height: 55%; /* Take up space to 70% */
+    width: 500px;
+    border: 12px solid #a87c5b;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.main__left__window__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../assets/window-bg.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    animation: window-light 60s infinite;
+}
+
+/* IMPROVED: Larger, more visible shelf with proper depth effect */
+.main__left__shelf {
+    position: absolute;
+    bottom: 0; /* Position at bottom */
+    width: 450px; /* Made wider */
+    height: 90px; /* Made thicker for visibility */
+    background: linear-gradient(to bottom, #a87c5b, #8b5a2b); /* Wood-like gradient */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3), 0 -1px 3px rgba(0, 0, 0, 0.1); /* Better shadow for depth */
+    z-index: 5; /* Positioned between the wall and items */
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px 2px 0 0; /* Slight rounding on top edges */
+    border-bottom: 3px solid #6b4226; /* Darker bottom border for depth */
+}
+
+/* Add a support bracket for the shelf */
+.main__left__shelf::before,
+.main__left__shelf::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 30px;
+    bottom: 0;
+    background: linear-gradient(135deg, #8b5a2b 0%, #8b5a2b 50%, transparent 50%, transparent 100%);
+    z-index: 4;
+}
+
+.main__left__shelf::before {
+    left: 50px;
+    transform: translateY(50%);
+}
+
+.main__left__shelf::after {
+    right: 50px;
+    transform: translateY(50%) scaleX(-1);
+}
+
+/* IMPROVED: Position items ON the shelf rather than above it */
+.shelf__items {
+    position: absolute;
+    bottom: 25px; /* Position at the top of the shelf */
+    width: 390px; /* Wider to accommodate all items properly */
+    height: 90px;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    z-index: 6; /* Higher z-index than shelf */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0 10px;
+}
+
+/* Books stand upright on the shelf */
+.shelf-book {
+    width: 28px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 2px 2px 0 0;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    transform-origin: bottom center;
+    z-index: 7; /* Ensure books are above shelf */
+}
+
+.shelf-book:hover {
+    transform: translateY(-5px);
+}
+
+.shelf-book--book1 {
+    height: 150px;
+    background-image: url('../assets/book1-spine.jpg');
+}
+
+.shelf-book--book2 {
+    height: 140px;
+    background-image: url('../assets/book2-spine.jpg');
+}
+
+.shelf-book--book3 {
+    height: 130px;
+    background-image: url('../assets/book3-spine.jpg');
+}
+
+.shelf-art {
+    height: 120px;
+    width: 100px;
+    background: #f5f5f5;
+    border: 4px solid #a1887f;
+    border-radius: 2px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    background-image: url('../assets/shelf-art.png');
+    background-size: cover;
+    background-position: center;
+    transform-origin: bottom center;
+    transition: transform 0.3s ease;
+    z-index: 7; /* Ensure art is above shelf */
+}
+
+.shelf-art:hover {
+    transform: scale(1.05);
+}
+
+/* Add subtle shadow below items to enhance the "sitting on shelf" effect */
+.shelf-book::after,
+.shelf-art::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 2px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    filter: blur(1px);
+}
+
+/* UNIVERSAL PLANT FIX - works for all possible HTML structures */
+/* Target the plant by class regardless of location */
+.main__left__plant {
+    display: block !important;
+    height: 180px !important;
+    width: 150px !important;
+    transform: scale(2.5) !important;
+    transform-origin: bottom center !important;
+    margin-bottom: 5px !important;
+    z-index: 7 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* If plant is inside shelf__items */
+.shelf__items .main__left__plant,
+.shelf__items > *:last-child {
+    transform: scale(2.2) !important;
+    margin-bottom: 5px !important;
+    position: static !important;
+}
+
+/* If plant is outside shelf__items, position it absolutely */
+.main__left > .main__left__plant:not(.shelf__items .main__left__plant) {
+    position: absolute !important;
+    bottom: 25px !important;
+    right: 40px !important;
+}
+
+/* Target any plants with svg, img or other elements inside */
+.main__left__plant svg,
+.main__left__plant img,
+.shelf__items > *:last-child svg,
+.shelf__items > *:last-child img {
+    height: 100% !important;
+    width: 100% !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Media queries for responsiveness */
+@media screen and (max-width: 1200px) {
+    .main__left__window {
+        width: 450px;
+    }
+
+    .main__left__shelf {
+        width: 380px;
+    }
+
+    .shelf__items {
+        width: 340px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .main__left__window {
+        width: 400px;
+    }
+
+    .main__left__shelf {
+        width: 350px;
+    }
+
+    .shelf__items {
+        width: 310px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .main__left {
+        display: none;
+    }
+}

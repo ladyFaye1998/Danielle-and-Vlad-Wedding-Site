@@ -1,0 +1,152 @@
+/* Cup container & hover */
+.main__cup {
+    position: absolute;
+    bottom: 15%;
+    right: 160px;
+    width: 150px;
+    height: 170px;
+    z-index: 15;
+    transition: transform 0.3s ease;
+}
+.main__cup:hover {
+    transform: translateY(-5px) scale(1.02);
+}
+
+/* Cup body: revert to original linear-gradient colors */
+.main__cup__body {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, #ffffff, #f7f7f7);
+    border-radius: 10px 10px 75px 75px;
+    box-shadow:
+            5px 5px 15px rgba(0, 0, 0, 0.15),
+            inset 1px 1px 5px rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+}
+/* Gentle rim sheen (unchanged) */
+.main__cup__body::before {
+    content: '';
+    position: absolute;
+    top: 6px; left: 6px; right: 6px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    filter: blur(4px);
+}
+
+/* Handle: keep original border-only look */
+.main__cup__handle {
+    position: absolute;
+    top: 30px;
+    right: -30px;
+    width: 30px;
+    height: 50px;
+    border: 8px solid #e0e0e0;
+    border-left: none;
+    border-radius: 0 30px 30px 0;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+    background: transparent;
+}
+
+/* Saucer (“base”): moved 30px left and original gradient */
+.main__cup__saucer {
+    position: absolute;
+    right: -20px;        /* was -50px, now 30px further left */
+    margin-top: -10px;
+    width: 190px;
+    height: 20px;
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
+    border-radius: 50%;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15);
+}
+/* Saucer gloss stripe (unchanged) */
+.main__cup__saucer::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    width: 60%;
+    height: 3px;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    filter: blur(2px);
+}
+
+/* Liquid: revert to original solid color */
+.main__cup__liquid {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0%;
+    background-color: rgba(26, 188, 156, 0.6);
+    box-shadow: inset 0px 5px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 75px 75px;
+    transition: height 2s, background-color 2s;
+}
+.main__cup__liquid::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: rotate(15deg);
+}
+
+/* Tea leaves (unchanged) */
+.main__cup__tea_leaves {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow: hidden;
+    z-index: 2;
+    transition: height 1.5s;
+}
+.main__cup__tea_leaves span {
+    width: 6px;
+    height: 12px;
+    margin: 3px;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 2s;
+    transform: rotate(var(--rotation));
+}
+.main__cup__tea_leaves span:nth-child(1)  { --rotation:  15deg; }
+.main__cup__tea_leaves span:nth-child(2)  { --rotation:  30deg; }
+.main__cup__tea_leaves span:nth-child(3)  { --rotation: -15deg; }
+.main__cup__tea_leaves span:nth-child(4)  { --rotation: -30deg; }
+.main__cup__tea_leaves span:nth-child(5)  { --rotation:  45deg; }
+.main__cup__tea_leaves span:nth-child(6)  { --rotation: -45deg; }
+.main__cup__tea_leaves span:nth-child(7)  { --rotation:  60deg; }
+.main__cup__tea_leaves span:nth-child(8)  { --rotation: -60deg; }
+.main__cup__tea_leaves span:nth-child(9)  { --rotation:  75deg; }
+.main__cup__tea_leaves span:nth-child(10) { --rotation: -75deg; }
+.main__cup__tea_leaves span:nth-child(11) { --rotation:  90deg; }
+.main__cup__tea_leaves span:nth-child(12) { --rotation: -90deg; }
+.main__cup__tea_leaves span:nth-child(13) { --rotation:   0deg; }
+.main__cup__tea_leaves span:nth-child(14) { --rotation:  45deg; }
+.main__cup__tea_leaves span:nth-child(15) { --rotation: -45deg; }
+
+/* Herbs & sweeteners (unchanged) */
+.main__cup__herbs,
+.main__cup__sweeteners {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow: hidden;
+    z-index: 3;
+    transition: height 1.5s;
+    animation: float-in-liquid 8s infinite ease-in-out;
+}

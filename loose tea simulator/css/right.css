@@ -1,0 +1,409 @@
+/* Right Section - Tea Jars, Herbs, and Sweeteners */
+.main__right {
+    grid-area: right;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 20px;
+    height: 100%;
+}
+
+/* Tea Shelf */
+/* Tea Shelf */
+.main__right__shelf,
+.main__right__herbs_shelf,
+.main__right__sweeteners_shelf {
+    position: relative;
+    top: 170px;    /* moves the shelf 20px lower */
+    left: -30px;  /* shifts the shelf 30px to the left */
+    width: 300px;
+    height: 30px;
+    background: linear-gradient(to bottom, #a87c5b, #8d6e63);
+    margin: 0 auto 25px;
+    border-radius: 2px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Tea Jars */
+.main__right__tea_jars {
+    width: 300px;
+    height: 100px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: -20px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 10;
+    transform: translateY(-15px);
+}
+
+.main__right__tea_jars__jar {
+    width: 50px;
+    height: 90px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px 5px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    transform: translateY(-15px);
+}
+
+.main__right__tea_jars__jar:hover {
+    transform: translateY(-5px);
+}
+
+.main__right__tea_jars__jar__lid {
+    width: 56px;
+    height: 15px;
+    background: linear-gradient(to bottom, #8d6e63, #6d4c41);
+    border-radius: 5px 5px 0 0;
+    position: absolute;
+    top: -15px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.main__right__tea_jars__jar__content {
+    width: 45px;
+    height: 75px;
+    position: absolute;
+    bottom: 10px;
+    border-radius: 0 0 15px 15px;
+    box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.main__right__tea_jars__jar__label {
+    position: absolute;
+    width: 40px;
+    height: 25px;
+    background-color: #f0e6d2;
+    border: 1px solid #b39275;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 35px;
+    font-size: 10px;
+    font-family: 'Playfair Display', serif;
+    color: #513b2e;
+    transform: rotate(-5deg);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Herbs Container */
+.main__right__herbs {
+    width: 300px;
+    height: 90px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: -15px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 10;
+    transform: translateY(-15px);
+}
+
+.main__right__herbs__item {
+    width: 40px;
+    height: 70px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    transform: translateY(-15px);
+}
+
+.main__right__herbs__item:hover {
+    transform: translateY(-5px);
+}
+
+.main__right__herbs__item__content {
+    width: 36px;
+    height: 50px;
+    position: absolute;
+    bottom: 8px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main__right__herbs__item__label {
+    position: absolute;
+    width: 35px;
+    height: 18px;
+    background-color: #f0e6d2;
+    border: 1px solid #b39275;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 15px;
+    font-size: 8px;
+    font-family: 'Playfair Display', serif;
+    color: #513b2e;
+    transform: rotate(-5deg);
+    z-index: 2;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Herb Visualizations */
+.herb-anise-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.herb-anise-icon svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.herb-cinnamon-icon {
+    width: 25px;
+    height: 10px;
+    background: linear-gradient(to right, #a1887f, #8d6e63);
+    border-radius: 5px;
+    position: relative;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.herb-cardamom-icon {
+    width: 15px;
+    height: 20px;
+    background: linear-gradient(to bottom, #8bc34a, #7cb342);
+    border-radius: 7px;
+    position: relative;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.herb-mint-icon {
+    width: 20px;
+    height: 25px;
+    position: relative;
+}
+
+.herb-mint-icon::before, .herb-mint-icon::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 15px;
+    background: linear-gradient(to bottom, #66bb6a, #4caf50);
+    border-radius: 50%;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.herb-mint-icon::before {
+    top: 0;
+    left: 0;
+}
+
+.herb-mint-icon::after {
+    top: 8px;
+    right: 0;
+}
+
+.herb-ginger-icon {
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(to bottom, #ffcc80, #ffb74d);
+    border-radius: 5px;
+    transform: rotate(45deg);
+    position: relative;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Sweeteners Container */
+.main__right__sweeteners {
+    width: 300px;
+    height: 90px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: -15px;
+    position: relative;
+    z-index: 10;
+    transform: translateY(-15px);
+}
+
+.main__right__sweeteners__item {
+    width: 40px;
+    height: 70px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    transform: translateY(-15px);
+}
+
+.main__right__sweeteners__item:hover {
+    transform: translateY(-5px);
+}
+
+.main__right__sweeteners__item__content {
+    width: 36px;
+    height: 50px;
+    position: absolute;
+    bottom: 8px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main__right__sweeteners__item__label {
+    position: absolute;
+    width: 35px;
+    height: 18px;
+    background-color: #f0e6d2;
+    border: 1px solid #b39275;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 15px;
+    font-size: 8px;
+    font-family: 'Playfair Display', serif;
+    color: #513b2e;
+    transform: rotate(-5deg);
+    z-index: 2;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Sweetener Icons */
+.sweetener-honey-icon {
+    width: 20px;
+    height: 25px;
+    background: linear-gradient(to bottom, #ffca28, #ffa000);
+    border-radius: 10px 10px 5px 5px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.sweetener-sugar-icon {
+    width: 20px;
+    height: 20px;
+    position: relative;
+}
+
+.sweetener-sugar-icon::before, .sweetener-sugar-icon::after {
+    content: '';
+    position: absolute;
+    background: linear-gradient(to bottom right, #ffffff, #e0e0e0);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.sweetener-sugar-icon::before {
+    width: 12px;
+    height: 12px;
+    top: 0;
+    left: 4px;
+    transform: rotate(45deg);
+}
+
+.sweetener-sugar-icon::after {
+    width: 8px;
+    height: 8px;
+    bottom: 0;
+    left: 6px;
+    transform: rotate(45deg);
+}
+
+/* Fixed maple and agave sweetener icons */
+.sweetener-maple-icon {
+    width: 20px;
+    height: 25px;
+    background: linear-gradient(to bottom, #8d6e63, #6d4c41);
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.sweetener-maple-icon::before {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: linear-gradient(to bottom, #a1887f, #8d6e63);
+    top: 5px;
+    left: 2.5px;
+    border-radius: 3px;
+}
+
+.sweetener-agave-icon {
+    width: 20px;
+    height: 25px;
+    position: relative;
+}
+
+.sweetener-agave-icon::before {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 20px;
+    background: linear-gradient(to bottom, #81c784, #66bb6a);
+    border-radius: 7.5px 7.5px 3px 3px;
+    top: 0;
+    left: 2.5px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Herbal tea elements */
+.herbal-tea-element {
+    width: 8px;
+    height: 12px;
+    background: #b48dac; /* Lavender color */
+    border-radius: 4px;
+    position: absolute;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.lavender-piece {
+    width: 6px;
+    height: 10px;
+    background: linear-gradient(to bottom, #b48dac, #d1a7c7);
+    border-radius: 3px;
+    position: absolute;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.main__right__tea_jars,
+.main__right__herbs,
+.main__right__sweeteners {
+    position: relative;
+    top: 85px;    /* move the whole row 20px lower */
+    left: -30px;  /* shift the whole row 30px to the left */
+}
+
+/* Base “pop-up” height – just enough so it looks like it’s hanging off the shelf */
+.main__right__tea_jars__jar,
+.main__right__herbs__item,
+.main__right__sweeteners__item {
+    transform: translateY(17px);
+    transition: transform 0.2s ease;
+}
+
+/* Hover: tiny 2px additional lift */
+.main__right__tea_jars__jar:hover,
+.main__right__herbs__item:hover,
+.main__right__sweeteners__item:hover {
+    transform: translateY(18px);
+}
+
+

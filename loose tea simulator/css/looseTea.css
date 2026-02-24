@@ -1,0 +1,94 @@
+/* Main Styles for Loose Tea Simulator */
+
+@import url('left.css');
+@import url('right.css');
+@import url('center.css');
+@import url('board.css');
+@import url('responsivity.css');
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Playfair Display', serif;
+    color: #513b2e;
+    background-color: #f5e9dc;
+}
+
+/* Typography */
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: #513b2e;
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+h2 {
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Playfair Display', serif;
+    color: #513b2e;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+p {
+    line-height: 1.6;
+    color: #513b2e;
+    font-family: 'Playfair Display', serif;
+}
+
+/* Main Layout */
+.main {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.7fr;
+    grid-template-areas: "left center right";
+    width: 100vw;
+    height: 65vh;
+    overflow: hidden;                  /* hide the floor overflow */
+
+    /* Layered wall texture + bottom gradient for depth */
+    background-color: #f4e0c1;         /* fallback warm tone */
+    background-image:
+            url('../assets/wall.jpg'),      /* your wall texture */
+            linear-gradient(to bottom, rgba(0,0,0,0) 60%, rgba(0,0,0,0.1) 100%);
+    background-size: cover, cover;
+    background-position: center 30%, center bottom;
+    background-repeat: no-repeat, no-repeat;
+
+    box-shadow: inset 0 -5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* “Floor” strip at the bottom */
+.main::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+    height: 35%;                       /* adjust how tall the floor appears */
+    background:
+            url('../assets/wood-floor-texture.jpg') repeat-x center top;
+    background-size: auto 100%;        /* tile horizontally, scale vertically */
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Make sure your three columns stack above the floor */
+.main__left,
+.main__center,
+.main__right {
+    position: relative;
+    z-index: 1;
+    transform: translateX(-20px);
+}
+
+
+
+
+
+
+
+

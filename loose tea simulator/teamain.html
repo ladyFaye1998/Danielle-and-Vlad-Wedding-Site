@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Loose Tea Simulator</title>
+    <link rel="icon" type="image/png" href="../assets/crest.png" />
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/looseTea.css">
+    <link rel="stylesheet" href="css/board.css">
+    <link rel="stylesheet" href="css/left.css">
+
+    <!-- Tailwind + Fonts with Extended Language Support -->
+    <script src="https://cdn.tailwindcss.com/3.4.4"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { ink: "#2e3238", honey: "#d6c09c", parchment: "#faf8f5" },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', "serif"],
+                        body: ['"Merriweather Sans"', "sans-serif"],
+                        script: ['"Dancing Script"', "cursive"],
+                        hebrew: ['"Heebo"', '"Noto Sans Hebrew"', "sans-serif"],
+                        russian: ['"Inter"', '"Noto Sans"', "sans-serif"]
+                    }
+                },
+            },
+        };
+    </script>
+
+    <!-- Google Fonts with Extended Language Support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Merriweather+Sans:wght@400;500&family=Dancing+Script:wght@600&family=Heebo:wght@400;500;700&family=Inter:wght@400;500;700&family=Noto+Sans+Hebrew:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <style>
+        html {
+            background: #faf8f5;
+            scroll-padding-top: 4rem;
+            transition: font-family 0.3s ease;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--tw-body);
+            transition: direction 0.3s ease;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--tw-serif);
+            margin: 0;
+        }
+
+        /* Language-specific styles */
+        .lang-hebrew {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+            direction: rtl;
+        }
+
+        .lang-hebrew h1,
+        .lang-hebrew h2,
+        .lang-hebrew h3,
+        .lang-hebrew h4 {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+            font-weight: 700;
+        }
+
+        .lang-hebrew .font-script {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+            font-style: normal;
+        }
+
+        .lang-russian {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            direction: ltr;
+        }
+
+        .lang-russian h1,
+        .lang-russian h2,
+        .lang-russian h3,
+        .lang-russian h4 {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            font-weight: 700;
+        }
+
+        .lang-russian .font-script {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            font-style: italic;
+        }
+
+        .link {
+            position: relative;
+            padding-bottom: 2px;
+            transition: .3s;
+        }
+
+        .link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 1px;
+            background: #d6c09c;
+            transform: scaleX(0);
+            transition: .3s;
+        }
+
+        .link:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* RTL adjustments */
+        [dir="rtl"] .link::after {
+            right: 0;
+            left: 0;
+        }
+
+        /* Fixed navbar */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: #faf8f5;
+            border-bottom: 1px solid #d6c09c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 2rem;
+        }
+
+        /* RTL navbar adjustments */
+        [dir="rtl"] .top-navbar {
+            flex-direction: row-reverse;
+        }
+
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-logo img {
+            height: 2rem;
+        }
+
+        .navbar-logo span {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+        }
+
+        html[lang="he"] .navbar-logo span {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+        }
+
+        html[lang="ru"] .navbar-logo span {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .navbar-link {
+            font-family: 'Merriweather Sans', sans-serif;
+            font-weight: 500;
+            color: #2e3238;
+            position: relative;
+        }
+
+        html[lang="he"] .navbar-link {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+        }
+
+        html[lang="ru"] .navbar-link {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+        }
+
+        /* Mobile menu */
+        .mobile-burger {
+            display: none;
+        }
+
+        /* Media queries */
+        @media (max-width: 768px) {
+            .navbar-links {
+                display: none;
+            }
+
+            .mobile-burger {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                cursor: pointer;
+            }
+
+            .mobile-burger span {
+                width: 24px;
+                height: 2px;
+                background-color: #2e3238;
+            }
+        }
+
+        /* Mobile menu dropdown */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 4rem;
+            right: 2rem;
+            background: white;
+            border: 1px solid #d6c09c;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* RTL mobile menu adjustment */
+        [dir="rtl"] .mobile-menu {
+            right: auto;
+            left: 2rem;
+        }
+
+        .mobile-menu.show {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: #2e3238;
+        }
+
+        .mobile-menu a:hover {
+            color: #d6c09c;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            html {
+                scroll-padding-top: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased bg-parchment text-ink">
+
+<!-- NAVBAR WITH MULTILINGUAL SUPPORT -->
+<div class="top-navbar">
+    <!-- Logo on left -->
+    <div class="navbar-logo">
+        <img src="../assets/crest.png" alt="Crest logo">
+        <span>D &amp; V</span>
+    </div>
+
+    <!-- Desktop navigation links -->
+    <div class="navbar-links">
+        <a href="../prologue.html" class="navbar-link link" data-nav-key="prologue">Prologue</a>
+        <a href="../index.html#quests" class="navbar-link link" data-nav-key="quests">Quests</a>
+        <a href="../index.html#ceremony" class="navbar-link link" data-nav-key="ceremony">Ceremony</a>
+        <a href="../index.html#travel" class="navbar-link link" data-nav-key="travel">Travel</a>
+        <a href="../index.html#rsvp" class="navbar-link link" data-nav-key="rsvp">RSVP</a>
+    </div>
+
+    <!-- Mobile burger menu -->
+    <div class="mobile-burger" id="mobile-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+
+<!-- Mobile menu dropdown -->
+<div class="mobile-menu" id="mobile-menu">
+    <a href="../prologue.html" data-nav-key="prologue">Prologue</a>
+    <a href="../index.html#quests" data-nav-key="quests">Quests</a>
+    <a href="../index.html#ceremony" data-nav-key="ceremony">Ceremony</a>
+    <a href="../index.html#travel" data-nav-key="travel">Travel</a>
+    <a href="../index.html#rsvp" data-nav-key="rsvp">RSVP</a>
+</div>
+
+<!-- Original tea simulator content -->
+<div id="main-container"></div>
+<div id="board-container"></div>
+
+<script>
+    // ────────────────────────────────────────────────────────────────
+    // Language Management
+    // ────────────────────────────────────────────────────────────────
+
+    class TeaSimulatorLanguageManager {
+        constructor() {
+            this.currentLang = 'en';
+            this.navTranslations = {
+                en: {
+                    prologue: "Prologue",
+                    quests: "Quests",
+                    ceremony: "Ceremony",
+                    travel: "Travel",
+                    rsvp: "RSVP"
+                },
+                ru: {
+                    prologue: "Пролог",
+                    quests: "Квесты",
+                    ceremony: "Церемония",
+                    travel: "Путешествие",
+                    rsvp: "RSVP"
+                },
+                he: {
+                    prologue: "פרולוג",
+                    quests: "חידות",
+                    ceremony: "טקס",
+                    travel: "נסיעה",
+                    rsvp: "אישור הגעה"
+                }
+            };
+            this.init();
+        }
+
+        init() {
+            // Check multiple sources for language preference
+            const urlLang = new URLSearchParams(window.location.search).get('lang');
+            const savedLang = sessionStorage.getItem('wedding-language');
+            const localLang = localStorage.getItem('wedding-language');
+
+            console.log('Tea Simulator language detection:', { urlLang, savedLang, localLang });
+
+            // Priority: URL parameter > sessionStorage > localStorage > default
+            if (urlLang && ['en', 'he', 'ru'].includes(urlLang)) {
+                this.currentLang = urlLang;
+            } else if (savedLang && ['en', 'he', 'ru'].includes(savedLang)) {
+                this.currentLang = savedLang;
+            } else if (localLang && ['en', 'he', 'ru'].includes(localLang)) {
+                this.currentLang = localLang;
+            }
+
+            this.applyLanguage();
+            this.setupLanguageObserver();
+            this.setupNavbarEvents();
+            console.log('Tea Simulator initialized with language:', this.currentLang);
+        }
+
+        applyLanguage() {
+            const html = document.documentElement;
+            const body = document.body;
+
+            // Set language and direction
+            html.lang = this.currentLang;
+
+            body.classList.remove('lang-hebrew', 'lang-russian');
+            html.classList.remove('lang-hebrew', 'lang-russian');
+
+            if (this.currentLang === 'he') {
+                html.dir = 'rtl';
+                body.style.direction = 'rtl';
+                body.classList.add('lang-hebrew');
+                html.classList.add('lang-hebrew');
+            } else {
+                html.dir = 'ltr';
+                body.style.direction = 'ltr';
+                if (this.currentLang === 'ru') {
+                    body.classList.add('lang-russian');
+                    html.classList.add('lang-russian');
+                }
+            }
+
+            // Update page title
+            const titles = {
+                en: 'Loose Tea Simulator',
+                he: 'סימולטור תה',
+                ru: 'Симулятор заваривания чая'
+            };
+            document.title = titles[this.currentLang] || titles.en;
+
+            // Update navbar translations
+            this.updateNavbar();
+        }
+
+        updateNavbar() {
+            const lang = this.currentLang;
+            const t = this.navTranslations[lang];
+
+            // Update all navigation elements
+            document.querySelectorAll('[data-nav-key]').forEach(element => {
+                const key = element.getAttribute('data-nav-key');
+                if (t[key]) {
+                    element.textContent = t[key];
+                }
+            });
+        }
+
+        setupNavbarEvents() {
+            // Mobile menu toggle
+            const burger = document.getElementById('mobile-burger');
+            const menu = document.getElementById('mobile-menu');
+            if (burger && menu) {
+                burger.addEventListener('click', () => {
+                    menu.classList.toggle('show');
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!burger.contains(e.target) && !menu.contains(e.target)) {
+                        menu.classList.remove('show');
+                    }
+                });
+
+                // Close menu when clicking a link
+                menu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        menu.classList.remove('show');
+                    });
+                });
+            }
+        }
+
+        setupLanguageObserver() {
+            // Poll for sessionStorage changes
+            let lastSessionLang = sessionStorage.getItem('wedding-language');
+            setInterval(() => {
+                const currentSessionLang = sessionStorage.getItem('wedding-language');
+                if (currentSessionLang && currentSessionLang !== lastSessionLang && currentSessionLang !== this.currentLang) {
+                    console.log('Tea Simulator detected language change:', currentSessionLang);
+                    this.setLanguage(currentSessionLang);
+                    lastSessionLang = currentSessionLang;
+                }
+            }, 1000);
+
+            // Listen for storage changes
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'wedding-language' && event.newValue) {
+                    this.setLanguage(event.newValue);
+                }
+            });
+        }
+
+        setLanguage(lang) {
+            if (['en', 'he', 'ru'].includes(lang) && lang !== this.currentLang) {
+                this.currentLang = lang;
+                this.applyLanguage();
+
+                // Also update the loaded sections
+                this.updateLoadedSections();
+            }
+        }
+
+        updateLoadedSections() {
+            const lang = this.currentLang;
+
+            // Define all translations for the tea simulator
+            const translations = {
+                en: {
+                    // Board section titles
+                    "title-brewing": "Brewing for the Bride",
+                    "title-choose-tea": "Choose Her Tea",
+                    "title-add-herbs": "Add Her Favorites",
+                    "title-add-sweetness": "Add Sweetness",
+                    "title-temperature": "Perfect Temperature",
+                    "title-time": "Brewing Time",
+                    "title-assessment": "Will She Approve?",
+
+                    // Board welcome text
+                    "welcome-text": "Dani looks anxious about the wedding preparations. She's quite particular about her tea - nothing calms her like the perfect cup. You'll need to create at least a 4-star blend to help settle her nerves. Choose the right tea type, add her favorite herbs, and brew at the perfect temperature and time. If it's not perfect, she might be too nervous to drink it. Let's create something special to help her relax. If you need help, please approach Saeriel, Veilwarden of Álfheimr, the dear wedding keeper. (i.e see support chat)",
+                    "start-brewing": "start brewing",
+
+                    // Tea types
+                    "green-tea": "Green Tea",
+                    "black-tea": "Black Tea",
+                    "oolong-tea": "Oolong Tea",
+                    "white-tea": "White Tea",
+                    "herbal-tea": "Herbal Tea",
+
+                    // Herbs
+                    "star-anise": "Star Anise",
+                    "cinnamon": "Cinnamon",
+                    "cardamom": "Cardamom",
+                    "mint": "Mint",
+                    "ginger": "Ginger",
+
+                    // Sweeteners
+                    "honey": "Honey",
+                    "sugar": "Sugar",
+                    "maple": "Maple",
+                    "agave": "Agave",
+
+                    // Temperature and time
+                    "water-temperature": "Water Temperature",
+                    "2-minutes": "2 Minutes",
+                    "3-minutes": "3 Minutes",
+                    "5-minutes": "5 Minutes",
+                    "light": "Light",
+                    "medium": "Medium",
+                    "strong": "Strong",
+
+                    // General
+                    "continue": "Continue",
+                    "assessment-text": "Let's see if your tea will calm the bride's nerves...",
+
+                    // Main section labels
+                    "green": "Green",
+                    "black": "Black",
+                    "oolong": "Oolong",
+                    "white": "White",
+                    "herbal": "Herbal",
+                    "anise": "Anise"
+                },
+
+                ru: {
+                    // Board section titles
+                    "title-brewing": "Завариваем для невесты",
+                    "title-choose-tea": "Выберите её чай",
+                    "title-add-herbs": "Добавьте её любимые травы",
+                    "title-add-sweetness": "Добавьте сладость",
+                    "title-temperature": "Идеальная температура",
+                    "title-time": "Время заваривания",
+                    "title-assessment": "Одобрит ли она?",
+
+                    // Board welcome text
+                    "welcome-text": "Дани беспокоится из-за подготовки к свадьбе. Она очень разборчива в чае - ничто не успокаивает её так, как идеальная чашка. Вам нужно создать смесь не менее чем на 4 звезды, чтобы успокоить её нервы. Выберите правильный тип чая, добавьте её любимые травы и заварите при идеальной температуре и времени. Если не получится идеально, она может быть слишком нервной, чтобы пить его. Давайте создадим что-то особенное, чтобы помочь ей расслабиться. Если нужна помощь, обратитесь к Саэриэль, Хранительнице Альвхейма, дорогой хранительнице свадьбы. (см. чат поддержки)",
+                    "start-brewing": "начать заваривание",
+
+                    // Tea types
+                    "green-tea": "Зелёный чай",
+                    "black-tea": "Чёрный чай",
+                    "oolong-tea": "Улун",
+                    "white-tea": "Белый чай",
+                    "herbal-tea": "Травяной чай",
+
+                    // Herbs
+                    "star-anise": "Бадьян",
+                    "cinnamon": "Корица",
+                    "cardamom": "Кардамон",
+                    "mint": "Мята",
+                    "ginger": "Имбирь",
+
+                    // Sweeteners
+                    "honey": "Мёд",
+                    "sugar": "Сахар",
+                    "maple": "Клён",
+                    "agave": "Агава",
+
+                    // Temperature and time
+                    "water-temperature": "Температура воды",
+                    "2-minutes": "2 минуты",
+                    "3-minutes": "3 минуты",
+                    "5-minutes": "5 минут",
+                    "light": "Лёгкий",
+                    "medium": "Средний",
+                    "strong": "Крепкий",
+
+                    // General
+                    "continue": "Продолжить",
+                    "assessment-text": "Посмотрим, успокоит ли ваш чай нервы невесты...",
+
+                    // Main section labels
+                    "green": "Зелёный",
+                    "black": "Чёрный",
+                    "oolong": "Улун",
+                    "white": "Белый",
+                    "herbal": "Травяной",
+                    "anise": "Бадьян"
+                },
+
+                he: {
+                    // Board section titles
+                    "title-brewing": "מכינים עבור הכלה",
+                    "title-choose-tea": "בחרו את התה שלה",
+                    "title-add-herbs": "הוסיפו את העשבים המועדפים עליה",
+                    "title-add-sweetness": "הוסיפו מתיקות",
+                    "title-temperature": "טמפרטורה מושלמת",
+                    "title-time": "זמן חליטה",
+                    "title-assessment": "האם היא תאשר?",
+
+                    // Board welcome text
+                    "welcome-text": "דני נראית חרדה מההכנות לחתונה. היא מאוד בררנית לגבי התה שלה - שום דבר לא מרגיע אותה כמו הכוס המושלמת. תצטרכו ליצור תערובת של לפחות 4 כוכבים כדי לעזור להרגיע את העצבים שלה. בחרו את סוג התה הנכון, הוסיפו את העשבים המועדפים עליה, וחלטו בטמפרטורה ובזמן המושלמים. אם זה לא יהיה מושלם, היא עלולה להיות מתוחה מדי כדי לשתות אותו. בואו ניצור משהו מיוחד כדי לעזור לה להירגע. אם אתם צריכים עזרה, אנא פנו לסאריאל, שומרת הסף של אלפהיימר, שומרת החתונה היקרה. (כלומר ראו צ'אט תמיכה)",
+                    "start-brewing": "התחלת חליטה",
+
+                    // Tea types
+                    "green-tea": "תה ירוק",
+                    "black-tea": "תה שחור",
+                    "oolong-tea": "תה אולונג",
+                    "white-tea": "תה לבן",
+                    "herbal-tea": "תה צמחים",
+
+                    // Herbs
+                    "star-anise": "אניס כוכב",
+                    "cinnamon": "קינמון",
+                    "cardamom": "הל",
+                    "mint": "נענע",
+                    "ginger": "זנגביל",
+
+                    // Sweeteners
+                    "honey": "דבש",
+                    "sugar": "סוכר",
+                    "maple": "מייפל",
+                    "agave": "אגבה",
+
+                    // Temperature and time
+                    "water-temperature": "טמפרטורת מים",
+                    "2-minutes": "2 דקות",
+                    "3-minutes": "3 דקות",
+                    "5-minutes": "5 דקות",
+                    "light": "קל",
+                    "medium": "בינוני",
+                    "strong": "חזק",
+
+                    // General
+                    "continue": "המשך",
+                    "assessment-text": "בואו נראה אם התה שלכם ירגיע את עצבי הכלה...",
+
+                    // Main section labels
+                    "green": "ירוק",
+                    "black": "שחור",
+                    "oolong": "אולונג",
+                    "white": "לבן",
+                    "herbal": "צמחים",
+                    "anise": "אניס"
+                }
+            };
+
+            const t = translations[lang];
+
+            // Update all elements with data-key attributes in loaded sections
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (t[key]) {
+                    element.textContent = t[key];
+                }
+            });
+        }
+
+        getCurrentLanguage() {
+            return this.currentLang;
+        }
+    }
+
+    // Initialize language manager
+    const langManager = new TeaSimulatorLanguageManager();
+    window.langManager = langManager;
+
+    // ────────────────────────────────────────────────────────────────
+    // Main Document Logic
+    // ────────────────────────────────────────────────────────────────
+
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log("Main document loaded - fetching sections");
+
+        // Load the main section
+        fetch('sections/main.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('main-container').innerHTML = html;
+                console.log("Main section loaded successfully");
+
+                // Add data-key attributes to the main section elements
+                setTimeout(() => {
+                    addDataKeysToMainSection();
+                    // Apply current language to newly loaded content
+                    langManager.updateLoadedSections();
+                }, 100);
+            })
+            .catch(error => console.error('Error loading main.html:', error));
+
+        // Load the board section
+        fetch('sections/board.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('board-container').innerHTML = html;
+                console.log("Board section loaded successfully");
+
+                // Add data-key attributes to the board section elements
+                setTimeout(() => {
+                    addDataKeysToBoardSection();
+                    // Apply current language to newly loaded content
+                    langManager.updateLoadedSections();
+
+                    // Dispatch a custom event to notify that the board is loaded
+                    document.dispatchEvent(new CustomEvent('boardLoaded'));
+                }, 100);
+            })
+            .catch(error => console.error('Error loading board.html:', error));
+    });
+
+    // Function to add data-key attributes to main section elements
+    function addDataKeysToMainSection() {
+        // Tea jar labels
+        const teaJars = {
+            'green-tea': 'green',
+            'black-tea': 'black',
+            'oolong-tea': 'oolong',
+            'white-tea': 'white',
+            'herbal-tea': 'herbal'
+        };
+
+        Object.entries(teaJars).forEach(([id, key]) => {
+            const jar = document.querySelector(`#${id} .main__right__tea_jars__jar__label`);
+            if (jar) jar.setAttribute('data-key', key);
+        });
+
+        // Herb labels
+        const herbs = ['anise', 'cinnamon', 'cardamom', 'mint', 'ginger'];
+        herbs.forEach(herb => {
+            const herbElement = document.querySelector(`#${herb} .main__right__herbs__item__label`);
+            if (herbElement) herbElement.setAttribute('data-key', herb);
+        });
+
+        // Sweetener labels
+        const sweeteners = ['honey', 'sugar', 'maple', 'agave'];
+        sweeteners.forEach(sweetener => {
+            const sweetenerElement = document.querySelector(`#${sweetener} .main__right__sweeteners__item__label`);
+            if (sweetenerElement) sweetenerElement.setAttribute('data-key', sweetener);
+        });
+    }
+
+    // Function to add data-key attributes to board section elements
+    function addDataKeysToBoardSection() {
+        // Title elements
+        const titleMappings = {
+            '.welcome': 'title-brewing',
+            '.tea_type': 'title-choose-tea',
+            '.herbs': 'title-add-herbs',
+            '.sweeteners': 'title-add-sweetness',
+            '.temperature': 'title-temperature',
+            '.time': 'title-time',
+            '.assessment': 'title-assessment'
+        };
+
+        Object.entries(titleMappings).forEach(([selector, key]) => {
+            const element = document.querySelector(`.board__title ${selector}`);
+            if (element) element.setAttribute('data-key', key);
+        });
+
+        // Welcome text
+        const welcomeText = document.querySelector('.board__welcome__text p');
+        if (welcomeText) welcomeText.setAttribute('data-key', 'welcome-text');
+
+        // Start brewing button
+        const startButton = document.querySelector('.board__welcome__button h2');
+        if (startButton) startButton.setAttribute('data-key', 'start-brewing');
+
+        // Tea type buttons
+        const teaTypes = ['green', 'black', 'oolong', 'white', 'herbal'];
+        teaTypes.forEach(tea => {
+            const button = document.querySelector(`[data-tea="${tea}"] h2`);
+            if (button) button.setAttribute('data-key', `${tea}-tea`);
+        });
+
+        // Herb buttons
+        const herbButtons = {
+            'anise': 'star-anise',
+            'cinnamon': 'cinnamon',
+            'cardamom': 'cardamom',
+            'mint': 'mint',
+            'ginger': 'ginger'
+        };
+
+        Object.entries(herbButtons).forEach(([herb, key]) => {
+            const button = document.querySelector(`[data-herb="${herb}"] h2`);
+            if (button) button.setAttribute('data-key', key);
+        });
+
+        // Sweetener buttons
+        const sweetenerButtons = ['honey', 'sugar', 'maple', 'agave'];
+        sweetenerButtons.forEach(sweetener => {
+            const button = document.querySelector(`[data-sweetener="${sweetener}"] h2`);
+            if (button) button.setAttribute('data-key', sweetener);
+        });
+
+        // Continue buttons
+        const continueButtons = document.querySelectorAll('[data-herb="none"] h2, [data-sweetener="none"] h2, #temperature-continue h2');
+        continueButtons.forEach(button => {
+            if (button) button.setAttribute('data-key', 'continue');
+        });
+
+        // Temperature
+        const tempTitle = document.querySelector('.board__temperature__slider h2');
+        if (tempTitle) tempTitle.setAttribute('data-key', 'water-temperature');
+
+        // Time buttons
+        const timeButtons = [
+            { selector: '[data-time="2"]', minutes: '2-minutes', strength: 'light' },
+            { selector: '[data-time="3"]', minutes: '3-minutes', strength: 'medium' },
+            { selector: '[data-time="5"]', minutes: '5-minutes', strength: 'strong' }
+        ];
+
+        timeButtons.forEach(({ selector, minutes, strength }) => {
+            const button = document.querySelector(selector);
+            if (button) {
+                const spans = button.querySelectorAll('span');
+                if (spans.length >= 2) {
+                    spans[0].setAttribute('data-key', minutes);
+                    spans[1].setAttribute('data-key', strength);
+                } else {
+                    // Fallback: add spans if they don't exist
+                    const h2 = button.querySelector('h2');
+                    if (h2) {
+                        const text = h2.innerHTML;
+                        const parts = text.split('<br>');
+                        if (parts.length === 2) {
+                            h2.innerHTML = `<span data-key="${minutes}">${parts[0]}</span><br><span data-key="${strength}">${parts[1]}</span>`;
+                        }
+                    }
+                }
+            }
+        });
+
+        // Assessment text
+        const assessmentText = document.querySelector('.board__assessment__text p');
+        if (assessmentText) assessmentText.setAttribute('data-key', 'assessment-text');
+    }
+</script>
+
+<!-- Saeriel Chat - with adjusted paths and language support -->
+<div id="chat-container"></div>
+<script>
+    (async function () {
+        try {
+            // Load the injectChat.js script which has full multilingual support
+            const script = document.createElement('script');
+            script.src = '../injectChat.js';
+            script.defer = true;
+
+            // Wait for the script to load and execute
+            script.onload = function() {
+                console.log('Multilingual chat widget loaded successfully');
+
+                // Fix the image paths for the tea simulator subdirectory
+                setTimeout(() => {
+                    const chatImages = document.querySelectorAll('#chatWidget img');
+                    chatImages.forEach(img => {
+                        if (img.src.includes('assets/saeriel.png') && !img.src.includes('../assets/')) {
+                            img.src = '../assets/saeriel.png';
+                        }
+                    });
+
+                    // Also fix audio path
+                    const audio = document.getElementById('whisperSound');
+                    if (audio && audio.src.includes('assets/')) {
+                        // Keep the external audio URL as is
+                        console.log('Audio source is external, keeping as is');
+                    }
+                }, 100);
+
+                // Ensure the embedded chat syncs with our language manager
+                setTimeout(() => {
+                    if (window.embeddedChatLangManager && window.langManager) {
+                        // Sync the embedded chat with the main language manager
+                        window.embeddedChatLangManager.setLanguage(window.langManager.getCurrentLanguage());
+                    }
+                }, 500);
+            };
+
+            document.body.appendChild(script);
+        } catch (error) {
+            console.error('Error injecting chat:', error);
+        }
+    })();
+</script>
+
+<script src="js/looseTea.js"></script>
+<script src="js/fix-plant-position.js"></script>
+</body>
+</html>

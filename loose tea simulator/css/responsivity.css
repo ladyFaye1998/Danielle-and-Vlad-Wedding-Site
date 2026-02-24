@@ -1,0 +1,626 @@
+/* ============================================= */
+/* ANIMATION-SAFE MOBILE & RTL FIXES */
+/* ============================================= */
+
+/* Mobile Layout */
+@media screen and (max-width: 768px) {
+    /* FORCE FULL WIDTH FOR EVERYTHING */
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100vw !important;
+        overflow-x: hidden !important;
+    }
+    /* Main container - FULL WIDTH */
+    .main {
+        transform: scale(1, 0.75);
+        transform-origin: top center;
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        min-height: calc(100vh - 60px) !important;
+        padding: 80px 0 160px 0 !important;
+        overflow-x: hidden !important;
+        position: relative !important;
+        width: 100vw !important;
+        margin: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+    }
+
+    /* HIDE CLOCK ON MOBILE */
+    .main__center #wall-clock,
+    .main__center .digital-time {
+        display: none !important;
+    }
+
+    /* RIGHT SECTION FIRST - Tea shelves at top with tighter spacing - 50px lower */
+    .main__right {
+        width: 100vw !important;
+        padding: 60px 0 !important;
+        margin: 0 !important;
+        display: block !important;
+        position: static !important;
+        transform: none !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        order: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    /* HIGHER Tea shelves - CHANGED FROM 25px TO 45px (+20px) */
+    .main__right__shelf,
+    .main__right__herbs_shelf,
+    .main__right__sweeteners_shelf {
+        display: block !important;
+        width: 280px !important;
+        max-width: 90vw !important;
+        height: 45px !important;
+        margin: 0 auto -4px auto !important;
+        position: static !important;
+        transform: none !important;
+        left: auto !important;
+        top: auto !important;
+        background: linear-gradient(to bottom, #a87c5b, #8d6e63) !important;
+        border-radius: 2px !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* Tea containers - CHANGED FROM 5px TO 0px (-5px spacing) */
+    .main__right__tea_jars,
+    .main__right__herbs,
+    .main__right__sweeteners {
+        display: flex !important;
+        width: 280px !important;
+        max-width: 90vw !important;
+        height: 70px !important;
+        justify-content: space-around !important;
+        align-items: flex-end !important;
+        margin: 0 auto 0px auto !important;
+        padding: 0 !important;
+        position: static !important;
+        transform: none !important;
+        left: auto !important;
+        top: auto !important;
+    }
+
+    /* SMALLER Individual tea items - positioned standing on shelves */
+    .main__right__tea_jars__jar,
+    .main__right__herbs__item,
+    .main__right__sweeteners__item {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 40px !important;
+        height: 65px !important;
+        margin: 0 2px !important;
+        position: static !important;
+        transform: translateY(35px) !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+        z-index: 2 !important;
+        background-color: rgba(255, 255, 255, 0.8) !important;
+        border-radius: 4px !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .main__right__tea_jars__jar__lid {
+        position: relative;
+        top: -30px;
+    }
+
+    /* Center section - SMALLER TABLE (half height) */
+    .main__center {
+        width: 120vw !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 30px !important;
+        padding: 0 !important;
+        margin: 0 -10vw !important;
+        position: static !important;
+        order: 2 !important;
+        background: transparent !important;
+        min-height: 100px !important;
+        height: 100px !important;
+        border: none !important;
+        left: 0 !important;
+        right: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* ANIMATION-SAFE SPOON - ALIGNED WITH KETTLE */
+    .main__spoon {
+        position: static !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        margin: 140px 0 0 0 !important;
+        /* REMOVED: transform lock that breaks animations */
+        z-index: 80 !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        width: 20px !important;
+        height: 120px !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Base mobile spoon transform - allows animations to override */
+    .main__spoon:not(.brewing):not(:hover) {
+        transform: rotate(30deg) scale(0.6) !important;
+    }
+
+    /* ANIMATION-SAFE KETTLE - 150px from top */
+    .main__kettle {
+        position: static !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        /* REMOVED: transform lock that breaks animations */
+        z-index: 100 !important;
+        margin: 100px 0 0 0 !important;
+        flex-shrink: 0 !important;
+        direction: ltr !important;
+        top: 300px !important;
+    }
+
+    /* Base mobile kettle transform - allows animations to override */
+    .main__kettle:not(.kettle-brewing):not(.kettle-boiling):not(:hover) {
+        transform: scale(0.6) !important;
+    }
+
+    /* Mobile brewing animations can override base transform */
+    .main__kettle.kettle-brewing,
+    .main__kettle.kettle-boiling {
+        transform: scale(0.6) !important;
+        transform-origin: center center !important;
+        /* Let animations work on top of base scale */
+    }
+
+    /* ANIMATION-SAFE CUP - ALIGNED WITH KETTLE */
+    .main__cup {
+        position: static !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        /* REMOVED: transform lock that breaks animations */
+        z-index: 90 !important;
+        margin: 30px 0 0 0 !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Base mobile cup transform - allows animations to override */
+    .main__cup:not(.cup-filling):not(.cup-brewing):not(:hover) {
+        transform: scale(0.6) !important;
+    }
+
+    /* Mobile cup animations can override base transform */
+    .main__cup.cup-filling,
+    .main__cup.cup-brewing {
+        transform: scale(0.6) !important;
+        transform-origin: center center !important;
+        /* Let animations work on top of base scale */
+    }
+
+    /* Board - REVERTED TO ORIGINAL */
+    .board {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-height: 50vh !important;
+        background: rgba(250, 248, 245, 0.98) !important;
+        border-top: 2px solid #d6c09c !important;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.15) !important;
+        z-index: 1000 !important;
+        overflow-y: auto !important;
+        padding: 15px !important;
+        backdrop-filter: blur(10px) !important;
+    }
+
+    /* Board styling - BACK TO ORIGINAL */
+    .board__title h1 {
+        font-size: 18px !important;
+        margin: 0 0 15px 0 !important;
+        text-align: center !important;
+        padding: 8px !important;
+    }
+
+    .board__content {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .board__welcome,
+    .board__tea_type,
+    .board__herbs,
+    .board__sweeteners,
+    .board__time,
+    .board__temperature,
+    .board__assessment {
+        width: 100% !important;
+        max-width: 400px !important;
+        margin: 10px auto !important;
+        text-align: center !important;
+    }
+
+    .board_welcome_text p {
+        font-size: 16px !important;
+        line-height: 1.5 !important;
+        margin: 15px 0 !important;
+        padding: 0 10px !important;
+    }
+
+    .board__tea_type,
+    .board__herbs,
+    .board__sweeteners,
+    .board__time {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 10px !important;
+    }
+
+    .board_tea_type_button,
+    .board_herbs_button,
+    .board_sweeteners_button {
+        width: 140px !important;
+        height: 50px !important;
+        font-size: 16px !important;
+        margin: 5px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+    }
+
+    .board_time_button {
+        width: 140px !important;
+        height: 70px !important;
+        font-size: 16px !important;
+        margin: 5px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+    }
+
+    .board_welcome_button,
+    #temperature-continue {
+        min-height: 55px !important;
+        width: 200px !important;
+        margin: 15px auto !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+        font-size: 18px !important;
+    }
+
+    .board_temperature_slider {
+        width: 90% !important;
+        margin: 0 auto !important;
+        text-align: center !important;
+    }
+
+    .temperature-slider {
+        width: 80% !important;
+        margin: 15px 0 !important;
+    }
+
+    .temperature-value {
+        font-size: 18px !important;
+        margin: 10px 0 !important;
+    }
+
+    .board_assessment_stars {
+        font-size: 32px !important;
+        margin: 15px 0 !important;
+    }
+}
+
+/* Small mobile screens */
+@media screen and (max-width: 480px) {
+    .main {
+        padding: 60px 0 150px 0 !important;
+        width: 100vw !important;
+        margin: 0 !important;
+    }
+
+    /* RIGHT SECTION - 50px lower for small screens */
+    .main__right {
+        padding: 120px 0 !important;
+    }
+
+    .main__center {
+        gap: 20px !important;
+        min-height: 90px !important;
+        height: 90px !important;
+        width: 120vw !important;
+        padding: 0 !important;
+        margin: 0 -10vw !important;
+        background: transparent !important;
+    }
+
+    /* ANIMATION-SAFE KETTLE - 150px from top for small screens */
+    .main__kettle {
+        position: static !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        /* REMOVED: transform lock */
+        z-index: 100 !important;
+        margin: -150px 0 0 0 !important;
+        width: 240px !important;
+        height: 260px !important;
+        flex-shrink: 0 !important;
+        direction: ltr !important;
+    }
+
+    /* Base small mobile kettle transform */
+    .main__kettle:not(.kettle-brewing):not(.kettle-boiling):not(:hover) {
+        transform: scale(0.4) !important;
+    }
+
+    .main__kettle.kettle-brewing,
+    .main__kettle.kettle-boiling {
+        transform: scale(0.4) !important;
+        transform-origin: center center !important;
+    }
+
+    .main__cup {
+        position: static !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        /* REMOVED: transform lock */
+        z-index: 90 !important;
+        margin: 90px 0 0 0 !important;
+        width: 150px !important;
+        height: 170px !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Base small mobile cup transform */
+    .main__cup:not(.cup-filling):not(.cup-brewing):not(:hover) {
+        transform: scale(0.5) !important;
+    }
+
+    .main__cup.cup-filling,
+    .main__cup.cup-brewing {
+        transform: scale(0.5) !important;
+        transform-origin: center center !important;
+    }
+
+    .main__spoon {
+        position: static !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        /* REMOVED: transform lock */
+        z-index: 80 !important;
+        margin: 140px 0 0 0 !important;
+        width: 20px !important;
+        height: 120px !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Base small mobile spoon transform */
+    .main__spoon:not(.brewing):not(:hover) {
+        transform: rotate(30deg) scale(0.5) !important;
+    }
+
+    /* HIGHER SHELVES for small screens - +20px height */
+    .main__right__shelf,
+    .main__right__herbs_shelf,
+    .main__right__sweeteners_shelf {
+        width: 280px !important;
+        height: 40px !important;
+        margin: 0 auto -4px auto !important;
+        position: static !important;
+        left: auto !important;
+    }
+
+    /* TEA CONTAINERS for small screens - 5px less spacing */
+    .main__right__tea_jars,
+    .main__right__herbs,
+    .main__right__sweeteners {
+        width: 250px !important;
+        margin: 0 auto -2px auto !important;
+        position: static !important;
+        left: auto !important;
+    }
+
+    .main__right__tea_jars__jar,
+    .main__right__herbs__item,
+    .main__right__sweeteners__item {
+        width: 38px !important;
+        height: 60px !important;
+        transform: translateY(-70px) !important;
+    }
+
+    .board_tea_type_button,
+    .board_herbs_button,
+    .board_sweeteners_button {
+        width: 120px !important;
+        height: 45px !important;
+        font-size: 14px !important;
+    }
+
+    .board_time_button {
+        width: 120px !important;
+        height: 60px !important;
+        font-size: 14px !important;
+    }
+
+    .board_welcome_button,
+    #temperature-continue {
+        width: 180px !important;
+        font-size: 16px !important;
+    }
+}
+
+/* ============================================= */
+/* RTL (HEBREW) SUPPORT - IMPROVED KETTLE FIX */
+/* ============================================= */
+
+/* RTL text direction */
+[dir="rtl"],
+html[lang="he"] {
+    direction: rtl !important;
+}
+
+[dir="rtl"] *,
+html[lang="he"] * {
+    font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif !important;
+}
+
+/* RTL text alignment */
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] p,
+html[lang="he"] h1,
+html[lang="he"] h2,
+html[lang="he"] h3,
+html[lang="he"] p {
+    text-align: right !important;
+}
+
+/* Keep center-aligned elements centered */
+[dir="rtl"] .board__title h1,
+[dir="rtl"] .board_welcome_button,
+[dir="rtl"] .digital-time,
+html[lang="he"] .board__title h1,
+html[lang="he"] .board_welcome_button,
+html[lang="he"] .digital-time {
+    text-align: center !important;
+}
+
+/* RTL navbar */
+[dir="rtl"] .top-navbar,
+html[lang="he"] .top-navbar {
+    flex-direction: row-reverse !important;
+}
+
+[dir="rtl"] .navbar-links,
+html[lang="he"] .navbar-links {
+    flex-direction: row-reverse !important;
+}
+
+/* HEBREW KETTLE FIX - MOVE BODY 20px TO THE LEFT */
+[dir="rtl"] .main_kettle_body,
+html[lang="he"] .main_kettle_body {
+    transform: translateX(-20px) !important;
+}
+
+/* RTL mobile menu */
+@media screen and (max-width: 768px) {
+    [dir="rtl"] .mobile-menu,
+    html[lang="he"] .mobile-menu {
+        left: 2rem !important;
+        right: auto !important;
+    }
+
+    /* RTL board button layout */
+    [dir="rtl"] .board__tea_type,
+    [dir="rtl"] .board__herbs,
+    [dir="rtl"] .board__sweeteners,
+    [dir="rtl"] .board__time,
+    html[lang="he"] .board__tea_type,
+    html[lang="he"] .board__herbs,
+    html[lang="he"] .board__sweeteners,
+    html[lang="he"] .board__time {
+        direction: rtl !important;
+    }
+
+    /* RTL tea jars */
+    [dir="rtl"] .main__right__tea_jars,
+    [dir="rtl"] .main__right__herbs,
+    [dir="rtl"] .main__right__sweeteners,
+    html[lang="he"] .main__right__tea_jars,
+    html[lang="he"] .main__right__herbs,
+    html[lang="he"] .main__right__sweeteners {
+        direction: rtl !important;
+        flex-direction: row-reverse !important;
+    }
+}
+
+/* Desktop RTL - minimal changes */
+@media screen and (min-width: 769px) {
+    [dir="rtl"] .board,
+    html[lang="he"] .board {
+        direction: rtl !important;
+        text-align: right !important;
+    }
+
+    [dir="rtl"] .board__title,
+    html[lang="he"] .board__title {
+        text-align: center !important;
+    }
+
+    [dir="rtl"] .board_welcome_text,
+    html[lang="he"] .board_welcome_text {
+        text-align: right !important;
+    }
+}
+
+/* ============================================= */
+/* UNIVERSAL FIXES */
+/* ============================================= */
+
+/* Prevent horizontal scroll and ensure full width */
+html,
+body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.main {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    margin: 0 !important;
+    padding: 80px 0 160px 0 !important;
+}
+
+/* Proper z-index stacking */
+.top-navbar { z-index: 1100 !important; }
+.board { z-index: 1000 !important; }
+.main__kettle { z-index: 100 !important; }
+.main__cup { z-index: 90 !important; }
+.main__spoon { z-index: 80 !important; }
+.main__right__tea_jars__jar,
+.main__right__herbs__item,
+.main__right__sweeteners__item { z-index: 70 !important; }
+
+/* ANIMATION-SAFE TRANSITIONS - Only apply to non-animated elements */
+*:not(.kettle-brewing):not(.kettle-boiling):not(.cup-filling):not(.cup-brewing):not(.brewing) {
+    transition: transform 0.2s ease, opacity 0.2s ease !important;
+}
+
+/* Ensure clickable elements are always clickable */
+button,
+[role="button"],
+.board_tea_type_button,
+.board_herbs_button,
+.board_sweeteners_button,
+.board_time_button,
+.board_welcome_button,
+#temperature-continue,
+.main__right__tea_jars__jar,
+.main__right__herbs__item,
+.main__right__sweeteners__item,
+.main__kettle,
+.main__cup,
+.main__spoon {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}

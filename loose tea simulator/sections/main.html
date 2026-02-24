@@ -1,0 +1,384 @@
+<section class="main">
+    <!-- LEFT SIDE - WINDOW AND SHELF -->
+    <div class="main__left">
+        <!-- Window with garden view -->
+        <div class="main__left__window">
+            <div class="main__left__window__bg"></div>
+        </div>
+
+        <!-- Shelf under the window -->
+        <div class="main__left__shelf"></div>
+
+        <!-- Shelf items: books, art, and plant -->
+        <div class="shelf__items">
+            <div class="shelf-book shelf-book--book1"></div>
+            <div class="shelf-book shelf-book--book2"></div>
+            <div class="shelf-book shelf-book--book3"></div>
+            <div class="shelf-art"></div>
+            <!-- Plant on the shelf -->
+            <div class="main__left__plant">
+                <svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Pot -->
+                    <rect x="30" y="170" width="40" height="30" fill="#a1887f" rx="5"/>
+                    <rect x="35" y="170" width="30" height="5" fill="#8d6e63"/>
+                    <!-- Plant Stems and Leaves -->
+                    <path d="M50 170 Q45 140 30 130" stroke="#558b2f" stroke-width="2" fill="none"/>
+                    <path d="M50 170 Q55 145 70 135" stroke="#558b2f" stroke-width="2" fill="none"/>
+                    <path d="M50 170 Q55 150 50 120" stroke="#558b2f" stroke-width="2" fill="none"/>
+
+                    <!-- Leaves -->
+                    <path d="M30 130 Q20 125 25 115 Q35 120 30 130" fill="#7cb342"/>
+                    <path d="M70 135 Q80 130 85 140 Q75 145 70 135" fill="#7cb342"/>
+                    <path d="M50 120 Q40 110 45 100 Q55 105 50 120" fill="#7cb342"/>
+                    <path d="M45 150 Q35 145 30 135 Q45 140 45 150" fill="#7cb342"/>
+                    <path d="M55 145 Q65 140 70 130 Q55 135 55 145" fill="#7cb342"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- CENTER SECTION - CLOCK AND KETTLE -->
+    <div class="main__center">
+        <!-- Wall Clock -->
+        <div id="wall-clock">
+            <div class="clock-face">
+                <!-- Hour markers -->
+                <div class="hour-markers">
+                    <!-- We'll generate these with JavaScript -->
+                </div>
+
+                <!-- Main numerals -->
+                <div class="numerals">
+                    <span class="numeral-12">12</span>
+                    <span class="numeral-3">3</span>
+                    <span class="numeral-6">6</span>
+                    <span class="numeral-9">9</span>
+                </div>
+
+                <!-- Clock hands -->
+                <div class="hand hour-hand" id="hour-hand"></div>
+                <div class="hand minute-hand" id="minute-hand"></div>
+                <div class="hand second-hand" id="second-hand"></div>
+                <div class="center-dot"></div>
+            </div>
+        </div>
+
+        <div class="digital-time" id="digital-time"></div>
+        <!-- KETTLE -->
+        <div class="main__kettle">
+            <div class="main__kettle__lid"></div>
+            <div class="main__kettle__top"></div>
+            <div class="main__kettle__steam">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="main__kettle__body">
+                <div class="main__kettle__liquid"></div>
+            </div>
+            <div class="main__kettle__spout"></div>
+            <div class="main__kettle__handle"></div>
+            <div class="main__kettle__base"></div>
+        </div>
+
+        <!-- TEACUP -->
+        <div class="main__cup hidden">
+            <div class="steam-from-cup">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="main__cup__body">
+                <div class="main__cup__handle"></div>
+                <div class="main__cup__liquid"></div>
+                <div class="main__cup__tea_leaves">
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="main__cup__herbs">
+                    <!-- Herbs visualization -->
+                    <span class="herb-anise"></span>
+                    <span class="herb-cinnamon"></span>
+                    <span class="herb-cardamom"></span>
+                    <span class="herb-mint"></span>
+                    <span class="herb-ginger"></span>
+                </div>
+                <div class="main__cup__sweeteners">
+                    <!-- Sweeteners visualization -->
+                    <span class="sweetener-honey"></span>
+                    <span class="sweetener-sugar"></span>
+                    <span class="sweetener-maple"></span>
+                    <span class="sweetener-agave"</span>
+                </div>
+            </div>
+            <div class="main__cup__saucer"></div>
+        </div>
+
+        <!-- SPOON -->
+        <div class="main__spoon hidden">
+            <div class="main__spoon__handle"></div>
+            <div class="main__spoon__bowl"></div>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE - TEA JARS, HERBS, AND SWEETENERS -->
+    <div class="main__right">
+        <!-- Tea Shelf with Jars -->
+        <div class="main__right__shelf"></div>
+        <div class="main__right__tea_jars">
+            <div class="main__right__tea_jars__jar" id="green-tea">
+                <div class="main__right__tea_jars__jar__lid"></div>
+                <div class="main__right__tea_jars__jar__content" style="background-color: #9fc088;"></div>
+                <div class="main__right__tea_jars__jar__label" data-key="green">Green</div>
+            </div>
+            <div class="main__right__tea_jars__jar" id="black-tea">
+                <div class="main__right__tea_jars__jar__lid"></div>
+                <div class="main__right__tea_jars__jar__content" style="background-color: #5c3c10;"></div>
+                <div class="main__right__tea_jars__jar__label" data-key="black">Black</div>
+            </div>
+            <div class="main__right__tea_jars__jar" id="oolong-tea">
+                <div class="main__right__tea_jars__jar__lid"></div>
+                <div class="main__right__tea_jars__jar__content" style="background-color: #b58a4b;"></div>
+                <div class="main__right__tea_jars__jar__label" data-key="oolong">Oolong</div>
+            </div>
+            <div class="main__right__tea_jars__jar" id="white-tea">
+                <div class="main__right__tea_jars__jar__lid"></div>
+                <div class="main__right__tea_jars__jar__content" style="background-color: #e0e0e0;"></div>
+                <div class="main__right__tea_jars__jar__label" data-key="white">White</div>
+            </div>
+            <div class="main__right__tea_jars__jar" id="herbal-tea">
+                <div class="main__right__tea_jars__jar__lid"></div>
+                <div class="main__right__tea_jars__jar__content" style="background-color: #d1a7c7;"></div>
+                <div class="main__right__tea_jars__jar__label" data-key="herbal">Herbal</div>
+            </div>
+        </div>
+
+        <!-- Herbs Shelf with Items -->
+        <div class="main__right__herbs_shelf"></div>
+        <div class="main__right__herbs">
+            <div class="main__right__herbs__item" id="anise">
+                <div class="main__right__herbs__item__content">
+                    <div class="herb-anise-icon">
+                        <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="25,5 33,20 48,22 37,34 39,50 25,42 11,50 13,34 2,22 17,20" fill="#5d4037"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="main__right__herbs__item__label" data-key="anise">Anise</div>
+            </div>
+            <div class="main__right__herbs__item" id="cinnamon">
+                <div class="main__right__herbs__item__content">
+                    <div class="herb-cinnamon-icon"></div>
+                </div>
+                <div class="main__right__herbs__item__label" data-key="cinnamon">Cinnamon</div>
+            </div>
+            <div class="main__right__herbs__item" id="cardamom">
+                <div class="main__right__herbs__item__content">
+                    <div class="herb-cardamom-icon"></div>
+                </div>
+                <div class="main__right__herbs__item__label" data-key="cardamom">Cardamom</div>
+            </div>
+            <div class="main__right__herbs__item" id="mint">
+                <div class="main__right__herbs__item__content">
+                    <div class="herb-mint-icon"></div>
+                </div>
+                <div class="main__right__herbs__item__label" data-key="mint">Mint</div>
+            </div>
+            <div class="main__right__herbs__item" id="ginger">
+                <div class="main__right__herbs__item__content">
+                    <div class="herb-ginger-icon"></div>
+                </div>
+                <div class="main__right__herbs__item__label" data-key="ginger">Ginger</div>
+            </div>
+        </div>
+
+        <!-- Sweeteners Shelf with Items -->
+        <div class="main__right__sweeteners_shelf"></div>
+        <div class="main__right__sweeteners">
+            <div class="main__right__sweeteners__item" id="honey">
+                <div class="main__right__sweeteners__item__content">
+                    <div class="sweetener-honey-icon"></div>
+                </div>
+                <div class="main__right__sweeteners__item__label" data-key="honey">Honey</div>
+            </div>
+            <div class="main__right__sweeteners__item" id="sugar">
+                <div class="main__right__sweeteners__item__content">
+                    <div class="sweetener-sugar-icon"></div>
+                </div>
+                <div class="main__right__sweeteners__item__label" data-key="sugar">Sugar</div>
+            </div>
+            <div class="main__right__sweeteners__item" id="maple">
+                <div class="main__right__sweeteners__item__content">
+                    <div class="sweetener-maple-icon"></div>
+                </div>
+                <div class="main__right__sweeteners__item__label" data-key="maple">Maple</div>
+            </div>
+            <div class="main__right__sweeteners__item" id="agave">
+                <div class="main__right__sweeteners__item__content">
+                    <div class="sweetener-agave-icon"></div>
+                </div>
+                <div class="main__right__sweeteners__item__label" data-key="agave">Agave</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/clock.js"></script>
+</section>
+
+<script>
+    // Tea Simulator Main Language Manager
+    class TeaMainLanguageManager {
+        constructor() {
+            this.currentLang = 'en';
+            this.translations = {
+                en: {
+                    // Tea jar labels
+                    "green": "Green",
+                    "black": "Black",
+                    "oolong": "Oolong",
+                    "white": "White",
+                    "herbal": "Herbal",
+
+                    // Herb labels
+                    "anise": "Anise",
+                    "cinnamon": "Cinnamon",
+                    "cardamom": "Cardamom",
+                    "mint": "Mint",
+                    "ginger": "Ginger",
+
+                    // Sweetener labels
+                    "honey": "Honey",
+                    "sugar": "Sugar",
+                    "maple": "Maple",
+                    "agave": "Agave"
+                },
+
+                ru: {
+                    // Tea jar labels
+                    "green": "Зелёный",
+                    "black": "Чёрный",
+                    "oolong": "Улун",
+                    "white": "Белый",
+                    "herbal": "Травяной",
+
+                    // Herb labels
+                    "anise": "Бадьян",
+                    "cinnamon": "Корица",
+                    "cardamom": "Кардамон",
+                    "mint": "Мята",
+                    "ginger": "Имбирь",
+
+                    // Sweetener labels
+                    "honey": "Мёд",
+                    "sugar": "Сахар",
+                    "maple": "Клён",
+                    "agave": "Агава"
+                },
+
+                he: {
+                    // Tea jar labels
+                    "green": "ירוק",
+                    "black": "שחור",
+                    "oolong": "אולונג",
+                    "white": "לבן",
+                    "herbal": "צמחים",
+
+                    // Herb labels
+                    "anise": "אניס",
+                    "cinnamon": "קינמון",
+                    "cardamom": "הל",
+                    "mint": "נענע",
+                    "ginger": "זנגביל",
+
+                    // Sweetener labels
+                    "honey": "דבש",
+                    "sugar": "סוכר",
+                    "maple": "מייפל",
+                    "agave": "אגבה"
+                }
+            };
+            this.init();
+        }
+
+        init() {
+            // Get language from parent window or storage
+            if (window.parent && window.parent.langManager) {
+                this.currentLang = window.parent.langManager.getCurrentLanguage();
+            } else {
+                const savedLang = sessionStorage.getItem('wedding-language');
+                if (savedLang && ['en', 'he', 'ru'].includes(savedLang)) {
+                    this.currentLang = savedLang;
+                }
+            }
+
+            this.applyLanguage();
+            this.setupLanguageObserver();
+        }
+
+        applyLanguage() {
+            const lang = this.currentLang;
+            const t = this.translations[lang];
+
+            // Update all elements with data-key attributes
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (t[key]) {
+                    element.textContent = t[key];
+                }
+            });
+
+            // Apply RTL for Hebrew
+            if (lang === 'he') {
+                document.body.style.direction = 'rtl';
+                // Adjust layout for RTL if needed
+                const rightSection = document.querySelector('.main__right');
+                if (rightSection) {
+                    rightSection.style.direction = 'rtl';
+                }
+            } else {
+                document.body.style.direction = 'ltr';
+                const rightSection = document.querySelector('.main__right');
+                if (rightSection) {
+                    rightSection.style.direction = 'ltr';
+                }
+            }
+        }
+
+        setupLanguageObserver() {
+            // Listen for language changes
+            let lastSessionLang = sessionStorage.getItem('wedding-language');
+            setInterval(() => {
+                const currentSessionLang = sessionStorage.getItem('wedding-language');
+                if (currentSessionLang && currentSessionLang !== lastSessionLang && currentSessionLang !== this.currentLang) {
+                    this.setLanguage(currentSessionLang);
+                    lastSessionLang = currentSessionLang;
+                }
+            }, 1000);
+        }
+
+        setLanguage(lang) {
+            if (['en', 'he', 'ru'].includes(lang) && lang !== this.currentLang) {
+                this.currentLang = lang;
+                this.applyLanguage();
+            }
+        }
+    }
+
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+        const mainLangManager = new TeaMainLanguageManager();
+        window.mainLangManager = mainLangManager;
+    });
+
+    // Also initialize if main is loaded dynamically
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainLangManager = new TeaMainLanguageManager();
+            window.mainLangManager = mainLangManager;
+        });
+    } else {
+        const mainLangManager = new TeaMainLanguageManager();
+        window.mainLangManager = mainLangManager;
+    }
+</script>

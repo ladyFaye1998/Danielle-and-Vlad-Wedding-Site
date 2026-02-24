@@ -1,0 +1,34 @@
+/* Spoon Styling */
+.main__spoon {
+    position: absolute;
+    bottom: 15%;        /* pull the spoon up off the floor */
+    right: 40px;        /* keep its horizontal offset */
+    width: 20px;
+    height: 120px;
+    z-index: 15;
+    transform: rotate(30deg);
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+
+.main__spoon:hover {
+    transform: rotate(40deg) translateY(-5px);
+}
+
+.main__spoon__handle {
+    width: 10px;
+    height: 80px;
+    background: linear-gradient(to right, #8d6e63, #a1887f);
+    border-radius: 5px;
+}
+
+.main__spoon__bowl {
+    width: 20px;
+    height: 40px;
+    background: linear-gradient(to right, #a1887f, #bcaaa4);
+    border-radius: 10px;
+    position: absolute;
+    bottom: 0;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,360 @@
+<!-- CONTROL BOARD -->
+<section class="board">
+    <!-- TITLE -->
+    <div class="board__title-container">
+        <div class="board__title">
+            <h1 class="welcome active" data-key="title-brewing">Brewing for the Bride</h1>
+            <h1 class="tea_type hidden" data-key="title-choose-tea">Choose Her Tea</h1>
+            <h1 class="herbs hidden" data-key="title-add-herbs">Add Her Favorites</h1>
+            <h1 class="sweeteners hidden" data-key="title-add-sweetness">Add Sweetness</h1>
+            <h1 class="temperature hidden" data-key="title-temperature">Perfect Temperature</h1>
+            <h1 class="time hidden" data-key="title-time">Brewing Time</h1>
+            <h1 class="assessment hidden" data-key="title-assessment">Will She Approve?</h1>
+        </div>
+    </div>
+
+    <!-- WELCOME -->
+    <div class="board__content">
+        <div class="board__welcome">
+            <div class="board__welcome__text">
+                <p data-key="welcome-text">Dani looks anxious about the wedding preparations. She's quite particular about her tea - nothing calms her like the perfect cup. You'll need to create at least a 4-star blend to help settle her nerves. Choose the right tea type, add her favorite herbs, and brew at the perfect temperature and time. If it's not perfect, she might be too nervous to drink it. Let's create something special to help her relax. If you need help, please approach Saeriel, Veilwarden of Álfheimr, the dear wedding keeper. (i.e see support chat)</p>
+            </div>
+            <div class="board__welcome__button">
+                <h2 data-key="start-brewing">start brewing</h2>
+            </div>
+        </div>
+
+        <!-- TEA TYPE SELECTION -->
+        <div class="board__tea_type hidden">
+            <div class="board__tea_type__button" data-tea="green" data-color="#9fc088" data-leaves="#7d9c66">
+                <h2 data-key="green-tea">Green Tea</h2>
+            </div>
+            <div class="board__tea_type__button" data-tea="black" data-color="#5c3c10" data-leaves="#3a2509">
+                <h2 data-key="black-tea">Black Tea</h2>
+            </div>
+            <div class="board__tea_type__button" data-tea="oolong" data-color="#b58a4b" data-leaves="#8e6c3c">
+                <h2 data-key="oolong-tea">Oolong Tea</h2>
+            </div>
+            <div class="board__tea_type__button" data-tea="white" data-color="#e0e0e0" data-leaves="#bdbdbd">
+                <h2 data-key="white-tea">White Tea</h2>
+            </div>
+            <div class="board__tea_type__button" data-tea="herbal" data-color="#d1a7c7" data-leaves="#b48dac">
+                <h2 data-key="herbal-tea">Herbal Tea</h2>
+            </div>
+        </div>
+
+        <!-- HERBS SELECTION -->
+        <div class="board__herbs hidden">
+            <div class="board__herbs__button" data-herb="anise">
+                <h2 data-key="star-anise">Star Anise</h2>
+            </div>
+            <div class="board__herbs__button" data-herb="cinnamon">
+                <h2 data-key="cinnamon">Cinnamon</h2>
+            </div>
+            <div class="board__herbs__button" data-herb="cardamom">
+                <h2 data-key="cardamom">Cardamom</h2>
+            </div>
+            <div class="board__herbs__button" data-herb="mint">
+                <h2 data-key="mint">Mint</h2>
+            </div>
+            <div class="board__herbs__button" data-herb="ginger">
+                <h2 data-key="ginger">Ginger</h2>
+            </div>
+            <div class="board__herbs__button" data-herb="none" style="width: 200px; height: 58px; background: linear-gradient(to bottom, rgba(214, 192, 156, 0.9), rgba(189, 166, 130, 0.9)); border-radius: 11px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 11px rgba(0, 0, 0, 0.2); border: 2px solid rgba(138, 94, 61, 0.5); margin-top: 25px;">
+                <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 22px; color: #513b2e; margin: 0;" data-key="continue">Continue</h2>
+            </div>
+        </div>
+
+        <!-- SWEETENERS SELECTION -->
+        <div class="board__sweeteners hidden">
+            <div class="board__sweeteners__button" data-sweetener="honey" style="width: 180px; height: 55px; background: linear-gradient(to bottom, rgba(245, 233, 220, 0.9), rgba(233, 219, 205, 0.9)); border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); border: 1px solid rgba(138, 94, 61, 0.3);">
+                <h2 data-key="honey">Honey</h2>
+            </div>
+            <div class="board__sweeteners__button" data-sweetener="sugar" style="width: 180px; height: 55px; background: linear-gradient(to bottom, rgba(245, 233, 220, 0.9), rgba(233, 219, 205, 0.9)); border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); border: 1px solid rgba(138, 94, 61, 0.3);">
+                <h2 data-key="sugar">Sugar</h2>
+            </div>
+            <div class="board__sweeteners__button" data-sweetener="maple" style="width: 180px; height: 55px; background: linear-gradient(to bottom, rgba(245, 233, 220, 0.9), rgba(233, 219, 205, 0.9)); border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); border: 1px solid rgba(138, 94, 61, 0.3);">
+                <h2 data-key="maple">Maple</h2>
+            </div>
+            <div class="board__sweeteners__button" data-sweetener="agave" style="width: 180px; height: 55px; background: linear-gradient(to bottom, rgba(245, 233, 220, 0.9), rgba(233, 219, 205, 0.9)); border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); border: 1px solid rgba(138, 94, 61, 0.3);">
+                <h2 data-key="agave">Agave</h2>
+            </div>
+            <div class="board__sweeteners__button" data-sweetener="none" style="width: 200px; height: 58px; background: linear-gradient(to bottom, rgba(214, 192, 156, 0.9), rgba(189, 166, 130, 0.9)); border-radius: 11px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 11px rgba(0, 0, 0, 0.2); border: 2px solid rgba(138, 94, 61, 0.5); margin-top: 25px;">
+                <h2 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 22px; color: #513b2e; margin: 0;" data-key="continue">Continue</h2>
+            </div>
+        </div>
+
+        <!-- TEMPERATURE SELECTION -->
+        <div class="board__temperature hidden">
+            <div class="board__temperature__slider">
+                <h2 data-key="water-temperature">Water Temperature</h2>
+                <input type="range" min="160" max="212" value="195" class="temperature-slider" id="tempSlider">
+                <div class="temperature-value">195°F (90°C)</div>
+            </div>
+            <div class="board__welcome__button" id="temperature-continue">
+                <h2 data-key="continue">continue</h2>
+            </div>
+        </div>
+
+        <!-- TIME SELECTION -->
+        <div class="board__time hidden">
+            <div class="board__time__button" data-time="2">
+                <h2><span data-key="2-minutes">2 Minutes</span><br><span data-key="light">Light</span></h2>
+            </div>
+            <div class="board__time__button" data-time="3">
+                <h2><span data-key="3-minutes">3 Minutes</span><br><span data-key="medium">Medium</span></h2>
+            </div>
+            <div class="board__time__button" data-time="5">
+                <h2><span data-key="5-minutes">5 Minutes</span><br><span data-key="strong">Strong</span></h2>
+            </div>
+        </div>
+
+        <!-- TEA ASSESSMENT -->
+        <div class="board__assessment hidden">
+            <div class="board__assessment__text">
+                <p data-key="assessment-text">Let's see if your tea will calm the bride's nerves...</p>
+            </div>
+            <div class="board__assessment__stars">
+                <span>★</span><span>★</span><span>★</span><span>☆</span><span>☆</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="board__footer__reset">
+        <img src="reset-icon.png" alt="reset">
+    </div>
+</section>
+
+<script>
+    // Tea Simulator Board Language Manager
+    class TeaBoardLanguageManager {
+        constructor() {
+            this.currentLang = 'en';
+            this.translations = {
+                en: {
+                    // Titles
+                    "title-brewing": "Brewing for the Bride",
+                    "title-choose-tea": "Choose Her Tea",
+                    "title-add-herbs": "Add Her Favorites",
+                    "title-add-sweetness": "Add Sweetness",
+                    "title-temperature": "Perfect Temperature",
+                    "title-time": "Brewing Time",
+                    "title-assessment": "Will She Approve?",
+
+                    // Welcome
+                    "welcome-text": "Dani looks anxious about the wedding preparations. She's quite particular about her tea - nothing calms her like the perfect cup. You'll need to create at least a 4-star blend to help settle her nerves. Choose the right tea type, add her favorite herbs, and brew at the perfect temperature and time. If it's not perfect, she might be too nervous to drink it. Let's create something special to help her relax. If you need help, please approach Saeriel, Veilwarden of Álfheimr, the dear wedding keeper. (i.e see support chat)",
+                    "start-brewing": "start brewing",
+
+                    // Tea Types
+                    "green-tea": "Green Tea",
+                    "black-tea": "Black Tea",
+                    "oolong-tea": "Oolong Tea",
+                    "white-tea": "White Tea",
+                    "herbal-tea": "Herbal Tea",
+
+                    // Herbs
+                    "star-anise": "Star Anise",
+                    "cinnamon": "Cinnamon",
+                    "cardamom": "Cardamom",
+                    "mint": "Mint",
+                    "ginger": "Ginger",
+
+                    // Sweeteners
+                    "honey": "Honey",
+                    "sugar": "Sugar",
+                    "maple": "Maple",
+                    "agave": "Agave",
+
+                    // Temperature
+                    "water-temperature": "Water Temperature",
+
+                    // Time
+                    "2-minutes": "2 Minutes",
+                    "3-minutes": "3 Minutes",
+                    "5-minutes": "5 Minutes",
+                    "light": "Light",
+                    "medium": "Medium",
+                    "strong": "Strong",
+
+                    // General
+                    "continue": "Continue",
+                    "assessment-text": "Let's see if your tea will calm the bride's nerves..."
+                },
+
+                ru: {
+                    // Titles
+                    "title-brewing": "Завариваем для невесты",
+                    "title-choose-tea": "Выберите её чай",
+                    "title-add-herbs": "Добавьте её любимые травы",
+                    "title-add-sweetness": "Добавьте сладость",
+                    "title-temperature": "Идеальная температура",
+                    "title-time": "Время заваривания",
+                    "title-assessment": "Одобрит ли она?",
+
+                    // Welcome
+                    "welcome-text": "Дани беспокоится из-за подготовки к свадьбе. Она очень разборчива в чае - ничто не успокаивает её так, как идеальная чашка. Вам нужно создать смесь не менее чем на 4 звезды, чтобы успокоить её нервы. Выберите правильный тип чая, добавьте её любимые травы и заварите при идеальной температуре и времени. Если не получится идеально, она может быть слишком нервной, чтобы пить его. Давайте создадим что-то особенное, чтобы помочь ей расслабиться. Если нужна помощь, обратитесь к Саэриэль, Хранительнице Альвхейма, дорогой хранительнице свадьбы. (см. чат поддержки)",
+                    "start-brewing": "начать заваривание",
+
+                    // Tea Types
+                    "green-tea": "Зелёный чай",
+                    "black-tea": "Чёрный чай",
+                    "oolong-tea": "Улун",
+                    "white-tea": "Белый чай",
+                    "herbal-tea": "Травяной чай",
+
+                    // Herbs
+                    "star-anise": "Бадьян",
+                    "cinnamon": "Корица",
+                    "cardamom": "Кардамон",
+                    "mint": "Мята",
+                    "ginger": "Имбирь",
+
+                    // Sweeteners
+                    "honey": "Мёд",
+                    "sugar": "Сахар",
+                    "maple": "Клён",
+                    "agave": "Агава",
+
+                    // Temperature
+                    "water-temperature": "Температура воды",
+
+                    // Time
+                    "2-minutes": "2 минуты",
+                    "3-minutes": "3 минуты",
+                    "5-minutes": "5 минут",
+                    "light": "Лёгкий",
+                    "medium": "Средний",
+                    "strong": "Крепкий",
+
+                    // General
+                    "continue": "Продолжить",
+                    "assessment-text": "Посмотрим, успокоит ли ваш чай нервы невесты..."
+                },
+
+                he: {
+                    // Titles
+                    "title-brewing": "מכינים תה לדני",
+                    "title-choose-tea": "בחרו את התה שלה",
+                    "title-add-herbs": "הוסיפו את התבלינים המועדפים עליה",
+                    "title-add-sweetness": "הוסיפו מתיקות",
+                    "title-temperature": "טמפרטורה מושלמת",
+                    "title-time": "זמן חליטה",
+                    "title-assessment": "האם היא תאשר?",
+
+                    // Welcome
+                    "welcome-text": "דני נראית חרדה מההכנות לחתונה. היא מאוד בררנית לגבי התה שלה - שום דבר לא מרגיע אותה כמו הכוס המושלמת. תצטרכו ליצור תערובת של לפחות 4 כוכבים כדי לעזור להרגיע את העצבים שלה. בחרו את סוג התה הנכון, הוסיפו את העשבים המועדפים עליה, וחלטו בטמפרטורה ובזמן המושלמים. אם זה לא יהיה מושלם, היא עלולה להיות מתוחה מדי כדי לשתות אותו. בואו ניצור משהו מיוחד כדי לעזור לה להירגע. אם אתם צריכים עזרה, אנא פנו לסאריאל, שומרת הסף של אלפהיימר, שומרת החתונה היקרה. (כלומר ראו צ'אט תמיכה)",
+                    "start-brewing": "התחלת חליטה",
+
+                    // Tea Types
+                    "green-tea": "תה ירוק",
+                    "black-tea": "תה שחור",
+                    "oolong-tea": "תה אולונג",
+                    "white-tea": "תה לבן",
+                    "herbal-tea": "תה צמחים",
+
+                    // Herbs
+                    "star-anise": "אניס כוכב",
+                    "cinnamon": "קינמון",
+                    "cardamom": "הל",
+                    "mint": "נענע",
+                    "ginger": "זנגביל",
+
+                    // Sweeteners
+                    "honey": "דבש",
+                    "sugar": "סוכר",
+                    "maple": "מייפל",
+                    "agave": "אגבה",
+
+                    // Temperature
+                    "water-temperature": "טמפרטורת מים",
+
+                    // Time
+                    "2-minutes": "2 דקות",
+                    "3-minutes": "3 דקות",
+                    "5-minutes": "5 דקות",
+                    "light": "קל",
+                    "medium": "בינוני",
+                    "strong": "חזק",
+
+                    // General
+                    "continue": "המשך",
+                    "assessment-text": "בואו נראה אם התה שלכם ירגיע את עצבי הכלה..."
+                }
+            };
+            this.init();
+        }
+
+        init() {
+            // Get language from parent window or storage
+            if (window.parent && window.parent.langManager) {
+                this.currentLang = window.parent.langManager.getCurrentLanguage();
+            } else {
+                const savedLang = sessionStorage.getItem('wedding-language');
+                if (savedLang && ['en', 'he', 'ru'].includes(savedLang)) {
+                    this.currentLang = savedLang;
+                }
+            }
+
+            this.applyLanguage();
+            this.setupLanguageObserver();
+        }
+
+        applyLanguage() {
+            const lang = this.currentLang;
+            const t = this.translations[lang];
+
+            // Update all elements with data-key attributes
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (t[key]) {
+                    element.textContent = t[key];
+                }
+            });
+
+            // Apply RTL for Hebrew
+            if (lang === 'he') {
+                document.body.style.direction = 'rtl';
+                document.body.style.textAlign = 'right';
+            } else {
+                document.body.style.direction = 'ltr';
+                document.body.style.textAlign = 'left';
+            }
+        }
+
+        setupLanguageObserver() {
+            // Listen for language changes
+            let lastSessionLang = sessionStorage.getItem('wedding-language');
+            setInterval(() => {
+                const currentSessionLang = sessionStorage.getItem('wedding-language');
+                if (currentSessionLang && currentSessionLang !== lastSessionLang && currentSessionLang !== this.currentLang) {
+                    this.setLanguage(currentSessionLang);
+                    lastSessionLang = currentSessionLang;
+                }
+            }, 1000);
+        }
+
+        setLanguage(lang) {
+            if (['en', 'he', 'ru'].includes(lang) && lang !== this.currentLang) {
+                this.currentLang = lang;
+                this.applyLanguage();
+            }
+        }
+    }
+
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+        const boardLangManager = new TeaBoardLanguageManager();
+        window.boardLangManager = boardLangManager;
+    });
+
+    // Also initialize if board is loaded dynamically
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            const boardLangManager = new TeaBoardLanguageManager();
+            window.boardLangManager = boardLangManager;
+        });
+    } else {
+        const boardLangManager = new TeaBoardLanguageManager();
+        window.boardLangManager = boardLangManager;
+    }
+</script>
