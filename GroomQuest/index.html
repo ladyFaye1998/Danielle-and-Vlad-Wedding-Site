@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="UTF-8"/>
+	<link rel="manifest" href="manifest.webmanifest">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="theme-color" content="#000000" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>D &amp; V — Goblin Chase</title>
+	<link rel="icon" type="image/png" href="../assets/crest.png" />
+
+	<!-- Google Fonts with Extended Language Support -->
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Merriweather+Sans:wght@400;500&family=Dancing+Script:wght@600&family=Heebo:wght@400;500;700&family=Inter:wght@400;500;700&family=Noto+Sans+Hebrew:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+			overflow: hidden;
+			font-family: 'Merriweather Sans', sans-serif;
+			transition: direction 0.3s ease;
+		}
+
+		/* Language-specific styles */
+		html[lang="he"] {
+			font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+			direction: rtl;
+		}
+
+		html[lang="he"] h1,
+		html[lang="he"] h2,
+		html[lang="he"] h3 {
+			font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+			font-weight: 700;
+		}
+
+		html[lang="ru"] {
+			font-family: 'Inter', 'Noto Sans', sans-serif;
+		}
+
+		html[lang="ru"] h1,
+		html[lang="ru"] h2,
+		html[lang="ru"] h3 {
+			font-family: 'Inter', 'Noto Sans', sans-serif;
+			font-weight: 700;
+		}
+
+		#canvasArea {
+			margin-left: auto;
+			margin-right: auto;
+			overflow: hidden;
+		}
+
+		/* Instructions */
+		#instructions {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: rgba(255, 255, 255, 0.95);
+			border: 3px solid #d6c09c;
+			border-radius: 15px;
+			padding: 30px;
+			max-width: 500px;
+			text-align: center;
+			z-index: 200;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+		}
+
+		#instructions h2 {
+			font-family: 'Playfair Display', serif;
+			color: #d6c09c;
+			margin-top: 0;
+		}
+
+		html[lang="he"] #instructions h2 {
+			font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+		}
+
+		html[lang="ru"] #instructions h2 {
+			font-family: 'Inter', 'Noto Sans', sans-serif;
+		}
+
+		#instructions p {
+			margin-bottom: 20px;
+			line-height: 1.5;
+		}
+
+		[dir="rtl"] #instructions {
+			text-align: right;
+		}
+
+		#start-game {
+			background: #d6c09c;
+			color: white;
+			border: none;
+			border-radius: 20px;
+			padding: 10px 20px;
+			font-family: 'Playfair Display', serif;
+			cursor: pointer;
+			transition: all 0.2s;
+			pointer-events: auto;
+		}
+
+		html[lang="he"] #start-game {
+			font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+		}
+
+		html[lang="ru"] #start-game {
+			font-family: 'Inter', 'Noto Sans', sans-serif;
+		}
+
+		#start-game:hover {
+			transform: scale(1.05);
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+		}
+
+		/* Success message */
+		#game-over {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.8);
+			display: none;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+			z-index: 300;
+			color: white;
+			text-align: center;
+		}
+
+		[dir="rtl"] #game-over {
+			text-align: center; /* Keep center for game over screen */
+		}
+
+		#game-over h2 {
+			font-family: 'Playfair Display', serif;
+			color: #d6c09c;
+			font-size: 3rem;
+			margin-bottom: 20px;
+		}
+
+		html[lang="he"] #game-over h2 {
+			font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+		}
+
+		html[lang="ru"] #game-over h2 {
+			font-family: 'Inter', 'Noto Sans', sans-serif;
+		}
+
+		#game-over p {
+			font-size: 1.5rem;
+			margin-bottom: 30px;
+			max-width: 600px;
+		}
+
+		#continue-btn {
+			background: #d6c09c;
+			color: white;
+			border: none;
+			border-radius: 30px;
+			padding: 15px 30px;
+			font-family: 'Playfair Display', serif;
+			font-size: 1.2rem;
+			cursor: pointer;
+			transition: all 0.3s;
+		}
+
+		html[lang="he"] #continue-btn {
+			font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+		}
+
+		html[lang="ru"] #continue-btn {
+			font-family: 'Inter', 'Noto Sans', sans-serif;
+		}
+
+		#continue-btn:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+		}
+
+		/* Skip button */
+		#skip-button {
+			position: fixed;
+			top: 10px;
+			right: 10px;
+			background: #d6c09c;
+			color: white;
+			border: none;
+			border-radius: 30px;
+			padding: 8px 16px;
+			font-family: 'Playfair Display', serif;
+			font-size: 14px;
+			cursor: pointer;
+			z-index: 1000;
+			box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+			transition: all 0.3s ease;
+			display: none; /* Hidden by default, will appear after 60 seconds */
+		}
+
+		html[lang="he"] #skip-button {
+			font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+		}
+
+		html[lang="ru"] #skip-button {
+			font-family: 'Inter', 'Noto Sans', sans-serif;
+		}
+
+		/* RTL adjustment for skip button */
+		[dir="rtl"] #skip-button {
+			right: auto;
+			left: 10px;
+		}
+
+		#skip-button:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+		}
+
+		/* Scold popup */
+		#scold-popup {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: rgba(255, 255, 255, 0.95);
+			border: 3px solid #d6c09c;
+			border-radius: 15px;
+			padding: 30px;
+			max-width: 500px;
+			text-align: center;
+			z-index: 400;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+			display: none;
+		}
+
+		[dir="rtl"] #scold-popup {
+			text-align: right;
+		}
+
+		#scold-popup h2 {
+			font-family: 'Playfair Display', serif;
+			color: #d6c09c;
+			margin-top: 0;
+		}
+
+		html[lang="he"] #scold-popup h2 {
+			font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+		}
+
+		html[lang="ru"] #scold-popup h2 {
+			font-family: 'Inter', 'Noto Sans', sans-serif;
+		}
+
+		#scold-popup p {
+			margin-bottom: 20px;
+			line-height: 1.5;
+		}
+
+		.scold-button {
+			margin: 0 10px;
+			padding: 10px 20px;
+			font-family: 'Playfair Display', serif;
+			border-radius: 20px;
+			cursor: pointer;
+			transition: all 0.2s;
+		}
+
+		html[lang="he"] .scold-button {
+			font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+		}
+
+		html[lang="ru"] .scold-button {
+			font-family: 'Inter', 'Noto Sans', sans-serif;
+		}
+
+		#scold-yes {
+			background: #d6c09c;
+			color: white;
+			border: none;
+		}
+
+		#scold-no {
+			background: white;
+			color: #2e3238;
+			border: 2px solid #d6c09c;
+		}
+
+		.scold-button:hover {
+			transform: scale(1.05);
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+		}
+
+		/* Alert notification - now inside instructions */
+		#skip-alert {
+			background: rgba(214, 192, 156, 0.2);
+			border: 2px solid #d6c09c;
+			border-radius: 8px;
+			padding: 12px;
+			margin: 15px 0;
+			font-size: 14px;
+			color: #8b6914;
+			font-style: italic;
+			text-align: center;
+		}
+
+		[dir="rtl"] #skip-alert {
+			text-align: right;
+		}
+
+		/* Responsive adjustments */
+		@media (max-width: 768px) {
+			#instructions, #scold-popup {
+				max-width: 90%;
+				padding: 20px;
+			}
+
+			#game-over h2 {
+				font-size: 2rem;
+			}
+
+			#game-over p {
+				font-size: 1.2rem;
+			}
+
+			#skip-alert {
+				font-size: 14px;
+				padding: 12px 20px;
+			}
+		}
+	</style>
+	<!-- Libs and GDJS core files : -->
+	<script src="libs/jshashtable.js" crossorigin="anonymous"></script>
+	<script src="logger.js" crossorigin="anonymous"></script>
+	<script src="gd.js" crossorigin="anonymous"></script>
+	<script src="libs/rbush.js" crossorigin="anonymous"></script>
+	<script src="AsyncTasksManager.js" crossorigin="anonymous"></script>
+	<script src="inputmanager.js" crossorigin="anonymous"></script>
+	<script src="jsonmanager.js" crossorigin="anonymous"></script>
+	<script src="Model3DManager.js" crossorigin="anonymous"></script>
+	<script src="ResourceLoader.js" crossorigin="anonymous"></script>
+	<script src="ResourceCache.js" crossorigin="anonymous"></script>
+	<script src="timemanager.js" crossorigin="anonymous"></script>
+	<script src="polygon.js" crossorigin="anonymous"></script>
+	<script src="runtimeobject.js" crossorigin="anonymous"></script>
+	<script src="profiler.js" crossorigin="anonymous"></script>
+	<script src="RuntimeInstanceContainer.js" crossorigin="anonymous"></script>
+	<script src="runtimescene.js" crossorigin="anonymous"></script>
+	<script src="scenestack.js" crossorigin="anonymous"></script>
+	<script src="force.js" crossorigin="anonymous"></script>
+	<script src="RuntimeLayer.js" crossorigin="anonymous"></script>
+	<script src="layer.js" crossorigin="anonymous"></script>
+	<script src="RuntimeCustomObjectLayer.js" crossorigin="anonymous"></script>
+	<script src="timer.js" crossorigin="anonymous"></script>
+	<script src="runtimewatermark.js" crossorigin="anonymous"></script>
+	<script src="runtimegame.js" crossorigin="anonymous"></script>
+	<script src="variable.js" crossorigin="anonymous"></script>
+	<script src="variablescontainer.js" crossorigin="anonymous"></script>
+	<script src="oncetriggers.js" crossorigin="anonymous"></script>
+	<script src="runtimebehavior.js" crossorigin="anonymous"></script>
+	<script src="SpriteAnimator.js" crossorigin="anonymous"></script>
+	<script src="spriteruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="affinetransformation.js" crossorigin="anonymous"></script>
+	<script src="CustomRuntimeObjectInstanceContainer.js" crossorigin="anonymous"></script>
+	<script src="CustomRuntimeObject.js" crossorigin="anonymous"></script>
+	<script src="CustomRuntimeObject2D.js" crossorigin="anonymous"></script>
+	<script src="events-tools/commontools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/variabletools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/runtimescenetools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/inputtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/objecttools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/cameratools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/soundtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/storagetools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/stringtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/windowtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/networktools.js" crossorigin="anonymous"></script>
+	<script src="splash/gd-logo-light.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi-filters-tools.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/runtimegame-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/runtimescene-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/layer-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi-image-manager.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi-bitmapfont-manager.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/spriteruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/CustomRuntimeObject2DPixiRenderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/DebuggerPixiRenderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/loadingscreen-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi-effects-manager.js" crossorigin="anonymous"></script>
+	<script src="howler-sound-manager/howler.min.js" crossorigin="anonymous"></script>
+	<script src="howler-sound-manager/howler-sound-manager.js" crossorigin="anonymous"></script>
+	<script src="fontfaceobserver-font-manager/fontfaceobserver.js" crossorigin="anonymous"></script>
+	<script src="fontfaceobserver-font-manager/fontfaceobserver-font-manager.js" crossorigin="anonymous"></script>
+	<script src="Extensions/AnchorBehavior/anchorruntimebehavior.js" crossorigin="anonymous"></script>
+	<script src="Extensions/BitmapText/bitmaptextruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="Extensions/BitmapText/bitmaptextruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="Extensions/DebuggerTools/debuggertools.js" crossorigin="anonymous"></script>
+	<script src="Extensions/LinkedObjects/linkedobjects.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PlatformBehavior/platformerobjectruntimebehavior.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PlatformBehavior/platformruntimebehavior.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PlatformBehavior/platformtools.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PrimitiveDrawing/pixi-graphics-extras/graphics-extras.min.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PrimitiveDrawing/shapepainterruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PrimitiveDrawing/shapepainterruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="Extensions/SystemInfo/systeminfotools.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TileMap/TileMapRuntimeManager.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TileMap/collision/TransformedTileMap.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TileMap/helper/TileMapHelper.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TileMap/pako/dist/pako.min.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TileMap/pixi-tilemap/dist/pixi-tilemap.umd.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TileMap/simpletilemapruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TileMap/tilemapruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TiledSpriteObject/tiledspriteruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TiledSpriteObject/tiledspriteruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TweenBehavior/TweenManager.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__buttonstates__buttonfsm.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__buttonstates__buttonobjecteffects.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__platformercharacteranimator__platformercharacteranimator.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__rectanglemovement__distancetoclosestedge-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__rectanglemovement__movealongborderofobject-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__rectanglemovement__movetonearestcorner-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__rectanglemovement__rectanglemovement.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__smoothcamera__smoothcamera.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__smoothcamera__smoothplatformercamera.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/AnimatableBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/EffectBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/FlippableBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/OpacityBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/ResizableBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/ScalableBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/TextContainerBehavior.js" crossorigin="anonymous"></script>
+	<script src="Extensions/3D/HemisphereLight.js" crossorigin="anonymous"></script>
+	<script src="Extensions/Effects/outline-pixi-filter.js" crossorigin="anonymous"></script>
+	<script src="Extensions/Effects/pixi-filters/filter-outline.js" crossorigin="anonymous"></script>
+	<script src="code0.js" crossorigin="anonymous"></script>
+	<script src="code1.js" crossorigin="anonymous"></script>
+	<script src="data.js" crossorigin="anonymous"></script>
+	<script src="remove-branding.js"></script>
+</head>
+<body>
+
+<!-- Instructions Overlay -->
+<div id="instructions">
+	<h2 data-key="instructions-title">Catch the Goblin!</h2>
+	<p data-key="instructions-desc1">The mischievous Grimble has stolen the wedding rings! Help Vlad track him through the enchanted forest.</p>
+	<p><strong data-key="instructions-task-label">Your task:</strong> <span data-key="instructions-task">Guide Vlad's pursuit by advancing through the forest obstacles and staying on Grimble's trail.</span></p>
+
+	<!-- Skip Alert inside instructions -->
+	<div id="skip-alert" style="background: rgba(214, 192, 156, 0.2); border: 2px solid #d6c09c; border-radius: 8px; padding: 12px; margin: 15px 0; font-size: 14px; color: #8b6914; font-style: italic;">
+		<span data-key="skip-alert-text">Notice the skip button — we recommend not to press it until you pass the level, but if you are impatient... it will appear on the top right 1 minute into the game</span>
+	</div>
+
+	<button id="start-game" data-key="start-game-btn">Begin the Chase</button>
+</div>
+
+<!-- Game Over Screen -->
+<div id="game-over">
+	<h2 data-key="victory-title">Victory!</h2>
+	<p data-key="victory-desc">You've cornered the clever Grimble at his hideout! Now you must match wits with him and solve his famous riddles to recover the precious wedding rings.</p>
+	<button id="continue-btn" data-key="continue-btn">Continue to Grimble's Lair</button>
+</div>
+
+<!-- Skip Button -->
+<button id="skip-button" data-key="skip-btn">Skip to Victory</button>
+
+<!-- Scold Popup -->
+<div id="scold-popup">
+	<h2 data-key="scold-title">Impatient, are we?</h2>
+	<p data-key="scold-desc">The noble path is to persevere through challenges, brave wanderer! Are you certain you wish to abandon the chase and skip ahead?</p>
+	<div>
+		<button id="scold-yes" class="scold-button" data-key="scold-yes-btn">Yes, I confess my impatience</button>
+		<button id="scold-no" class="scold-button" data-key="scold-no-btn">No, I'll continue the quest</button>
+	</div>
+</div>
+
+<script>
+	// ────────────────────────────────────────────────────────────────
+	// Language Management
+	// ────────────────────────────────────────────────────────────────
+
+	class GroomQuestGameLanguageManager {
+		constructor() {
+			this.currentLang = 'en';
+			this.init();
+		}
+
+		init() {
+			// Check multiple sources for language preference
+			const urlLang = new URLSearchParams(window.location.search).get('lang');
+			const savedLang = sessionStorage.getItem('wedding-language');
+			const localLang = localStorage.getItem('wedding-language');
+
+			console.log('Groom Quest Game language detection:', { urlLang, savedLang, localLang });
+
+			// Priority: URL parameter > sessionStorage > localStorage > default
+			if (urlLang && ['en', 'he', 'ru'].includes(urlLang)) {
+				this.currentLang = urlLang;
+			} else if (savedLang && ['en', 'he', 'ru'].includes(savedLang)) {
+				this.currentLang = savedLang;
+			} else if (localLang && ['en', 'he', 'ru'].includes(localLang)) {
+				this.currentLang = localLang;
+			}
+
+			this.applyLanguage();
+			this.setupLanguageObserver();
+			console.log('Groom Quest Game initialized with language:', this.currentLang);
+		}
+
+		applyLanguage() {
+			const html = document.documentElement;
+
+			// Set language and direction
+			html.lang = this.currentLang;
+
+			if (this.currentLang === 'he') {
+				html.dir = 'rtl';
+			} else {
+				html.dir = 'ltr';
+			}
+
+			// Update page title
+			const titles = {
+				en: 'D & V — Goblin Chase',
+				he: 'ד & ו — מרדף הגובלין',
+				ru: 'Д & В — Погоня за гоблином'
+			};
+			document.title = titles[this.currentLang] || titles.en;
+
+			// Update text content
+			this.updateTextContent();
+		}
+
+		updateTextContent() {
+			const lang = this.currentLang;
+			const t = translations[lang];
+
+			// Update all elements with data-key attributes
+			document.querySelectorAll('[data-key]').forEach(element => {
+				const key = element.getAttribute('data-key');
+				if (t[key]) {
+					element.textContent = t[key];
+				}
+			});
+		}
+
+		setupLanguageObserver() {
+			// Poll for sessionStorage changes
+			let lastSessionLang = sessionStorage.getItem('wedding-language');
+			setInterval(() => {
+				const currentSessionLang = sessionStorage.getItem('wedding-language');
+				if (currentSessionLang && currentSessionLang !== lastSessionLang && currentSessionLang !== this.currentLang) {
+					console.log('Groom Quest Game detected language change:', currentSessionLang);
+					this.setLanguage(currentSessionLang);
+					lastSessionLang = currentSessionLang;
+				}
+			}, 1000);
+
+			// Listen for storage changes
+			window.addEventListener('storage', (event) => {
+				if (event.key === 'wedding-language' && event.newValue) {
+					this.setLanguage(event.newValue);
+				}
+			});
+		}
+
+		setLanguage(lang) {
+			if (['en', 'he', 'ru'].includes(lang) && lang !== this.currentLang) {
+				this.currentLang = lang;
+				this.applyLanguage();
+			}
+		}
+
+		getCurrentLanguage() {
+			return this.currentLang;
+		}
+	}
+
+	// ────────────────────────────────────────────────────────────────
+	// Multilingual Content
+	// ────────────────────────────────────────────────────────────────
+
+	const translations = {
+		en: {
+			// Skip Alert
+			"skip-alert-text": "Notice the skip button — we recommend not to press it until you pass the level, but if you are impatient... it will appear on the top right 1 minute into the game",
+
+			// Instructions
+			"instructions-title": "Catch the Goblin!",
+			"instructions-desc1": "The mischievous Grimble has stolen the wedding rings! Help Vlad track him through the enchanted forest.",
+			"instructions-task-label": "Your task:",
+			"instructions-task": "Guide Vlad's pursuit by advancing through the forest obstacles and staying on Grimble's trail.",
+			"start-game-btn": "Begin the Chase",
+
+			// Victory Screen
+			"victory-title": "Victory!",
+			"victory-desc": "You've cornered the clever Grimble at his hideout! Now you must match wits with him and solve his famous riddles to recover the precious wedding rings.",
+			"continue-btn": "Continue to Grimble's Lair",
+
+			// Skip Button
+			"skip-btn": "Skip to Victory",
+
+			// Scold Popup
+			"scold-title": "Impatient, are we?",
+			"scold-desc": "The noble path is to persevere through challenges, brave wanderer! Are you certain you wish to abandon the chase and skip ahead?",
+			"scold-yes-btn": "Yes, I confess my impatience",
+			"scold-no-btn": "No, I'll continue the quest"
+		},
+
+		ru: {
+			// Skip Alert
+			"skip-alert-text": "Обратите внимание на кнопку пропуска — мы рекомендуем не нажимать её, пока вы не пройдёте уровень, но если вы нетерпеливы... она появится в правом верхнем углу через минуту игры",
+
+			// Instructions
+			"instructions-title": "Поймай гоблина!",
+			"instructions-desc1": "Озорной Гримбл украл обручальные кольца! Помоги Владу выследить его в заколдованном лесу.",
+			"instructions-task-label": "Ваша задача:",
+			"instructions-task": "Направляйте преследование Влада, продвигаясь через лесные препятствия и держась на следу Гримбла.",
+			"start-game-btn": "Начать погоню",
+
+			// Victory Screen
+			"victory-title": "Победа!",
+			"victory-desc": "Вы загнали хитрого Гримбла в его логово!",
+			"continue-btn": "Перейти в логово Гримбла",
+
+			// Skip Button
+			"skip-btn": "Пропустить к победе",
+
+			// Scold Popup
+			"scold-title": "Нетерпеливы, не так ли?",
+			"scold-desc": "Благородный путь — преодолевать трудности, храбрый странник! Вы уверены, что хотите бросить погоню?",
+			"scold-yes-btn": "Да, признаю своё нетерпение",
+			"scold-no-btn": "Нет, я продолжу квест"
+		},
+
+		he: {
+			// Skip Alert
+			"skip-alert-text": "שימו לב לכפתור הדילוג — אנו ממליצים לא ללחוץ עליו עד שתעברו את השלב, אבל אם אתם חסרי סבלנות... הוא יופיע בפינה הימנית העליונה דקה לתוך המשחק",
+
+			// Instructions
+			"instructions-title": "תפסו את הגובלין!",
+			"instructions-desc1": "גרימבל השובב גנב את טבעות הנישואין! עזרו לולאד לעקוב אחריו דרך היער הקסום.",
+			"instructions-task-label": "המשימה שלכם:",
+			"instructions-task": "הנחו את המרדף של ולאד על ידי התקדמות דרך מכשולי היער.",
+			"start-game-btn": "התחלת המרדף",
+
+			// Victory Screen
+			"victory-title": "ניצחון!",
+			"victory-desc": "הצלחתם להדביק את גרימבל החכם במחבואו!",
+			"continue-btn": "המשך למערת גרימבל",
+
+			// Skip Button
+			"skip-btn": "דלג לניצחון",
+
+			// Scold Popup
+			"scold-title": "חסרי סבלנות, אה?",
+			"scold-desc": "הדרך האצילית היא להתמיד מול אתגרים, הרפתקן אמיץ! האם אתם בטוחים שברצונכם לנטוש את המרדף ולדלג קדימה?",
+			"scold-yes-btn": "כן, אני מודה בחוסר הסבלנות שלי",
+			"scold-no-btn": "לא, אני אמשיך במשימה"
+		}
+	};
+
+	// Initialize language manager
+	const langManager = new GroomQuestGameLanguageManager();
+
+	// ────────────────────────────────────────────────────────────────
+	// Game Logic
+	// ────────────────────────────────────────────────────────────────
+
+	let gameStarted = false;
+	let skipButtonShown = false;
+	let secondSceneReached = false;
+	let secondSceneTimer = null;
+
+	// Show instructions on load
+	document.addEventListener('DOMContentLoaded', function() {
+		const instructions = document.getElementById('instructions');
+		const gameOver = document.getElementById('game-over');
+		const startGameBtn = document.getElementById('start-game');
+		const continueBtn = document.getElementById('continue-btn');
+		const skipButton = document.getElementById('skip-button');
+		const scoldPopup = document.getElementById('scold-popup');
+		const scoldYes = document.getElementById('scold-yes');
+		const scoldNo = document.getElementById('scold-no');
+		const skipAlert = document.getElementById('skip-alert');
+
+		// Show instructions on load
+		instructions.style.display = 'block';
+
+		// Show the skip alert after a short delay
+		setTimeout(() => {
+			skipAlert.style.display = 'block';
+			// Hide the alert after 8 seconds
+			setTimeout(() => {
+				skipAlert.style.display = 'none';
+			}, 8000);
+		}, 1500);
+
+		// Start button hides instructions and starts timers
+		startGameBtn.addEventListener('click', function() {
+			instructions.style.display = 'none';
+			skipAlert.style.display = 'none'; // Hide alert when game starts
+			gameStarted = true;
+
+			// Show skip button after 60 seconds
+			setTimeout(function() {
+				if (!secondSceneReached) {
+					skipButton.style.display = 'block';
+					skipButtonShown = true;
+				}
+			}, 60000); // 60 seconds
+		});
+
+		// Skip button shows scold popup
+		skipButton.addEventListener('click', function() {
+			scoldPopup.style.display = 'block';
+		});
+
+		// Scold popup buttons
+		scoldYes.addEventListener('click', function() {
+			scoldPopup.style.display = 'none';
+			gameOver.style.display = 'flex';
+		});
+
+		scoldNo.addEventListener('click', function() {
+			scoldPopup.style.display = 'none';
+		});
+
+		// Continue to Goblin's Lair
+		continueBtn.addEventListener('click', function() {
+			window.location.href = '../GroomAfterQuest.html';
+		});
+	});
+
+	// Game integration
+	(function() {
+		//Initialization
+		var game = new gdjs.RuntimeGame(gdjs.projectData, {});
+
+		//Create a renderer
+		game.getRenderer().createStandardCanvas(document.body);
+
+		//Bind keyboards/mouse/touch events
+		game.getRenderer().bindStandardEvents(game.getInputManager(), window, document);
+
+		// Custom scene change detection
+		var originalSceneStackPush = gdjs.SceneStack.prototype.push;
+		gdjs.SceneStack.prototype.push = function(sceneName, stopPreviousScene) {
+			// Call the original function
+			originalSceneStackPush.call(this, sceneName, stopPreviousScene);
+
+			// Check if this is the second scene
+			if (this._stack.length === 2 || sceneName === "Scene2") {
+				console.log("Second scene reached!");
+				secondSceneReached = true;
+
+				// Hide skip button if it's showing
+				if (skipButtonShown) {
+					document.getElementById('skip-button').style.display = 'none';
+				}
+
+				// Auto-complete after 5 seconds
+				secondSceneTimer = setTimeout(function() {
+					window.location.href = '../GroomAfterQuest.html';
+				}, 5000);
+			}
+		};
+
+		//Load all assets and start the game
+		game.loadAllAssets(function() {
+			game.startGameLoop();
+		});
+	})();
+</script>
+</body>
+</html>
