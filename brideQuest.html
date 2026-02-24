@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>D &amp; V — Her Quest</title>
+  <link rel="icon" type="image/png" href="assets/crest.png" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com/3.4.4"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: "#2e3238",
+            honey: "#d6c09c",
+            parchment: "#faf8f5",
+            rose: "#f9f4ef"
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', "serif"],
+            body: ['"Merriweather Sans"', "sans-serif"],
+            script: ['"Dancing Script"', "cursive"],
+            hebrew: ['"Heebo"', '"Noto Sans Hebrew"', "sans-serif"],
+            russian: ['"Inter"', '"Noto Sans"', "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts with Extended Language Support -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Merriweather+Sans:wght@400;500&family=Dancing+Script:wght@600&family=Heebo:wght@400;500;700&family=Inter:wght@400;500;700&family=Noto+Sans+Hebrew:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    html {
+      background: #faf8f5;
+      scroll-padding-top: 4rem;
+      transition: font-family 0.3s ease;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--tw-body);
+      overflow: hidden;
+      transition: direction 0.3s ease;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--tw-serif);
+      margin: 0;
+    }
+
+    /* Language-specific styles */
+    .lang-hebrew {
+      font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+      direction: rtl;
+    }
+
+    .lang-hebrew h1,
+    .lang-hebrew h2,
+    .lang-hebrew h3,
+    .lang-hebrew h4 {
+      font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+      font-weight: 700;
+    }
+
+    .lang-hebrew .font-script {
+      font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+      font-style: normal;
+    }
+
+    .lang-russian {
+      font-family: 'Inter', 'Noto Sans', sans-serif;
+      direction: ltr;
+    }
+
+    .lang-russian h1,
+    .lang-russian h2,
+    .lang-russian h3,
+    .lang-russian h4 {
+      font-family: 'Inter', 'Noto Sans', sans-serif;
+      font-weight: 700;
+    }
+
+    .lang-russian .font-script {
+      font-family: 'Inter', 'Noto Sans', sans-serif;
+      font-style: italic;
+    }
+
+    .speaker {
+      font-family: 'Playfair Display', serif;
+      font-weight: bold;
+      color: #d6c09c;
+      font-size: 1.1rem;
+    }
+
+    html[lang="he"] .speaker {
+      font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+      font-weight: 700;
+    }
+
+    html[lang="ru"] .speaker {
+      font-family: 'Inter', 'Noto Sans', sans-serif;
+      font-weight: 700;
+    }
+
+    .bubble {
+      border: 2px solid #d6c09c;
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      background: #fff;
+      backdrop-filter: blur(4px);
+      max-width: 90%;
+      margin: 0 auto;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      transition: text-align 0.3s ease;
+    }
+
+    .choice {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: #fff;
+      border: 2px solid #d6c09c;
+      color: #2e3238;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .choice:hover {
+      background: #d6c09c;
+      color: #fff;
+    }
+
+    /* RTL adjustments */
+    [dir="rtl"] #dani {
+      right: auto;
+      left: 2.5rem;
+      transform: scaleX(-1);
+    }
+
+    [dir="rtl"] .bubble {
+      text-align: right;
+    }
+
+    [dir="rtl"] #dialogue {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Tea iframe styles */
+    #tea-iframe {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      z-index: 50;
+      display: none;
+    }
+
+    /* Tea result popup */
+    .tea-result-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      background-color: #fff;
+      border: 3px solid #d6c09c;
+      border-radius: 1rem;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      z-index: 100;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Animations for tea success */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes floatUp {
+      from { transform: translate(-50%, 20px); }
+      to { transform: translate(-50%, -50%); }
+    }
+    @keyframes shimmer {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Link hover effect */
+    .link {
+      position: relative;
+      padding-bottom: 2px;
+      transition: .3s;
+    }
+
+    .link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: #d6c09c;
+      transform: scaleX(0);
+      transition: .3s;
+    }
+
+    .link:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* RTL adjustments for links */
+    [dir="rtl"] .link::after {
+      right: 0;
+      left: 0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      html {
+        scroll-padding-top: 3rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-parchment text-ink antialiased">
+
+<!-- ░ NAVBAR ░ -->
+<nav id="navbar" class="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-4 sm:px-8 py-3 bg-white/50 backdrop-blur-lg border-b border-white/30 shadow-md">
+  <!-- Crest + monogram on the left -->
+  <a href="index.html" class="flex items-center gap-3">
+    <img src="assets/crest.png" alt="Wedding crest" class="h-8 drop-shadow-md" />
+    <span class="hidden sm:inline-block font-serif text-xl text-ink">D&nbsp;&amp;&nbsp;V</span>
+  </a>
+
+  <!-- Desktop links (right) -->
+  <ul class="hidden md:flex gap-6 lg:gap-8 text-base font-medium">
+    <li><a href="prologue.html#s0" class="link" data-nav-key="prologue">Prologue</a></li>
+    <li><a href="index.html#quests" class="link" data-nav-key="quests">Quests</a></li>
+    <li><a href="index.html#ceremony" class="link" data-nav-key="ceremony">Ceremony</a></li>
+    <li><a href="index.html#travel" class="link" data-nav-key="travel">Travel</a></li>
+    <li><a href="index.html#rsvp" class="link" data-nav-key="rsvp">RSVP</a></li>
+  </ul>
+
+  <!-- Mobile burger -->
+  <button id="burger" class="burger md:hidden flex flex-col gap-1.5 p-2" aria-label="Menu">
+    <span class="burger-line w-6 h-[2px] bg-ink"></span>
+    <span class="burger-line w-6 h-[2px] bg-ink"></span>
+    <span class="burger-line w-6 h-[2px] bg-ink"></span>
+  </button>
+</nav>
+
+<!-- Mobile drop-down menu -->
+<div id="mobileMenu" class="fixed z-40 flex-col gap-4 bg-white/95 backdrop-blur-md shadow-lg right-4 top-16 py-5 px-8 rounded-lg text-sm border border-honey/20 opacity-0 transform translateY(-10px) transition-all duration-300 pointer-events-none">
+  <ul class="flex flex-col gap-5">
+    <li><a href="prologue.html#s0" class="block py-1 hover:text-honey transition-colors" data-nav-key="prologue">Prologue</a></li>
+    <li><a href="index.html#quests" class="block py-1 hover:text-honey transition-colors" data-nav-key="quests">Quests</a></li>
+    <li><a href="index.html#ceremony" class="block py-1 hover:text-honey transition-colors" data-nav-key="ceremony">Ceremony</a></li>
+    <li><a href="index.html#travel" class="block py-1 hover:text-honey transition-colors" data-nav-key="travel">Travel</a></li>
+    <li><a href="index.html#rsvp" class="block py-1 hover:text-honey transition-colors" data-nav-key="rsvp">RSVP</a></li>
+  </ul>
+</div>
+
+<style>
+  /* Burger animation */
+  .burger-line {
+    transition: all 0.3s ease;
+  }
+
+  .burger.active .burger-line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .burger.active .burger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .burger.active .burger-line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* Mobile menu visibility */
+  #mobileMenu.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* RTL adjustments for navbar */
+  [dir="rtl"] #navbar {
+    flex-direction: row-reverse;
+  }
+
+  [dir="rtl"] .link::after {
+    right: 0;
+    left: 0;
+  }
+</style>
+
+<!-- ░ BACKGROUND + CHARACTER ░ -->
+<div id="scene" class="absolute inset-0 bg-cover bg-center z-0"></div>
+<img id="dani" src="" alt="Dani" class="absolute bottom-0 left-10 h-[65vh] md:h-[72vh] w-auto z-10 transition-all duration-300" />
+
+<!-- ░ DIALOGUE UI ░ -->
+<div id="dialogue" class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-3xl px-6 py-4 z-20">
+  <div class="bubble">
+    <div id="dialogue-label" class="speaker mb-1"></div>
+    <div id="dialogue-text" class="italic whitespace-pre-line text-[1.05rem] leading-relaxed"></div>
+  </div>
+  <div id="choices" class="text-center mt-4"></div>
+</div>
+
+<!-- ░ TEA GAME IFRAME ░ -->
+<iframe id="tea-iframe" src="" allowfullscreen></iframe>
+
+<main class="pt-20"></main>
+
+<!-- ░ CHAT WIDGET ░ -->
+<div id="chat-container"></div>
+<script src="injectChat.js"></script>
+
+<script>
+  // ────────────────────────────────────────────────────────────────
+  // Language Management
+  // ────────────────────────────────────────────────────────────────
+
+  class BrideQuestLanguageManager {
+    constructor() {
+      this.currentLang = 'en';
+      this.navTranslations = {
+        en: {
+          prologue: "Prologue",
+          quests: "Quests",
+          ceremony: "Ceremony",
+          travel: "Travel",
+          rsvp: "RSVP"
+        },
+        ru: {
+          prologue: "Пролог",
+          quests: "Квесты",
+          ceremony: "Церемония",
+          travel: "Путешествие",
+          rsvp: "RSVP"
+        },
+        he: {
+          prologue: "פרולוג",
+          quests: "חידות",
+          ceremony: "טקס",
+          travel: "נסיעה",
+          rsvp: "אישור הגעה"
+        }
+      };
+      this.init();
+    }
+
+    init() {
+      // Check multiple sources for language preference
+      const urlLang = new URLSearchParams(window.location.search).get('lang');
+      const savedLang = sessionStorage.getItem('wedding-language');
+      const localLang = localStorage.getItem('wedding-language');
+
+      console.log('Bride Quest language detection:', { urlLang, savedLang, localLang });
+
+      // Priority: URL parameter > sessionStorage > localStorage > default
+      if (urlLang && ['en', 'he', 'ru'].includes(urlLang)) {
+        this.currentLang = urlLang;
+      } else if (savedLang && ['en', 'he', 'ru'].includes(savedLang)) {
+        this.currentLang = savedLang;
+      } else if (localLang && ['en', 'he', 'ru'].includes(localLang)) {
+        this.currentLang = localLang;
+      }
+
+      this.applyLanguage();
+      this.setupLanguageObserver();
+      this.setupNavbarEvents();
+      console.log('Bride Quest initialized with language:', this.currentLang);
+    }
+
+    applyLanguage() {
+      const html = document.documentElement;
+      const body = document.body;
+
+      // Set language and direction
+      html.lang = this.currentLang;
+
+      body.classList.remove('lang-hebrew', 'lang-russian');
+      html.classList.remove('lang-hebrew', 'lang-russian');
+
+      if (this.currentLang === 'he') {
+        html.dir = 'rtl';
+        body.style.direction = 'rtl';
+        body.classList.add('lang-hebrew');
+        html.classList.add('lang-hebrew');
+      } else {
+        html.dir = 'ltr';
+        body.style.direction = 'ltr';
+        if (this.currentLang === 'ru') {
+          body.classList.add('lang-russian');
+          html.classList.add('lang-russian');
+        }
+      }
+
+      // Update page title
+      const titles = {
+        en: 'D & V — Her Quest',
+        he: 'ד & ו — המסע שלה',
+        ru: 'Д & В — Её Квест'
+      };
+      document.title = titles[this.currentLang] || titles.en;
+
+      // Update navbar translations
+      this.updateNavbar();
+
+      // Re-render current scene with new language
+      if (window.scenes && typeof window.render === 'function') {
+        window.render();
+      }
+    }
+
+    updateNavbar() {
+      const lang = this.currentLang;
+      const t = this.navTranslations[lang];
+
+      // Update all navigation elements
+      document.querySelectorAll('[data-nav-key]').forEach(element => {
+        const key = element.getAttribute('data-nav-key');
+        if (t[key]) {
+          element.textContent = t[key];
+        }
+      });
+    }
+
+    setupNavbarEvents() {
+      // Setup burger menu functionality
+      const burger = document.getElementById('burger');
+      const mobileMenu = document.getElementById('mobileMenu');
+
+      if (burger && mobileMenu) {
+        burger.addEventListener('click', function() {
+          burger.classList.toggle('active');
+          mobileMenu.classList.toggle('visible');
+        });
+
+        // Close menu when clicking a link
+        mobileMenu.querySelectorAll('a').forEach(a => {
+          a.addEventListener('click', function() {
+            burger.classList.remove('active');
+            mobileMenu.classList.remove('visible');
+          });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+          if (mobileMenu.classList.contains('visible') &&
+                  !mobileMenu.contains(e.target) &&
+                  !burger.contains(e.target)) {
+            burger.classList.remove('active');
+            mobileMenu.classList.remove('visible');
+          }
+        });
+      }
+    }
+
+    setupLanguageObserver() {
+      // Poll for sessionStorage changes
+      let lastSessionLang = sessionStorage.getItem('wedding-language');
+      setInterval(() => {
+        const currentSessionLang = sessionStorage.getItem('wedding-language');
+        if (currentSessionLang && currentSessionLang !== lastSessionLang && currentSessionLang !== this.currentLang) {
+          console.log('Bride Quest detected language change:', currentSessionLang);
+          this.setLanguage(currentSessionLang);
+          lastSessionLang = currentSessionLang;
+        }
+      }, 1000);
+
+      // Listen for storage changes
+      window.addEventListener('storage', (event) => {
+        if (event.key === 'wedding-language' && event.newValue) {
+          this.setLanguage(event.newValue);
+        }
+      });
+    }
+
+    setLanguage(lang) {
+      if (['en', 'he', 'ru'].includes(lang) && lang !== this.currentLang) {
+        this.currentLang = lang;
+        this.applyLanguage();
+      }
+    }
+
+    getCurrentLanguage() {
+      return this.currentLang;
+    }
+  }
+
+  // Initialize language manager
+  const langManager = new BrideQuestLanguageManager();
+  window.langManager = langManager;
+
+  // ────────────────────────────────────────────────────────────────
+  // Multilingual Story Content
+  // ────────────────────────────────────────────────────────────────
+
+  const translations = {
+    en: {
+      dani: "Dani",
+      wanderer: "Wanderer",
+      scenes: [
+        // 0 — Nervous feelings
+        {
+          text: "I don't know why, but I feel a little fluttery inside today.\nLike there are butterflies rehearsing too.",
+          choices: [{ text: "Next" }]
+        },
+        // 1 — Hoping to feel ready
+        {
+          text: "It's silly, isn't it?\nEverything is nearly ready... I just hope I'll feel ready too.",
+          choices: [{ text: "Next" }]
+        },
+        // 2 — Offer of tea/coffee
+        {
+          text: "Not silly at all.\nHow about something warm to settle the butterflies?\nTea or coffee?",
+          choices: [
+            { text: "Tea 🍵" },
+            { text: "Coffee ☕" }
+          ]
+        },
+        // 3 — Happy with tea
+        {
+          text: "This tea is wonderful! Just what I needed.\nI can feel my nerves settling already.",
+          choices: [{ text: "Next" }]
+        },
+        // 4 — Tea expertise question
+        {
+          text: "You really know how to brew the perfect cup.\nAre you a tea expert, or just naturally intuitive?",
+          choices: [
+            { text: "I've studied tea brewing" },
+            { text: "Just intuitive" }
+          ]
+        },
+        // 5 — Wedding invitation setup
+        {
+          text: "Well, you've certainly helped calm my nerves.\nYou know, we're still finalizing our guest list...",
+          choices: [{ text: "Next" }]
+        },
+        // 6 — Wedding invitation
+        {
+          text: "I'd like to invite you to our wedding!\nSomeone with your calming presence would be a welcome addition.",
+          choices: [{ text: "I'd be honored" }]
+        },
+        // 7 — Failed tea scene
+        {
+          text: "Hmm... This tea is a bit... different. It's not quite what I was hoping for.",
+          choices: [{ text: "Try again?" }]
+        }
+      ],
+      teaResponses: {
+        studied: "I see! That explains the precision. There's such an art to it.",
+        intuitive: "Sometimes intuition is the best guide, especially with something as personal as tea."
+      },
+      teaChoice: "...Yes. Tea. That sounds perfect.\nSomething calming would be wonderful right now.",
+      coffeeChoice: "...Coffee? That might make me more anxious.",
+      teaTransition: "Let's make some tea for Dani...",
+
+      // Tea success popup
+      teaSuccess: {
+        title: "Perfect Brew!",
+        description: "Dani will appreciate your wonderful tea.",
+        exquisiteDescription: "Dani will appreciate your exquisite tea.",
+        continueButton: "Present to the Bride",
+        quote: "The perfect cup to calm her nerves."
+      },
+
+      // Invitation
+      invitation: {
+        title: "Daniëlle & Vlad",
+        request: "Request the honor of your presence",
+        date: "Tuesday · 22 July 2025",
+        location: "Kerem Maharal Castle",
+        tagline: "An evening of quests, music & magic",
+        reason: "For calming the bride's nerves\nand brewing the perfect cup of tea",
+        printButton: "Print",
+        continueButton: "Continue"
+      },
+
+      // Completion
+      completion: {
+        congratulations: "Congratulations!",
+        passed: "You've passed the Bride's Quest",
+        returnHome: "Return to Home"
+      }
+    },
+
+    ru: {
+      dani: "Дани",
+      wanderer: "Странник",
+      scenes: [
+        // 0 — Nervous feelings
+        {
+          text: "Не знаю почему, но сегодня у меня внутри порхают бабочки.\nКак будто они тоже репетируют.",
+          choices: [{ text: "Далее" }]
+        },
+        // 1 — Hoping to feel ready
+        {
+          text: "Глупо, правда?\nВсё почти готово... просто надеюсь, что я тоже буду готова.",
+          choices: [{ text: "Далее" }]
+        },
+        // 2 — Offer of tea/coffee
+        {
+          text: "Совсем не глупо.\nКак насчёт чего-то тёплого, чтобы успокоить бабочек?\nЧай или кофе?",
+          choices: [
+            { text: "Чай 🍵" },
+            { text: "Кофе ☕" }
+          ]
+        },
+        // 3 — Happy with tea
+        {
+          text: "Этот чай восхитителен! Именно то, что нужно.\nУже чувствую, как нервы успокаиваются.",
+          choices: [{ text: "Далее" }]
+        },
+        // 4 — Tea expertise question
+        {
+          text: "Вы действительно умеете заваривать идеальный чай.\nВы эксперт по чаю или просто интуитивно чувствуете?",
+          choices: [
+            { text: "Я изучал заваривание чая" },
+            { text: "Просто интуиция" }
+          ]
+        },
+        // 5 — Wedding invitation setup
+        {
+          text: "Что ж, вы определённо помогли успокоить мои нервы.\nЗнаете, мы всё ещё дорабатываем список гостей...",
+          choices: [{ text: "Далее" }]
+        },
+        // 6 — Wedding invitation
+        {
+          text: "Я хотела бы пригласить вас на нашу свадьбу!\nКто-то с вашим успокаивающим присутствием будет желанным дополнением.",
+          choices: [{ text: "Буду рад" }]
+        },
+        // 7 — Failed tea scene
+        {
+          text: "Хм... Этот чай немного... странный. Это не совсем то, на что я надеялась.",
+          choices: [{ text: "Попробовать ещё раз?" }]
+        }
+      ],
+      teaResponses: {
+        studied: "Понятно! Это объясняет точность. В этом есть настоящее искусство.",
+        intuitive: "Иногда интуиция — лучший проводник, особенно в чём-то таком личном, как чай."
+      },
+      teaChoice: "...Да. Чай. Звучит идеально.\nЧто-то успокаивающее было бы замечательно сейчас.",
+      coffeeChoice: "...Кофе? Это может сделать меня ещё более нервной.",
+      teaTransition: "Давайте приготовим чай для Дани...",
+
+      // Tea success popup
+      teaSuccess: {
+        title: "Идеальная заварка!",
+        description: "Дани оценит ваш замечательный чай.",
+        exquisiteDescription: "Дани оценит ваш изысканный чай.",
+        continueButton: "Подать невесте",
+        quote: "Идеальная чашка для успокоения нервов."
+      },
+
+      // Invitation
+      invitation: {
+        title: "Даниэль и Влад",
+        request: "Просят честь вашего присутствия",
+        date: "Вторник · 22 июль 2025",
+        location: "Замок Керем Махарал",
+        tagline: "Вечер квестов, музыки и волшебства",
+        reason: "За успокоение нервов невесты\nи заваривание идеальной чашки чая",
+        printButton: "Печать",
+        continueButton: "Продолжить"
+      },
+
+      // Completion
+      completion: {
+        congratulations: "Поздравляем!",
+        passed: "Вы прошли Квест невесты",
+        returnHome: "Вернуться домой"
+      }
+    },
+
+    he: {
+      dani: "דני",
+      wanderer: "הרפתקן",
+      scenes: [
+        // 0 — Nervous feelings
+        {
+          text: "אני לא יודעת למה, אבל אני מרגישה קצת פרפרים בבטן היום.\nכאילו שגם הם עושים חזרות.",
+          choices: [{ text: "הבא" }]
+        },
+        // 1 — Hoping to feel ready
+        {
+          text: "זה מטופש, לא?\nהכל כמעט מוכן... אני רק מקווה שגם אני אהיה מוכנה.",
+          choices: [{ text: "הבא" }]
+        },
+        // 2 — Offer of tea/coffee
+        {
+          text: "בכלל לא מטופש.\nמה דעתך על משהו חם כדי להרגיע את הפרפרים?\nתה או קפה?",
+          choices: [
+            { text: "תה 🍵" },
+            { text: "קפה ☕" }
+          ]
+        },
+        // 3 — Happy with tea
+        {
+          text: "התה הזה נפלא! בדיוק מה שצריכתי.\nאני כבר מרגישה איך העצבים שלי נרגעים.",
+          choices: [{ text: "הבא" }]
+        },
+        // 4 — Tea expertise question
+        {
+          text: "אתה באמת יודע איך להכין כוס תה מושלמת.\nאתה מומחה תה, או סתם אינטואיטיבי?",
+          choices: [
+            { text: "למדתי הכנת תה" },
+            { text: "סתם אינטואיציה" }
+          ]
+        },
+        // 5 — Wedding invitation setup
+        {
+          text: "ובכן, בהחלט עזרת להרגיע את העצבים שלי.\nאתה יודע, אנחנו עדיין מסיימים את רשימת האורחים...",
+          choices: [{ text: "הבא" }]
+        },
+        // 6 — Wedding invitation
+        {
+          text: "הייתי רוצה להזמין אותך לחתונה שלנו!\nמישהו עם הנוכחות המרגיעה שלך יהיה תוספת מבורכת.",
+          choices: [{ text: "זה יהיה כבוד" }]
+        },
+        // 7 — Failed tea scene
+        {
+          text: "הממ... התה הזה קצת... שונה. זה לא בדיוק מה שקיוויתי לו.",
+          choices: [{ text: "לנסות שוב?" }]
+        }
+      ],
+      teaResponses: {
+        studied: "מובן! זה מסביר את הדיוק. יש באמת אמנות בזה.",
+        intuitive: "לפעמים אינטואיציה היא המדריך הטוב ביותר, במיוחד במשהו כל כך אישי כמו תה."
+      },
+      teaChoice: "...כן. תה. זה נשמע מושלם.\nמשהו מרגיע יהיה נפלא עכשיו.",
+      coffeeChoice: "...קפה? זה עלול לעשות אותי יותר חרדה.",
+      teaTransition: "בואו נכין תה לדני...",
+
+      // Tea success popup
+      teaSuccess: {
+        title: "חליטה מושלמת!",
+        description: "דני תעריך את התה הנפלא שלך.",
+        exquisiteDescription: "דני תעריך את התה המעולה שלך.",
+        continueButton: "להגיש לכלה",
+        quote: "הכוס המושלמת להרגעת העצבים."
+      },
+
+      // Invitation
+      invitation: {
+        title: "דניאל וולאד",
+        request: "מבקשים את כבוד נוכחותכם",
+        date: "יום שלישי · 22 ביולי 2025",
+        location: "טירת כרם מהר״ל",
+        tagline: "ערב של חידות, מוזיקה וקסם",
+        reason: "על הרגעת עצבי הכלה\nוהכנת כוס התה המושלמת",
+        printButton: "הדפס",
+        continueButton: "המשך"
+      },
+
+      // Completion
+      completion: {
+        congratulations: "מזל טוב!",
+        passed: "עברת את מסע הכלה",
+        returnHome: "חזור הביתה"
+      }
+    }
+  };
+
+  // ────────────────────────────────────────────────────────────────
+  // Story Scenes with Multilingual Support
+  // ────────────────────────────────────────────────────────────────
+
+  const baseScenes = [
+    // Scene structure with backgrounds and character images
+    {
+      bg: 'BrideAssets/bg-intro.png',
+      char: 'BrideAssets/Dani-sad.png',
+      speaker: 'dani'
+    },
+    {
+      bg: 'BrideAssets/bg-intro.png',
+      char: 'BrideAssets/Dani-sad.png',
+      speaker: 'dani'
+    },
+    {
+      bg: 'BrideAssets/bg-intro.png',
+      char: 'BrideAssets/Dani-neutral.png',
+      speaker: 'wanderer'
+    },
+    {
+      bg: 'BrideAssets/bg-intro.png',
+      char: 'BrideAssets/Dani-happy.png',
+      speaker: 'dani'
+    },
+    {
+      bg: 'BrideAssets/bg-intro.png',
+      char: 'BrideAssets/Dani-happy.png',
+      speaker: 'dani'
+    },
+    {
+      bg: 'BrideAssets/bg-intro.png',
+      char: 'BrideAssets/Dani-happy.png',
+      speaker: 'dani'
+    },
+    {
+      bg: 'BrideAssets/bg-intro.png',
+      char: 'BrideAssets/Dani-happy.png',
+      speaker: 'dani'
+    },
+    {
+      bg: 'BrideAssets/bg-intro.png',
+      char: 'BrideAssets/Dani-sad.png',
+      speaker: 'dani'
+    }
+  ];
+
+  // Generate localized scenes
+  function getLocalizedScenes() {
+    const lang = langManager.getCurrentLanguage();
+    const t = translations[lang];
+
+    return baseScenes.map((scene, index) => {
+      const localizedContent = t.scenes[index];
+      const speakerName = t[scene.speaker];
+
+      return {
+        ...scene,
+        speaker: speakerName,
+        text: localizedContent.text,
+        choices: localizedContent.choices.map((choice, choiceIndex) => ({
+          text: choice.text,
+          action: () => {
+            if (index === 2) {
+              // Tea/Coffee choice scene
+              if (choiceIndex === 0) {
+                chooseTea();
+              } else {
+                chooseCoffee();
+              }
+            } else if (index === 4) {
+              // Tea expertise response
+              if (choiceIndex === 0) {
+                teaResponse('studied');
+              } else {
+                teaResponse('intuitive');
+              }
+            } else if (index === 6) {
+              // Wedding invitation acceptance
+              showInvitation();
+            } else if (index === 7) {
+              // Try again after failed tea
+              goto(2);
+            } else {
+              // Regular progression
+              if (index < baseScenes.length - 1) {
+                goto(index + 1);
+              }
+            }
+          }
+        }))
+      };
+    });
+  }
+
+  // Debug info
+  const debugMode = true;
+  function log(message) {
+    if (debugMode) {
+      console.log(`[BrideQuest] ${message}`);
+    }
+  }
+
+  // Asset preloader to check files
+  function preloadAssets() {
+    log("Preloading assets...");
+    const assetsToPreload = [
+      "BrideAssets/bg-intro.png",
+      "BrideAssets/Dani-sad.png",
+      "BrideAssets/Dani-neutral.png",
+      "BrideAssets/Dani-happy.png"
+    ];
+
+    // Alternate paths to try if original fails
+    const alternatePathPrefixes = ["", "./", "../", "assets/"];
+
+    assetsToPreload.forEach(assetPath => {
+      const img = new Image();
+      img.onload = () => log(`✅ Successfully loaded: ${assetPath}`);
+      img.onerror = () => {
+        log(`❌ Failed to load: ${assetPath} - Trying alternates...`);
+
+        // Try alternate paths
+        let loaded = false;
+        alternatePathPrefixes.forEach(prefix => {
+          if (!loaded) {
+            const altPath = `${prefix}${assetPath}`;
+            const altImg = new Image();
+            altImg.onload = () => {
+              log(`✅ Success with alternate path: ${altPath}`);
+              loaded = true;
+              // Store the working path for later use
+              window.workingPaths = window.workingPaths || {};
+              window.workingPaths[assetPath] = altPath;
+            };
+            altImg.src = altPath;
+          }
+        });
+      };
+      img.src = assetPath;
+    });
+  }
+
+  // Helper function to get the working path for an asset
+  function getAssetPath(originalPath) {
+    if (window.workingPaths && window.workingPaths[originalPath]) {
+      return window.workingPaths[originalPath];
+    }
+    return originalPath;
+  }
+
+  // Preload assets as soon as script runs
+  preloadAssets();
+
+  // ── STATE ───────────────────────────────────────────────────────
+  let idx = 0;
+  let teaRating = 0;
+  let scenes = getLocalizedScenes();
+
+  // Update scenes when language changes
+  langManager.originalSetLanguage = langManager.setLanguage;
+  langManager.setLanguage = function(lang) {
+    langManager.originalSetLanguage.call(this, lang);
+    scenes = getLocalizedScenes();
+    render(); // Re-render current scene
+  };
+
+  // Get DOM elements
+  const sceneEl = document.getElementById('scene');
+  const daniEl  = document.getElementById('dani');
+  const diaEl   = document.getElementById('dialogue');
+  const textEl  = document.getElementById('dialogue-text');
+  const labelEl = document.getElementById('dialogue-label');
+  const chEl    = document.getElementById('choices');
+  const teaIframe = document.getElementById('tea-iframe');
+
+  // Core game functions
+  function render() {
+    log(`Rendering scene ${idx}`);
+    const s = scenes[idx];
+
+    if (s.bg) {
+      const bgPath = getAssetPath(s.bg);
+      log(`Setting background to: ${bgPath}`);
+      sceneEl.style.backgroundImage = `url('${bgPath}')`;
+      // Fallback in case image fails to load
+      sceneEl.style.backgroundColor = "#f9f4ef";
+    }
+
+    if (s.char) {
+      const charPath = getAssetPath(s.char);
+      log(`Setting character to: ${charPath}`);
+      daniEl.onerror = function() {
+        log(`Failed to load character: ${charPath}`);
+        // Try fallback to known image
+        this.src = "assets/avatar-her-full.png";
+      };
+      daniEl.src = charPath;
+      daniEl.classList.remove('hidden');
+    } else {
+      daniEl.classList.add('hidden');
+    }
+
+    if (s.text !== undefined) {
+      diaEl.classList.remove('hidden');
+      labelEl.textContent = s.speaker || '';
+      textEl.textContent = s.text;
+      chEl.innerHTML = '';
+      (s.choices || []).forEach(c => {
+        const btn = document.createElement('span');
+        btn.textContent = c.text;
+        btn.className = 'choice';
+        btn.onclick = c.action;
+        chEl.appendChild(btn);
+      });
+    } else {
+      diaEl.classList.add('hidden');
+    }
+  }
+
+  function goto(i) {
+    idx = i;
+    render();
+  }
+
+  function chooseCoffee() {
+    const lang = langManager.getCurrentLanguage();
+    const t = translations[lang];
+
+    labelEl.textContent = t.dani;
+    textEl.textContent = t.coffeeChoice;
+    daniEl.src = getAssetPath('BrideAssets/Dani-sad.png');
+
+    setTimeout(() => {
+      daniEl.src = getAssetPath('BrideAssets/Dani-neutral.png');
+      goto(2); // return to offer again or go forward
+    }, 1800);
+  }
+
+  function chooseTea() {
+    const lang = langManager.getCurrentLanguage();
+    const t = translations[lang];
+
+    // Change Dani's expression to show she's pleased with the tea choice
+    daniEl.src = getAssetPath('BrideAssets/Dani-happy.png');
+
+    // Show Dani's response
+    labelEl.textContent = t.dani;
+    textEl.textContent = t.teaChoice;
+
+    // Disable the choice buttons to prevent multiple clicks
+    const choiceButtons = document.querySelectorAll('.choice');
+    choiceButtons.forEach(btn => {
+      btn.style.pointerEvents = 'none';
+      btn.style.opacity = '0.5';
+    });
+
+    // Wait 3 seconds to let the user read the response
+    setTimeout(() => {
+      // Show a brief transition message
+      textEl.textContent = t.teaTransition;
+
+      // Wait another 1.5 seconds before redirecting to tea.html
+      setTimeout(() => {
+        // Try to load the tea simulator
+        try {
+          log("Redirecting to tea simulator");
+          window.location.href = 'loose tea simulator/teamain.html';
+        } catch (e) {
+          log("Failed to load tea simulator, trying alternate path");
+          // Try alternate paths
+          window.location.href = 'tea.html';
+        }
+      }, 1500);
+    }, 3000);
+  }
+
+  function teaResponse(type) {
+    const lang = langManager.getCurrentLanguage();
+    const t = translations[lang];
+
+    textEl.textContent = t.teaResponses[type];
+
+    // Show Dani's appreciation
+    daniEl.src = getAssetPath('BrideAssets/Dani-happy.png');
+
+    // Continue after a short delay
+    setTimeout(() => goto(5), 3000);
+  }
+
+  function showTeaSuccessPopup(rating) {
+    const lang = langManager.getCurrentLanguage();
+    const t = translations[lang];
+
+    // Default to 4 stars if rating is invalid
+    rating = rating || 4;
+
+    // Don't proceed unless rating is 4 or higher
+    if (rating < 4) {
+      log("Rating too low for success popup:", rating);
+      return;
+    }
+
+    // Create overlay background
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    overlay.style.backdropFilter = 'blur(5px)';
+    overlay.style.zIndex = '99';
+    document.body.appendChild(overlay);
+
+    // Create popup with the tea success
+    const popup = document.createElement('div');
+    popup.className = 'tea-result-popup';
+
+    // Add animation classes
+    popup.style.animation = 'fadeIn 0.5s ease-out, floatUp 0.8s ease-out';
+
+    // Show stars based on actual rating
+    const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+
+    // Get appropriate description
+    const description = rating >= 5 ? t.teaSuccess.exquisiteDescription : t.teaSuccess.description;
+
+    // More elaborate popup with decorative elements
+    popup.innerHTML = `
+        <style>
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes floatUp {
+                from { transform: translate(-50%, 20px); }
+                to { transform: translate(-50%, -50%); }
+            }
+            @keyframes shimmer {
+                0% { opacity: 0.4; }
+                50% { opacity: 1; }
+                100% { opacity: 0.4; }
+            }
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+            .star-rating {
+                display: inline-block;
+                animation: shimmer 1.5s infinite;
+                color: #d6c09c;
+            }
+            .continue-btn {
+                animation: pulse 2s infinite;
+                transition: all 0.3s ease;
+            }
+            .continue-btn:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            }
+            .decorative-border {
+                border: 3px double #d6c09c;
+                position: absolute;
+                top: -10px;
+                left: -10px;
+                right: -10px;
+                bottom: -10px;
+                border-radius: 1.3rem;
+                pointer-events: none;
+            }
+            .success-icon {
+                font-size: 48px;
+                margin-bottom: 10px;
+                color: #d6c09c;
+            }
+        </style>
+        <div class="decorative-border"></div>
+        <div class="success-icon">✓</div>
+        <h2 style="color:#d6c09c;margin:0 0 15px;font-size:24px;font-family:'Playfair Display',serif;">${t.teaSuccess.title}</h2>
+        <p style="margin:5px 0 15px;font-family:'Merriweather Sans',sans-serif;font-size:16px;">${description}</p>
+        <div style="text-align:center;margin:20px 0;font-size:36px;">
+            <span class="star-rating">${stars}</span>
+        </div>
+        <button id="continue-btn" class="continue-btn" style="padding:12px 24px;background:#d6c09c;border:none;color:white;border-radius:30px;cursor:pointer;font-family:'Playfair Display',serif;width:100%;font-size:18px;box-shadow:0 4px 12px rgba(0,0,0,0.2);">${t.teaSuccess.continueButton}</button>
+        <p style="margin-top:15px;font-size:14px;color:#8d6e63;font-style:italic;">"${t.teaSuccess.quote}"</p>
+    `;
+
+    // Style the popup more elaborately
+    Object.assign(popup.style, {
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: '350px',
+      backgroundColor: '#fff',
+      border: '3px solid #d6c09c',
+      borderRadius: '1rem',
+      padding: '30px 25px',
+      boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+      zIndex: '100',
+      textAlign: 'center',
+      fontFamily: 'Playfair Display, serif'
+    });
+
+    document.body.appendChild(popup);
+
+    // Add event listener to continue button
+    document.getElementById('continue-btn').addEventListener('click', () => {
+      // Add a fade-out effect
+      overlay.style.transition = 'opacity 0.5s ease';
+      popup.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      overlay.style.opacity = '0';
+      popup.style.opacity = '0';
+      popup.style.transform = 'translate(-50%, -30%)';
+
+      // Remove elements after transition
+      setTimeout(() => {
+        overlay.remove();
+        popup.remove();
+
+        // Show the dialogue and character again
+        diaEl.style.display = 'block';
+        daniEl.style.display = 'block';
+
+        // Go to the happy Dani scene
+        goto(3);
+      }, 500);
+    });
+  }
+
+  function showInvitation() {
+    const lang = langManager.getCurrentLanguage();
+    const t = translations[lang];
+
+    // Determine which invitation to use based on language
+    let invitationSrc;
+    switch(lang) {
+      case 'ru':
+        invitationSrc = 'invitations/ru.png';
+        break;
+      case 'he':
+        invitationSrc = 'invitations/he.png';
+        break;
+      default:
+        invitationSrc = 'invitations/en.png';
+    }
+
+    // Create wedding invitation popup
+    const invitation = document.createElement('div');
+    invitation.style.position = 'fixed';
+    invitation.style.top = '50%';
+    invitation.style.left = '50%';
+    invitation.style.transform = 'translate(-50%, -50%)';
+    invitation.style.width = '90%';
+    invitation.style.maxWidth = '600px';
+    invitation.style.maxHeight = '80vh';
+    invitation.style.overflowY = 'auto';
+    invitation.style.backgroundColor = '#fff';
+    invitation.style.border = '3px solid #d6c09c';
+    invitation.style.borderRadius = '1rem';
+    invitation.style.padding = '2rem';
+    invitation.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+    invitation.style.zIndex = '2000';
+    invitation.style.textAlign = 'center';
+    invitation.style.fontFamily = "'Playfair Display', serif";
+
+    invitation.innerHTML = `
+      <div class="print-area">
+        <img src="${invitationSrc}" alt="Wedding Invitation" style="width: 100%; height: auto;" />
+      </div>
+      <div style="margin-top:2rem;display:flex;justify-content:center;gap:1rem" class="no-print">
+        <button id="print-invite" style="padding:0.75rem 1.5rem;background:#f5f5f5;border:2px solid #d6c09c;color:#2e3238;border-radius:30px;cursor:pointer;font-family:'Playfair Display',serif">
+          <span style="display:flex;align-items:center;gap:0.5rem">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            ${t.invitation.printButton}
+          </span>
+        </button>
+        <button id="continue-btn" style="padding:0.75rem 1.5rem;background:#d6c09c;border:none;color:white;border-radius:30px;cursor:pointer;font-family:'Playfair Display',serif">${t.invitation.continueButton}</button>
+      </div>
+    `;
+
+    document.body.appendChild(invitation);
+
+    // Add event listeners
+    document.getElementById('print-invite').addEventListener('click', () => {
+      window.print();
+    });
+
+    document.getElementById('continue-btn').addEventListener('click', () => {
+      invitation.remove();
+
+      // Show completion message
+      const completion = document.createElement('div');
+      completion.style.position = 'fixed';
+      completion.style.inset = '0';
+      completion.style.backgroundColor = 'rgba(0,0,0,0.8)';
+      completion.style.display = 'flex';
+      completion.style.flexDirection = 'column';
+      completion.style.justifyContent = 'center';
+      completion.style.alignItems = 'center';
+      completion.style.zIndex = '3000';
+      completion.style.color = 'white';
+      completion.style.textAlign = 'center';
+
+      completion.innerHTML = `
+        <h1 style="font-family:'Playfair Display',serif;color:#d6c09c;font-size:48px;margin-bottom:1rem">${t.completion.congratulations}</h1>
+        <p style="font-family:'Merriweather Sans',sans-serif;font-size:24px;margin-bottom:2rem">${t.completion.passed}</p>
+        <button id="return-home" style="padding:1rem 2rem;background:#d6c09c;border:none;color:white;border-radius:30px;cursor:pointer;font-family:'Playfair Display',serif;font-size:18px">${t.completion.returnHome}</button>
+      `;
+
+      document.body.appendChild(completion);
+
+      document.getElementById('return-home').addEventListener('click', () => {
+        window.location.href = 'index.html';
+      });
+    });
+  }
+
+  // Make functions globally available
+  window.scenes = scenes;
+  window.render = render;
+  window.goto = goto;
+  window.chooseTea = chooseTea;
+  window.chooseCoffee = chooseCoffee;
+  window.teaResponse = teaResponse;
+  window.showTeaSuccessPopup = showTeaSuccessPopup;
+  window.showInvitation = showInvitation;
+
+  // Start the story - immediately render
+  render();
+</script>
+
+<!-- Print styles for invitation -->
+<style>
+  @media print {
+    @page {
+      size: 8.5in 11in;
+      margin: 0;
+    }
+
+    * {
+      visibility: hidden !important;
+    }
+
+    .print-area,
+    .print-area * {
+      visibility: visible !important;
+    }
+
+    .print-area img {
+      height: 10.5in !important;
+      width: auto !important;
+      max-width: 100% !important;
+      object-fit: contain !important;
+      display: block !important;
+      margin: 0 !important;
+      transform: none !important;
+    }
+
+    .no-print {
+      display: none !important;
+    }
+  }
+</style>
+
+</body>
+</html>

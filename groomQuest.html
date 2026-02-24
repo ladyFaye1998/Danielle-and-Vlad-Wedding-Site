@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>D &amp; V — His Quest</title>
+    <link rel="icon" type="image/png" href="assets/crest.png" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com/3.4.4"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: "#2e3238",
+                        honey: "#d6c09c",
+                        parchment: "#faf8f5",
+                        rose: "#f9f4ef"
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', "serif"],
+                        body: ['"Merriweather Sans"', "sans-serif"],
+                        script: ['"Dancing Script"', "cursive"],
+                        hebrew: ['"Noto Serif Hebrew"', "serif"],
+                        russian: ['"Roboto"', "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts with language support -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Merriweather+Sans:wght@400;500&family=Dancing+Script:wght@600&family=Roboto:wght@400;500;700&family=Noto+Serif+Hebrew:wght@400;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        html {
+            background: #faf8f5;
+            scroll-padding-top: 4rem;
+            transition: font-family 0.3s ease;
+        }
+        body {
+            margin: 0;
+            font-family: var(--tw-body);
+            overflow: hidden;
+            transition: direction 0.3s ease;
+        }
+
+        /* Language-specific styles */
+        html[lang="he"] {
+            font-family: 'Noto Serif Hebrew', serif;
+            direction: rtl;
+        }
+
+        html[lang="he"] .font-serif {
+            font-family: 'Noto Serif Hebrew', serif;
+        }
+
+        html[lang="ru"] {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        html[lang="ru"] .font-serif {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+        }
+
+        .speaker {
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            color: #d6c09c;
+            font-size: 1.1rem;
+        }
+
+        html[lang="he"] .speaker {
+            font-family: 'Noto Serif Hebrew', serif;
+            font-weight: 700;
+        }
+
+        html[lang="ru"] .speaker {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+        }
+
+        .bubble {
+            border: 2px solid #d6c09c;
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+            background: #fff;
+            backdrop-filter: blur(4px);
+            max-width: 90%;
+            margin: 0 auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            transition: text-align 0.3s ease;
+        }
+
+        .choice {
+            display: inline-block;
+            margin: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: #fff;
+            border: 2px solid #d6c09c;
+            color: #2e3238;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+        .choice:hover {
+            background: #d6c09c;
+            color: #fff;
+        }
+
+        /* RTL adjustments */
+        [dir="rtl"] #vlad {
+            right: auto;
+            left: 2.5rem;
+            transform: scaleX(-1);
+        }
+
+        [dir="rtl"] .bubble {
+            text-align: right;
+        }
+
+        [dir="rtl"] #dialogue {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Combat game iframe styles */
+        #combat-iframe {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: 50;
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes floatUp {
+            from { transform: translate(-50%, 20px); }
+            to { transform: translate(-50%, -50%); }
+        }
+        @keyframes shimmer {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+
+<body class="bg-parchment text-ink antialiased">
+
+<!-- ░ NAVBAR ░ -->
+<nav id="navbar" class="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-4 sm:px-8 py-3 bg-white/50 backdrop-blur-lg border-b border-white/30 shadow-md">
+    <!-- Crest + monogram on the left -->
+    <a href="index.html" class="flex items-center gap-3">
+        <img src="assets/crest.png" alt="Wedding crest" class="h-8 drop-shadow-md" />
+        <span class="hidden sm:inline-block font-serif text-xl text-ink">D&nbsp;&amp;&nbsp;V</span>
+    </a>
+
+    <!-- Desktop links (right) -->
+    <ul class="hidden md:flex gap-6 lg:gap-8 text-base font-medium">
+        <li><a href="prologue.html#s0" class="link" data-nav-key="prologue">Prologue</a></li>
+        <li><a href="index.html#quests" class="link" data-nav-key="quests">Quests</a></li>
+        <li><a href="index.html#ceremony" class="link" data-nav-key="ceremony">Ceremony</a></li>
+        <li><a href="index.html#travel" class="link" data-nav-key="travel">Travel</a></li>
+        <li><a href="index.html#rsvp" class="link" data-nav-key="rsvp">RSVP</a></li>
+    </ul>
+
+    <!-- Mobile burger -->
+    <button id="burger" class="burger md:hidden flex flex-col gap-1.5 p-2" aria-label="Menu">
+        <span class="burger-line w-6 h-[2px] bg-ink"></span>
+        <span class="burger-line w-6 h-[2px] bg-ink"></span>
+        <span class="burger-line w-6 h-[2px] bg-ink"></span>
+    </button>
+</nav>
+
+<!-- Mobile drop-down menu -->
+<div id="mobileMenu" class="fixed z-40 flex-col gap-4 bg-white/95 backdrop-blur-md shadow-lg right-4 top-16 py-5 px-8 rounded-lg text-sm border border-honey/20 opacity-0 transform translateY(-10px) transition-all duration-300 pointer-events-none">
+    <ul class="flex flex-col gap-5">
+        <li><a href="prologue.html#s0" class="block py-1 hover:text-honey transition-colors" data-nav-key="prologue">Prologue</a></li>
+        <li><a href="index.html#quests" class="block py-1 hover:text-honey transition-colors" data-nav-key="quests">Quests</a></li>
+        <li><a href="index.html#ceremony" class="block py-1 hover:text-honey transition-colors" data-nav-key="ceremony">Ceremony</a></li>
+        <li><a href="index.html#travel" class="block py-1 hover:text-honey transition-colors" data-nav-key="travel">Travel</a></li>
+        <li><a href="index.html#rsvp" class="block py-1 hover:text-honey transition-colors" data-nav-key="rsvp">RSVP</a></li>
+    </ul>
+</div>
+
+<style>
+    /* Link hover effect */
+    .link {
+        position: relative;
+        padding-bottom: 2px;
+        transition: .3s;
+    }
+
+    .link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 1px;
+        background: #d6c09c;
+        transform: scaleX(0);
+        transition: .3s;
+    }
+
+    .link:hover::after {
+        transform: scaleX(1);
+    }
+
+    .link:hover {
+        color: #d6c09c;
+        text-shadow: 0 0 10px rgba(214,192,156,0.5);
+    }
+
+    /* Burger animation */
+    .burger-line {
+        transition: all 0.3s ease;
+    }
+
+    .burger.active .burger-line:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .burger.active .burger-line:nth-child(2) {
+        opacity: 0;
+    }
+
+    .burger.active .burger-line:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* Mobile menu visibility */
+    #mobileMenu.visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    /* RTL adjustments for navbar */
+    [dir="rtl"] #navbar {
+        flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .link::after {
+        right: 0;
+        left: 0;
+    }
+</style>
+
+<!-- ░ BACKGROUND + CHARACTER ░ -->
+<div id="scene" class="absolute inset-0 bg-cover bg-center z-0"></div>
+<img id="vlad" src="" alt="Vlad" class="absolute bottom-0 right-10 h-[65vh] md:h-[72vh] w-auto z-10 transition-all duration-300" />
+
+<!-- ░ DIALOGUE UI ░ -->
+<div id="dialogue" class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-3xl px-6 py-4 z-20">
+    <div class="bubble">
+        <div id="dialogue-label" class="speaker mb-1"></div>
+        <div id="dialogue-text" class="italic whitespace-pre-line text-[1.05rem] leading-relaxed"></div>
+    </div>
+    <div id="choices" class="text-center mt-4"></div>
+</div>
+
+<!-- ░ COMBAT GAME IFRAME ░ -->
+<iframe id="combat-iframe" src="" allowfullscreen></iframe>
+
+<main class="pt-20"></main>
+
+<!-- ░ CHAT WIDGET ░ -->
+<div id="chat-container"></div>
+<script src="injectChat.js"></script>
+
+<script>
+    // ────────────────────────────────────────────────────────────────
+    // Language Management
+    // ────────────────────────────────────────────────────────────────
+
+    class GroomQuestLanguageManager {
+        constructor() {
+            this.currentLang = 'en';
+            this.navTranslations = {
+                en: {
+                    prologue: "Prologue",
+                    quests: "Quests",
+                    ceremony: "Ceremony",
+                    travel: "Travel",
+                    rsvp: "RSVP"
+                },
+                ru: {
+                    prologue: "Пролог",
+                    quests: "Квесты",
+                    ceremony: "Церемония",
+                    travel: "Путешествие",
+                    rsvp: "RSVP"
+                },
+                he: {
+                    prologue: "פרולוג",
+                    quests: "חידות",
+                    ceremony: "טקס",
+                    travel: "נסיעה",
+                    rsvp: "אישור הגעה"
+                }
+            };
+            this.init();
+        }
+
+        init() {
+            // Check multiple sources for language preference
+            const urlLang = new URLSearchParams(window.location.search).get('lang');
+            const savedLang = sessionStorage.getItem('wedding-language');
+            const localLang = localStorage.getItem('wedding-language');
+
+            console.log('Groom Quest language detection:', { urlLang, savedLang, localLang });
+
+            // Priority: URL parameter > sessionStorage > localStorage > default
+            if (urlLang && ['en', 'he', 'ru'].includes(urlLang)) {
+                this.currentLang = urlLang;
+            } else if (savedLang && ['en', 'he', 'ru'].includes(savedLang)) {
+                this.currentLang = savedLang;
+            } else if (localLang && ['en', 'he', 'ru'].includes(localLang)) {
+                this.currentLang = localLang;
+            }
+
+            this.applyLanguage();
+            this.setupLanguageObserver();
+            this.setupNavbarEvents();
+            console.log('Groom Quest initialized with language:', this.currentLang);
+        }
+
+        applyLanguage() {
+            const html = document.documentElement;
+            const body = document.body;
+
+            // Set language and direction
+            html.lang = this.currentLang;
+
+            if (this.currentLang === 'he') {
+                html.dir = 'rtl';
+                body.style.direction = 'rtl';
+            } else {
+                html.dir = 'ltr';
+                body.style.direction = 'ltr';
+            }
+
+            // Update page title
+            const titles = {
+                en: 'D & V — His Quest',
+                he: 'ד & ו — המסע שלו',
+                ru: 'Д & В — Его Квест'
+            };
+            document.title = titles[this.currentLang] || titles.en;
+
+            // Update navbar translations
+            this.updateNavbar();
+
+            // Re-render current scene with new language
+            if (window.scenes && typeof window.render === 'function') {
+                window.render();
+            }
+        }
+
+        updateNavbar() {
+            const lang = this.currentLang;
+            const t = this.navTranslations[lang];
+
+            // Update all navigation elements
+            document.querySelectorAll('[data-nav-key]').forEach(element => {
+                const key = element.getAttribute('data-nav-key');
+                if (t[key]) {
+                    element.textContent = t[key];
+                }
+            });
+        }
+
+        setupNavbarEvents() {
+            // Setup burger menu functionality
+            const burger = document.getElementById('burger');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            if (burger && mobileMenu) {
+                burger.addEventListener('click', function() {
+                    burger.classList.toggle('active');
+                    mobileMenu.classList.toggle('visible');
+                });
+
+                // Close menu when clicking a link
+                mobileMenu.querySelectorAll('a').forEach(a => {
+                    a.addEventListener('click', function() {
+                        burger.classList.remove('active');
+                        mobileMenu.classList.remove('visible');
+                    });
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (mobileMenu.classList.contains('visible') &&
+                        !mobileMenu.contains(e.target) &&
+                        !burger.contains(e.target)) {
+                        burger.classList.remove('active');
+                        mobileMenu.classList.remove('visible');
+                    }
+                });
+            }
+        }
+
+        setupLanguageObserver() {
+            // Poll for sessionStorage changes
+            let lastSessionLang = sessionStorage.getItem('wedding-language');
+            setInterval(() => {
+                const currentSessionLang = sessionStorage.getItem('wedding-language');
+                if (currentSessionLang && currentSessionLang !== lastSessionLang && currentSessionLang !== this.currentLang) {
+                    console.log('Groom Quest detected language change:', currentSessionLang);
+                    this.setLanguage(currentSessionLang);
+                    lastSessionLang = currentSessionLang;
+                }
+            }, 1000);
+
+            // Listen for storage changes
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'wedding-language' && event.newValue) {
+                    this.setLanguage(event.newValue);
+                }
+            });
+        }
+
+        setLanguage(lang) {
+            if (['en', 'he', 'ru'].includes(lang) && lang !== this.currentLang) {
+                this.currentLang = lang;
+                this.applyLanguage();
+            }
+        }
+
+        getCurrentLanguage() {
+            return this.currentLang;
+        }
+    }
+
+    // Initialize language manager
+    const langManager = new GroomQuestLanguageManager();
+    window.langManager = langManager;
+
+    // ────────────────────────────────────────────────────────────────
+    // Multilingual Story Content
+    // ────────────────────────────────────────────────────────────────
+
+    const translations = {
+        en: {
+            vlad: "Vlad",
+            scenes: [
+                // 0 — Morning greeting
+                {
+                    text: "You're up early.",
+                    choices: [{ text: "So are you" }]
+                },
+                // 1 — Calm moment
+                {
+                    text: "Couldn't sleep either?",
+                    choices: [
+                        { text: "A little too excited" },
+                        { text: "Just... restless" }
+                    ]
+                },
+                // 2 — Light teasing
+                {
+                    text: "I already tore the shoulder seam on my ceremony jacket.\nWasn't even trying to be heroic.",
+                    choices: [{ text: "Impressive" }]
+                },
+                // 3 — Leads into business
+                {
+                    text: "Anyway—was just about to check the rings before they get packed.",
+                    choices: [{ text: "Want company?" }]
+                },
+                // 4 — Realization
+                {
+                    text: "...Wait.",
+                    choices: [{ text: "What?" }]
+                },
+                // 5 — The box is empty
+                {
+                    text: "They're not here.",
+                    choices: [{ text: "Check again" }]
+                },
+                // 6 — Suspicion rises
+                {
+                    text: "I packed them myself. Velvet case. Closed it tight. Placed it right here.",
+                    choices: [
+                        { text: "Maybe someone moved them?" },
+                        { text: "Are you sure you—" }
+                    ]
+                },
+                // 7 — The shadow
+                {
+                    text: "When I came in just now, I saw someone at the end of the hall.\nSmall. Fast. I thought it was a servant.",
+                    choices: [{ text: "But?" }]
+                },
+                // 8 — Pattern emerging
+                {
+                    text: "Wrong height. Wrong shape. Didn't look back.\nAnd lately? Missing food. Tiny prints in the garden.",
+                    choices: [{ text: "You're not serious." }]
+                },
+                // 9 — The name
+                {
+                    text: "It's a goblin. It has to be.\nAnd it has our rings.",
+                    choices: [{ text: "What do we do?" }]
+                },
+                // 10 — Gearing up
+                {
+                    text: "I'm not going after it in formalwear.\nGive me one second.",
+                    choices: [{ text: "Take your time" }]
+                },
+                // 11 — Armoured return
+                {
+                    text: "Alright. Steel's back on.\nLet's go find that little thief.",
+                    choices: [{ text: "To the forest" }]
+                },
+                // 12 — Forest edge
+                {
+                    text: "The air feels strange.\nStay close—we're not alone out here.",
+                    choices: [{ text: "Start the hunt" }]
+                }
+            ],
+            combatTransition: {
+                initial: "You and Vlad vanish into the trees… ready for whatever waits.",
+                tracking: "Tracking the goblin's trail..."
+            }
+        },
+
+        ru: {
+            vlad: "Влад",
+            scenes: [
+                // 0 — Morning greeting
+                {
+                    text: "Ты встал рано.",
+                    choices: [{ text: "Ты тоже" }]
+                },
+                // 1 — Calm moment
+                {
+                    text: "Ты тоже не мог уснуть?",
+                    choices: [
+                        { text: "Слишком взволнован" },
+                        { text: "Просто... беспокойно" }
+                    ]
+                },
+                // 2 — Light teasing
+                {
+                    text: "Я уже порвал шов на плече свадебного пиджака.\nНа этот раз Я даже не пытался быть героем.",
+                    choices: [{ text: "Впечатляет" }]
+                },
+                // 3 — Leads into business
+                {
+                    text: "В любом случае — как раз собирался проверить кольца.",
+                    choices: [{ text: "Нужна компания?" }]
+                },
+                // 4 — Realization
+                {
+                    text: "...Подожди.",
+                    choices: [{ text: "Что?" }]
+                },
+                // 5 — The box is empty
+                {
+                    text: "Их здесь нет.",
+                    choices: [{ text: "Проверь еще раз" }]
+                },
+                // 6 — Suspicion rises
+                {
+                    text: "Я сам их упаковал. Бархатная коробочка. Плотно закрыл. Положил прямо сюда.",
+                    choices: [
+                        { text: "Может, кто-то переложил?" },
+                        { text: "Ты уверен, что—" }
+                    ]
+                },
+                // 7 — The shadow
+                {
+                    text: "Когда я только зашел, я видел кого-то в конце коридора.\nМаленького. Быстрого. Думал, это слуга.",
+                    choices: [{ text: "Но?" }]
+                },
+                // 8 — Pattern emerging
+                {
+                    text: "Неправильный рост. Неправильная форма. Не оглянулся.\nА в последнее время? Пропадает еда. Мы находим крошечные следы в саду.",
+                    choices: [{ text: "Ты не серьезно." }]
+                },
+                // 9 — The name
+                {
+                    text: "Это гоблин. Это точно.\nИ у него наши кольца.",
+                    choices: [{ text: "Что будем делать?" }]
+                },
+                // 10 — Gearing up
+                {
+                    text: "Я не пойду за ним в парадной одежде.\nСекунду.",
+                    choices: [{ text: "Не торопись" }]
+                },
+                // 11 — Armoured return
+                {
+                    text: "Хорошо. Доспехи снова на мне.\nПойдем найдем этого воришку.",
+                    choices: [{ text: "В лес" }]
+                },
+                // 12 — Forest edge
+                {
+                    text: "Воздух какой-то странный.\nДержись близко — мы здесь не одни.",
+                    choices: [{ text: "Начать охоту" }]
+                }
+            ],
+            combatTransition: {
+                initial: "Вы с Владом исчезаете среди деревьев... готовые к тому, что вас ждет.",
+                tracking: "Выслеживаем след гоблина..."
+            }
+        },
+
+        he: {
+            vlad: "ולאד",
+            scenes: [
+                // 0 — Morning greeting
+                {
+                    text: "קמת מוקדם.",
+                    choices: [{ text: "גם אתה" }]
+                },
+                // 1 — Calm moment
+                {
+                    text: "לא הצלחת להרדם?",
+                    choices: [
+                        { text: "קצת יותר מדי נרגש" },
+                        { text: "סתם... חסר מנוחה" }
+                    ]
+                },
+                // 2 — Light teasing
+                {
+                    text: "כבר קרעתי את התפר בכתף של הז'קט לטקס.\nאפילו לא ניסיתי להיות גיבור הפעם.",
+                    choices: [{ text: "מרשים" }]
+                },
+                // 3 — Leads into business
+                {
+                    text: "בכל מקרה — בדיוק התכוונתי לבדוק את הטבעות.",
+                    choices: [{ text: "צריך חברה?" }]
+                },
+                // 4 — Realization
+                {
+                    text: "...רגע.",
+                    choices: [{ text: "מה?" }]
+                },
+                // 5 — The box is empty
+                {
+                    text: "הן לא כאן.",
+                    choices: [{ text: "תבדוק שוב" }]
+                },
+                // 6 — Suspicion rises
+                {
+                    text: "ארזתי אותן בעצמי. קופסת קטיפה. סגרתי טוב. שמתי אותן בדיוק כאן.",
+                    choices: [
+                        { text: "אולי מישהו הזיז אותן?" },
+                        { text: "אתה בטוח ש—" }
+                    ]
+                },
+                // 7 — The shadow
+                {
+                    text: "כשנכנסתי עכשיו, ראיתי מישהו בקצה המסדרון.\nקטן. מהיר. חשבתי שזה משרת.",
+                    choices: [{ text: "אבל?" }]
+                },
+                // 8 — Pattern emerging
+                {
+                    text: "גובה לא נכון. צורה לא נכונה. לא הסתכל אחורה.\nובזמן האחרון? אוכל נעלם. יש עקבות זעירות בגן.",
+                    choices: [{ text: "אתה לא רציני." }]
+                },
+                // 9 — The name
+                {
+                    text: "זה גובלין. זה חייב להיות.\nויש לו את הטבעות שלנו.",
+                    choices: [{ text: "מה נעשה?" }]
+                },
+                // 10 — Gearing up
+                {
+                    text: "אני לא רודף אחריו בבגדי חתן.\nתן לי שנייה.",
+                    choices: [{ text: "קח את הזמן" }]
+                },
+                // 11 — Armoured return
+                {
+                    text: "סבבה. השריון עליי.\nבוא נמצא את הגנב הקטן הזה.",
+                    choices: [{ text: "ליער" }]
+                },
+                // 12 — Forest edge
+                {
+                    text: "האוויר מרגיש מוזר.\nתישאר קרוב — אנחנו לא לבד כאן.",
+                    choices: [{ text: "התחלת מרדף" }]
+                }
+            ],
+            combatTransition: {
+                initial: "אתה ווולאד נעלמים בין העצים... מוכנים לכל מה שמחכה.",
+                tracking: "עוקבים אחרי העקבות של הגובלין..."
+            }
+        }
+    };
+
+    // ────────────────────────────────────────────────────────────────
+    // Story Scenes with Multilingual Support
+    // ────────────────────────────────────────────────────────────────
+
+    const baseScenes = [
+        // Scene structure with backgrounds and character images
+        {
+            bg: 'GroomAssets/bg-castle.png',
+            char: 'GroomAssets/Vlad-worried.png'
+        },
+        {
+            bg: 'GroomAssets/bg-castle.png',
+            char: 'GroomAssets/Vlad-worried.png'
+        },
+        {
+            bg: 'GroomAssets/bg-castle.png',
+            char: 'GroomAssets/Vlad-worried.png'
+        },
+        {
+            bg: 'GroomAssets/bg-castle.png',
+            char: 'GroomAssets/Vlad-worried.png'
+        },
+        {
+            bg: 'GroomAssets/bg-castle.png',
+            char: 'GroomAssets/Vlad-worried.png'
+        },
+        {
+            bg: 'GroomAssets/bg-castle.png',
+            char: 'GroomAssets/Vlad-worried.png'
+        },
+        {
+            bg: 'GroomAssets/bg-castle.png',
+            char: 'GroomAssets/Vlad-worried.png'
+        },
+        {
+            bg: 'GroomAssets/bg-castle.png',
+            char: 'GroomAssets/Vlad-worried.png'
+        },
+        {
+            bg: 'GroomAssets/bg-castle.png',
+            char: 'GroomAssets/Vlad-determined.png'
+        },
+        {
+            bg: 'GroomAssets/bg-castle.png',
+            char: 'GroomAssets/Vlad-determined.png'
+        },
+        {
+            bg: 'GroomAssets/bg-castle.png',
+            char: 'GroomAssets/Vlad-determined.png'
+        },
+        {
+            bg: 'GroomAssets/bg-castle.png',
+            char: 'GroomAssets/Vlad-armored.png'
+        },
+        {
+            bg: 'GroomAssets/bg-forest.png',
+            char: 'GroomAssets/Vlad-armored.png'
+        }
+    ];
+
+    // Generate localized scenes
+    function getLocalizedScenes() {
+        const lang = langManager.getCurrentLanguage();
+        const t = translations[lang];
+
+        return baseScenes.map((scene, index) => {
+            const localizedContent = t.scenes[index];
+            return {
+                ...scene,
+                speaker: t.vlad,
+                text: localizedContent.text,
+                choices: localizedContent.choices.map((choice, choiceIndex) => ({
+                    text: choice.text,
+                    action: () => {
+                        if (index < baseScenes.length - 1) {
+                            goto(index + 1);
+                        } else {
+                            startCombat();
+                        }
+                    }
+                }))
+            };
+        });
+    }
+
+    // ── STATE ───────────────────────────────────────────────────────
+    let idx = 0;
+    let scenes = getLocalizedScenes();
+
+    // Update scenes when language changes
+    langManager.originalSetLanguage = langManager.setLanguage;
+    langManager.setLanguage = function(lang) {
+        langManager.originalSetLanguage.call(this, lang);
+        scenes = getLocalizedScenes();
+        render(); // Re-render current scene
+    };
+
+    // ── DOM HOOKS ───────────────────────────────────────────────────
+    const sceneEl          = document.getElementById('scene');
+    const vladEl           = document.getElementById('vlad');
+    const diaEl            = document.getElementById('dialogue');
+    const textEl           = document.getElementById('dialogue-text');
+    const labelEl          = document.getElementById('dialogue-label');
+    const chEl             = document.getElementById('choices');
+    const combatIframe     = document.getElementById('combat-iframe');
+
+    // ── RENDER LOOP ─────────────────────────────────────────────────
+    function render() {
+        const s = scenes[idx];
+
+        sceneEl.style.backgroundImage = `url('${s.bg}')`;
+
+        if (s.char) {
+            vladEl.src = s.char;
+            vladEl.classList.remove('hidden');
+        } else {
+            vladEl.classList.add('hidden');
+        }
+
+        if (s.text !== undefined) {
+            diaEl.classList.remove('hidden');
+            labelEl.textContent = s.speaker || '';
+            textEl.textContent  = s.text;
+            chEl.innerHTML      = '';
+
+            (s.choices || []).forEach(c => {
+                const btn = document.createElement('span');
+                btn.textContent = c.text;
+                btn.className   = 'choice';
+                btn.onclick     = c.action;
+                chEl.appendChild(btn);
+            });
+        } else {
+            diaEl.classList.add('hidden');
+        }
+    }
+
+    // ── HELPER NAV FUNCTIONS ────────────────────────────────────────
+    function goto(i) {
+        idx = i;
+        render();
+    }
+
+    // ── COMBAT TRANSITION ───────────────────────────────────────────
+    function startCombat() {
+        const lang = langManager.getCurrentLanguage();
+        const t = translations[lang];
+
+        labelEl.textContent = t.vlad;
+        textEl.textContent = t.combatTransition.initial;
+
+        document.querySelectorAll('.choice').forEach(btn => {
+            btn.style.pointerEvents = 'none';
+            btn.style.opacity = '0.5';
+        });
+
+        setTimeout(() => {
+            textEl.textContent = t.combatTransition.tracking;
+            setTimeout(() => {
+                window.location.href = 'GroomQuest/index.html';
+            }, 1500);
+        }, 3000);
+    }
+
+    // Make functions globally available
+    window.scenes = scenes;
+    window.render = render;
+    window.goto = goto;
+    window.startCombat = startCombat;
+
+    // ── START ───────────────────────────────────────────────────────
+    render();
+</script>
+
+</body>
+</html>

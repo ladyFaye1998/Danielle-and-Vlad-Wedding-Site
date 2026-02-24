@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radio Camelot | Avalon Air</title>
+  <link href="https://fonts.googleapis.com/css2?family=Garamond&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Garamond', serif;
+      background: linear-gradient(to bottom, #f9f3e6, #e3d8b8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 90%;
+      background-color: #fff9f2;
+      padding: 2rem;
+      border-radius: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .crest {
+      max-width: 120px;
+      margin: 0 auto 1rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #4b3621;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      color: #6b4e2e;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+
+    #airadiobot-player-container {
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      .crest {
+        max-width: 90px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="assets/crest.png" alt="Radio Crest" class="crest" />
+    <h1>🎙️ Radio Camelot</h1>
+    <p class="subtitle">Avalon Air – For lovers, knights, and dreamers</p>
+
+    <div id="airadiobot-player-container"></div>
+
+    <script src="https://studio.airadiobot.com/stream-player/embedded/65235/" type="application/javascript"></script>
+    <script type="text/javascript">
+      const airadiobot_player_display_station_logo = true;
+      const airadiobot_player_display_station_name = true;
+      const airadiobot_player_display_music_bars = true;
+      const airadiobot_player_station_name_color = '#FFFFFF';
+      const airadiobot_player_background_color = '#6B7280';
+      const airadiobot_player_buttons_color = '#FFFFFF';
+      const airadiobot_player_buttons_hover_color = '#000000';
+      const airadiobot_player_music_bars_color = '#FFFFFF';
+    </script>
+  </div>
+</body>
+</html>

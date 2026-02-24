@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whispers of Saeriel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            honey: "#d6c09c",
+            ink: "#2e3238",
+            parchment: "#f6f1ea"
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', "serif"],
+            body: ['"Merriweather Sans"', "sans-serif"],
+            script: ['"Dancing Script"', "cursive"],
+            hebrew: ['"Heebo"', '"Noto Sans Hebrew"', "sans-serif"],
+            russian: ['"Inter"', '"Noto Sans"', "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Merriweather+Sans:wght@400;500&family=Dancing+Script:wght@600&family=Heebo:wght@400;500;700&family=Inter:wght@400;500;700&family=Noto+Sans+Hebrew:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+
+    body {
+      background-color: #f6f1ea;
+      font-family: "Merriweather Sans", sans-serif;
+      transition: font-family 0.3s ease;
+    }
+
+    /* Language-specific styles */
+    .lang-hebrew {
+      font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+      direction: rtl;
+    }
+
+    .lang-hebrew .font-serif {
+      font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+      font-weight: 700;
+    }
+
+    .lang-hebrew .font-script {
+      font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+      font-style: normal;
+    }
+
+    .lang-russian {
+      font-family: 'Inter', 'Noto Sans', sans-serif;
+      direction: ltr;
+    }
+
+    .lang-russian .font-serif {
+      font-family: 'Inter', 'Noto Sans', sans-serif;
+      font-weight: 700;
+    }
+
+    .lang-russian .font-script {
+      font-family: 'Inter', 'Noto Sans', sans-serif;
+      font-style: italic;
+    }
+
+    #chatLog { scrollbar-width: thin; }
+    .message.user { font-weight: bold; color: #2e3238; }
+    .message.saeriel { color: #8b5e3c; font-style: italic; }
+
+    /* RTL adjustments */
+    [dir="rtl"] #chatWidget {
+      right: auto;
+      left: 2rem;
+    }
+
+    [dir="rtl"] .flex.gap-4 {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .flex.gap-2 {
+      flex-direction: row-reverse;
+    }
+  </style>
+</head>
+<body class="relative min-h-screen antialiased">
+
+<!-- Floating Chat Widget -->
+<div id="chatWidget" class="fixed bottom-8 right-8 z-50">
+  <!-- Chat Toggle Button -->
+  <button id="openChat"
+          class="rounded-full shadow-lg overflow-hidden hover:scale-105 transition border-2 border-honey"
+          data-title-en="Whispers of Saeriel"
+          data-title-he="לחישות של סאריאל"
+          data-title-ru="Шепот Саэриэль"
+          title="Whispers of Saeriel">
+    <img src="assets/saeriel.png" alt="Saeriel" class="w-16 h-16 object-cover rounded-full" />
+  </button>
+
+  <!-- Chat Box -->
+  <div
+          id="chatBox"
+          class="
+    hidden fixed inset-4
+    w-[90vw] max-w-[90vw]      /* mobile: 90% viewport width max */
+    max-h-[90vh] overflow-auto /* optional: cap height, scroll if tall */
+    sm:inset-auto sm:static
+    sm:mt-4 sm:w-[32rem]       /* ≥sm: back to 32 rem width */
+    bg-white rounded-3xl shadow-2xl border border-honey flex flex-col
+  ">
+    <div class="bg-honey/10 p-5 flex items-center gap-4">
+      <img src="assets/saeriel.png" alt="Saeriel" class="w-14 h-14 rounded-full object-cover border border-honey shadow" />
+      <div>
+        <p class="text-xl font-serif text-ink font-semibold"
+           data-en="Saeriel, Veilwarden of Álfheimr"
+           data-he="סאריאל, שומרת הסף של אלפהיימר"
+           data-ru="Саэриэль, Хранительница Альвхейма">
+          Saeriel, Veilwarden of Álfheimr
+        </p>
+        <p class="text-md text-ink/60 italic"
+           data-en="\"Whisper, and I shall answer in petals and wind."\"
+        data-he="\"לחש, ואני אענה בעלי כותרת ורוח.\""
+        data-ru="\"Шепни, и я отвечу лепестками и ветром.\"">
+        "Whisper, and I shall answer in petals and wind."
+        </p>
+      </div>
+    </div>
+
+    <!-- Chat Log -->
+    <div id="chatLog" class="overflow-y-auto px-6 py-4 text-[17px] text-ink/90 space-y-4 bg-parchment font-serif flex-1">
+      <div class="text-ink/60 italic"
+           data-en="💬 Saeriel awaits your question…"
+           data-he="💬 סאריאל ממתינה לשאלתך..."
+           data-ru="💬 Саэриэль ждет вашего вопроса...">
+        💬 Saeriel awaits your question…
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="p-5 border-t border-honey/30 bg-white shrink-0">
+      <form id="chatForm" class="flex gap-2">
+        <input id="chatInput"
+               type="text"
+               data-placeholder-en="Ask the fae spirit..."
+               data-placeholder-he="שאל את רוח הפיות..."
+               data-placeholder-ru="Спроси у духа фей..."
+               placeholder="Ask the fae spirit..."
+               class="w-full rounded-full px-5 py-4 text-lg border border-honey/50 bg-parchment text-ink placeholder-ink/40 font-serif focus:outline-none focus:ring-2 focus:ring-honey" />
+        <button type="submit"
+                class="px-4 py-2 bg-honey text-white rounded-full hover:bg-honey/90 transition">
+          ➤
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<audio id="whisperSound" src="https://cdn.pixabay.com/download/audio/2023/02/27/audio_2f62436f40.mp3?filename=magic-chime-88386.mp3" preload="auto"></audio>
+
+<!-- Language Support Script -->
+<script>
+  // Language management
+  class LanguageManager {
+    constructor() {
+      this.currentLang = 'en';
+      this.isInitialized = false;
+      this.init();
+    }
+
+    init() {
+      // Check multiple sources for language preference
+      const urlLang = new URLSearchParams(window.location.search).get('lang');
+      const savedLang = sessionStorage.getItem('wedding-language');
+      const localLang = localStorage.getItem('wedding-language'); // Fallback
+
+      console.log('Language detection:', { urlLang, savedLang, localLang });
+
+      // Priority: URL parameter > sessionStorage > localStorage > default
+      if (urlLang && ['en', 'he', 'ru'].includes(urlLang)) {
+        this.currentLang = urlLang;
+        console.log('Using URL language:', urlLang);
+      } else if (savedLang && ['en', 'he', 'ru'].includes(savedLang)) {
+        this.currentLang = savedLang;
+        console.log('Using session language:', savedLang);
+      } else if (localLang && ['en', 'he', 'ru'].includes(localLang)) {
+        this.currentLang = localLang;
+        console.log('Using local storage language:', localLang);
+      } else {
+        console.log('Using default language: en');
+      }
+
+      this.applyLanguage();
+      this.setupLanguageObserver();
+      this.isInitialized = true;
+    }
+
+    applyLanguage() {
+      const html = document.documentElement;
+      const body = document.body;
+
+      // Clear existing language classes
+      body.classList.remove('lang-hebrew', 'lang-russian');
+      html.classList.remove('lang-hebrew', 'lang-russian');
+
+      // Apply language-specific settings
+      if (this.currentLang === 'he') {
+        html.setAttribute('dir', 'rtl');
+        html.setAttribute('lang', 'he');
+        body.classList.add('lang-hebrew');
+        html.classList.add('lang-hebrew');
+      } else if (this.currentLang === 'ru') {
+        html.setAttribute('dir', 'ltr');
+        html.setAttribute('lang', 'ru');
+        body.classList.add('lang-russian');
+        html.classList.add('lang-russian');
+      } else {
+        html.setAttribute('dir', 'ltr');
+        html.setAttribute('lang', 'en');
+      }
+
+      this.updateTextContent();
+
+      // Save to both session and local storage for persistence
+      sessionStorage.setItem('wedding-language', this.currentLang);
+      localStorage.setItem('wedding-language', this.currentLang);
+
+      console.log('Applied language:', this.currentLang);
+    }
+
+    updateTextContent() {
+      // Update regular text content
+      const elements = document.querySelectorAll('[data-en]');
+      elements.forEach(element => {
+        const text = element.getAttribute(`data-${this.currentLang}`);
+        if (text) {
+          element.textContent = text;
+        }
+      });
+
+      // Update placeholders
+      const placeholderElements = document.querySelectorAll('[data-placeholder-en]');
+      placeholderElements.forEach(element => {
+        const placeholder = element.getAttribute(`data-placeholder-${this.currentLang}`);
+        if (placeholder) {
+          element.placeholder = placeholder;
+        }
+      });
+
+      // Update button titles
+      const titleElements = document.querySelectorAll('[data-title-en]');
+      titleElements.forEach(element => {
+        const title = element.getAttribute(`data-title-${this.currentLang}`);
+        if (title) {
+          element.title = title;
+        }
+      });
+
+      // Update page title
+      const titles = {
+        en: 'Whispers of Saeriel',
+        he: 'לחישות של סאריאל',
+        ru: 'Шепот Саэриэль'
+      };
+      document.title = titles[this.currentLang] || titles.en;
+    }
+
+    setLanguage(lang) {
+      if (['en', 'he', 'ru'].includes(lang) && lang !== this.currentLang) {
+        console.log('Changing language from', this.currentLang, 'to', lang);
+        this.currentLang = lang;
+        this.applyLanguage();
+      }
+    }
+
+    setupLanguageObserver() {
+      // Listen for language changes from the main site
+      window.addEventListener('languageChanged', (event) => {
+        console.log('Language change event received:', event.detail.language);
+        this.setLanguage(event.detail.language);
+      });
+
+      // Listen for storage changes (if user opens multiple tabs)
+      window.addEventListener('storage', (event) => {
+        if (event.key === 'wedding-language' && event.newValue) {
+          console.log('Storage change detected:', event.newValue);
+          this.setLanguage(event.newValue);
+        }
+      });
+
+      // Poll for sessionStorage changes (since storage event doesn't fire for sessionStorage)
+      let lastSessionLang = sessionStorage.getItem('wedding-language');
+      setInterval(() => {
+        const currentSessionLang = sessionStorage.getItem('wedding-language');
+        if (currentSessionLang && currentSessionLang !== lastSessionLang && currentSessionLang !== this.currentLang) {
+          console.log('Session storage change detected:', currentSessionLang);
+          this.setLanguage(currentSessionLang);
+          lastSessionLang = currentSessionLang;
+        }
+      }, 1000); // Check every second
+    }
+
+    getCurrentLanguage() {
+      return this.currentLang;
+    }
+
+    // Method to get localized text for dynamic content
+    getLocalizedText(key) {
+      const texts = {
+        you: { en: 'You', he: 'אתה', ru: 'Вы' },
+        saeriel: { en: 'Saeriel', he: 'סאריאל', ru: 'Саэриэль' },
+        mists: { en: 'The mists are swirling…', he: 'הערפל לוחש...', ru: 'Туман шепчет...' },
+        error: { en: 'The winds failed to carry your words. Try again soon.', he: 'הרוחות נכשלו לשאת את דבריך. נסה שוב בקרוב.', ru: 'Ветры не смогли донести ваши слова. Попробуйте еще раз.' }
+      };
+      return texts[key] ? texts[key][this.currentLang] : key;
+    }
+  }
+
+  // Initialize language manager immediately
+  let languageManager;
+
+  // Function to ensure language manager is ready
+  function ensureLanguageManager() {
+    if (!languageManager) {
+      languageManager = new LanguageManager();
+      window.languageManager = languageManager;
+    }
+    return languageManager;
+  }
+
+  // Initialize immediately
+  ensureLanguageManager();
+
+  // Backup initialization on DOM ready
+  document.addEventListener('DOMContentLoaded', function() {
+    ensureLanguageManager();
+    console.log('DOM loaded, language manager initialized');
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const chatBox = document.getElementById('chatBox');
+    const openChat = document.getElementById('openChat');
+    const chatLog = document.getElementById('chatLog');
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const whisper = document.getElementById('whisperSound');
+
+    // Ensure language manager is available
+    const langManager = window.languageManager || ensureLanguageManager();
+
+    openChat.addEventListener('click', () => {
+      chatBox.classList.toggle('hidden');
+    });
+
+    function appendMessage(role, text) {
+      const msg = document.createElement('div');
+      msg.className = `message ${role === 'user' ? 'user' : 'saeriel'}`;
+
+      // Use localized labels for user/saeriel
+      const roleLabel = role === 'user'
+              ? langManager.getLocalizedText('you')
+              : langManager.getLocalizedText('saeriel');
+
+      msg.textContent = `${roleLabel}: ${text}`;
+      chatLog.appendChild(msg);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const message = chatInput.value.trim();
+      if (!message) return;
+
+      appendMessage('user', message);
+      chatInput.value = '';
+      appendMessage('saeriel', langManager.getLocalizedText('mists'));
+
+      try {
+        const response = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message,
+            language: langManager.getCurrentLanguage()
+          })
+        });
+
+        const data = await response.json();
+        const last = chatLog.querySelector('.message.saeriel:last-child');
+        if (last) last.remove();
+
+        appendMessage('saeriel', data.reply);
+        whisper.play().catch(() => {}); // Ignore audio errors
+      } catch (err) {
+        console.error('Chat error:', err);
+        const last = chatLog.querySelector('.message.saeriel:last-child');
+        if (last) last.remove();
+
+        appendMessage('saeriel', langManager.getLocalizedText('error'));
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

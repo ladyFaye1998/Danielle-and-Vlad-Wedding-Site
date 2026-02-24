@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>D &amp; V — His Quest</title>
+  <link rel="icon" type="image/png" href="assets/crest.png" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com/3.4.4"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: "#2e3238",
+            honey: "#d6c09c",
+            parchment: "#faf8f5",
+            rose: "#f9f4ef"
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', "serif"],
+            body: ['"Merriweather Sans"', "sans-serif"],
+            script: ['"Dancing Script"', "cursive"],
+            hebrew: ['"Noto Serif Hebrew"', "serif"],
+            russian: ['"Roboto"', "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Fonts with Extended Language Support -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Merriweather+Sans:wght@400;500&family=Dancing+Script:wght@600&family=Roboto:wght@400;500;700&family=Noto+Serif+Hebrew:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    html { background: #faf8f5; scroll-padding-top:4rem }
+    body { margin:0; font-family:var(--tw-body) }
+
+    /* RTL Support for Hebrew */
+    html[dir="rtl"] {
+      font-family: 'Noto Serif Hebrew', serif;
+    }
+
+    html[dir="rtl"] h1,
+    html[dir="rtl"] h2,
+    html[dir="rtl"] h3 {
+      font-family: 'Noto Serif Hebrew', serif;
+    }
+
+    /* Russian language support */
+    html[lang="ru"] .font-body {
+      font-family: 'Roboto', sans-serif;
+    }
+
+    html[lang="ru"] h1,
+    html[lang="ru"] h2,
+    html[lang="ru"] h3 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .speaker {
+      font-family: 'Playfair Display', serif;
+      font-weight: bold;
+      color: #d6c09c;
+      font-size: 1.1rem;
+    }
+
+    .bubble {
+      border: 2px solid #d6c09c;
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      background: #fff;
+      backdrop-filter: blur(4px);
+      max-width: 90%;
+      margin: 0 auto;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    }
+
+    .choice {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      background: #fff;
+      border: 2px solid #d6c09c;
+      color: #2e3238;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .choice:hover {
+      background: #d6c09c;
+      color: #fff;
+    }
+
+    /* Riddle UI */
+    .riddle-container {
+      border: 3px solid #d6c09c;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(5px);
+      padding: 1.5rem;
+      margin-top: 1rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .riddle-title {
+      font-family: 'Playfair Display', serif;
+      color: #d6c09c;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .riddle-text {
+      font-style: italic;
+      margin-bottom: 1rem;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .riddle-options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 20px;
+    }
+
+    .riddle-option {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 2px solid #d6c09c;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .riddle-option:hover {
+      background: #d6c09c;
+      color: white;
+    }
+
+    /* Animation for rings */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Link styling for navbar */
+    .link { position: relative; padding-bottom: 2px; transition: .3s; }
+    .link::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+      height: 1px; background: #d6c09c; transform: scaleX(0);
+      transition: .3s;
+    }
+    .link:hover::after { transform: scaleX(1); }
+    /* Print styles for invitation */
+    /* ░░░  PRINT-ONLY STYLES  ░░░ */
+    @media print {
+
+      /* 1 — tell the printer we want a bare-edge Letter page */
+      @page {
+        size: 8.5in 11in;
+        margin: 0;
+      }
+
+      /* 2 — hide the whole UI by default … */
+      * {
+        visibility: hidden !important;
+      }
+
+      /* 3 — … then WHITELIST the invitation area */
+      .print-area,
+      .print-area * {
+        visibility: visible !important;
+      }
+
+      /* 4 — pin the printable canvas directly to the paper */
+      /* 5 — let the PNG grow to the *height* of the sheet first */
+      .print-area img{
+        height: 10.5in !important;   /* fill the full page height          */
+        width:  auto    !important;  /* keep proportions                   */
+        max-width: 100% !important;  /* safety in case of landscape images */
+        object-fit: contain !important;
+        display: block !important;
+        margin: 0 !important;
+        transform: none !important;
+      }
+
+
+      /* 5 — let the PNG grow to fill the sheet */
+      .print-area img {
+        max-width: 100% !important;   /* obey whichever side hits first  */
+        max-height: 100% !important;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain !important;  /* keep proportions              */
+        display: block !important;
+        margin: 0 !important;
+        transform: none !important;      /* nuke any Tailwind transforms  */
+      }
+
+      /* 6 — never output the “Print / Close” buttons, etc.           */
+      .no-print {
+        display: none !important;
+      }
+    }
+
+
+
+  </style>
+</head>
+
+<body class="bg-parchment text-ink antialiased">
+
+<!-- NAVBAR -->
+<nav id="topNav" class="fixed inset-x-0 top-0 z-50 flex items-center justify-between
+                      px-4 sm:px-8 py-3
+                      bg-white/50 backdrop-blur-lg
+                      border-b border-white/30
+                      shadow-md">
+  <!-- Crest + monogram on the left -->
+  <a href="index.html#hero" class="flex items-center gap-3">
+    <img src="assets/crest.png" alt="Wedding crest" class="h-8 drop-shadow-md" />
+    <span class="hidden sm:inline-block font-serif text-xl text-ink">D&nbsp;&amp;&nbsp;V</span>
+  </a>
+
+  <!-- Desktop links (right) -->
+  <ul class="hidden md:flex gap-6 lg:gap-8 text-base font-medium">
+    <li><a href="prologue.html#s0" class="link" data-key="prologue">Prologue</a></li>
+    <li><a href="index.html#quests" class="link" data-key="quests">Quests</a></li>
+    <li><a href="index.html#ceremony" class="link" data-key="ceremony">Ceremony</a></li>
+    <li><a href="index.html#travel" class="link" data-key="travel">Travel</a></li>
+    <li><a href="index.html#rsvp" class="link" data-key="rsvp">RSVP</a></li>
+  </ul>
+
+  <!-- Mobile burger -->
+  <button id="burger" class="burger md:hidden flex flex-col gap-1.5 p-2" aria-label="Menu">
+    <span class="burger-line w-6 h-[2px] bg-ink"></span>
+    <span class="burger-line w-6 h-[2px] bg-ink"></span>
+    <span class="burger-line w-6 h-[2px] bg-ink"></span>
+  </button>
+</nav>
+
+<!-- Mobile drop-down menu -->
+<div id="mobileMenu" class="fixed z-40 flex-col gap-4 bg-white/95 backdrop-blur-md shadow-lg
+                          right-4 top-16 py-5 px-8 rounded-lg text-sm
+                          border border-honey/20 hidden">
+  <ul class="flex flex-col gap-5">
+    <li><a href="prologue.html#s0" class="block py-1 hover:text-honey transition-colors" data-key="prologue">Prologue</a></li>
+    <li><a href="index.html#quests" class="block py-1 hover:text-honey transition-colors" data-key="quests">Quests</a></li>
+    <li><a href="index.html#ceremony" class="block py-1 hover:text-honey transition-colors" data-key="ceremony">Ceremony</a></li>
+    <li><a href="index.html#travel" class="block py-1 hover:text-honey transition-colors" data-key="travel">Travel</a></li>
+    <li><a href="index.html#rsvp" class="block py-1 hover:text-honey transition-colors" data-key="rsvp">RSVP</a></li>
+  </ul>
+</div>
+
+<!-- ░ BACKGROUND + CHARACTER ░ -->
+<div id="scene" class="absolute inset-0 bg-[#353535] bg-cover bg-center z-0"></div>
+<img id="vlad" src="GroomAssets/Vlad-armored.png" alt="Vlad" class="absolute bottom-0 left-10 h-[65vh] md:h-[72vh] w-auto z-10 transition-all duration-300" style="transform: scaleX(-1);" onerror="this.src='assets/avatar-his-full.png'; this.style.transform='scaleX(-1)'" />
+<img id="goblin" src="GroomAssets/goblin-angry.png" alt="Goblin" class="absolute bottom-0 right-10 h-[40vh] md:h-[45vh] w-auto z-20 transition-all duration-300" onerror="this.style.display='none'" />
+
+<!-- ░ DIALOGUE UI ░ -->
+<div id="dialogue" class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-3xl px-6 py-4 z-30">
+  <div class="bubble">
+    <div id="dialogue-label" class="speaker mb-1"></div>
+    <div id="dialogue-text" class="italic whitespace-pre-line text-[1.05rem] leading-relaxed"></div>
+  </div>
+  <div id="choices" class="text-center mt-4"></div>
+</div>
+
+<!-- ░ RIDDLE CONTAINER ░ -->
+<div id="riddle-ui" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-xl px-6 z-40 hidden">
+  <div class="riddle-container">
+    <div class="riddle-title" id="riddle-number" data-key="riddle-number">Riddle #1</div>
+    <p class="riddle-text" id="riddle-question"></p>
+    <div class="riddle-options" id="riddle-options"></div>
+  </div>
+</div>
+
+<!-- ░ RINGS CONTAINER ░ -->
+<div id="rings-container" class="absolute left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/2 flex gap-8 z-25 hidden">
+  <img id="ring1" src="GroomAssets/ring1.png" alt="Ring 1" class="h-24 w-auto float-animation" style="animation-delay: 0s;" onerror="this.src='assets/crest.png'" />
+  <img id="ring2" src="GroomAssets/ring2.png" alt="Ring 2" class="h-24 w-auto float-animation" style="animation-delay: 0.5s;" onerror="this.src='assets/crest.png'" />
+</div>
+
+<main class="pt-20"></main>
+
+<!-- ░ CHAT WIDGET ░ -->
+<div id="chat-container"></div>
+<script src="injectChat.js" onerror="console.error('Failed to load chat script')"></script>
+
+<script>
+  // Set the background immediately to ensure it's visible
+  document.getElementById('scene').style.backgroundImage = "url('GroomAssets/bg-cave.png')";
+
+  // Multi-language support
+  const translations = {
+    en: {
+      // Navigation
+      "prologue": "Prologue",
+      "quests": "Quests",
+      "ceremony": "Ceremony",
+      "travel": "Travel",
+      "rsvp": "RSVP",
+
+      // Riddles
+      "riddle-number": "Riddle #",
+
+      // Dialogue and choices
+      "goblin-greeting": "Heh-heh-heh! Big humans always stomping around where they don't belong!\nGrimble's cave, Grimble's rules! Come to take Grimble's pretty circles, have you?",
+      "choice-never-yours": "They were never yours, goblin",
+      "vlad-negotiate": "Listen... Grimble, is it? I've dealt with goblins before. I'd rather not have to get rough.\nThose rings are important to us humans. They're for a wedding ceremony.",
+      "choice-negotiate": "Can we negotiate?",
+      "goblin-challenge": "Grimble doesn't give treasures for free! But Grimble likes a good game.\nThree riddles. Answer right, shiny rings go back to boring humans. Grimble bored of them anyway.",
+      "choice-lets-do-this": "Fine. Let's do this",
+      "goblin-first-success": "Hmm. Not bad for clumsy humans with small brains.\nBut Grimble's goblin grandmother gave him this next one. Much, much trickier!",
+      "choice-try-us": "Try us, goblin",
+      "goblin-second-success": "What?! No fair! You must have heard that one before!\nNobody gets Grimble's goblin riddles that fast... nobody! Grimble smells trickery!",
+      "choice-final-riddle": "Final riddle, Grimble",
+      "goblin-defeated": "Three for three?! Impossible! You... you cheated somehow!\nBut Grimble keeps word. Even when humans are suspiciously smart.",
+      "choice-rings-please": "The rings, please",
+      "vlad-thanks": "Thank you, Grimble. No hard feelings I hope?\nGotta say, I've met many goblins, but none with your taste in riddles.",
+      "choice-leave-before-change": "Let's go before he changes his mind",
+      "vlad-forest": "That went better than expected. Thought I'd have to swing a sword at that goblin at least once.\nWho knew goblins were such riddle enthusiasts? They're usually more into hitting things.",
+      "choice-everyone-except-you": "Everyone except you, apparently",
+      "vlad-back-castle": "Ah, good to be back. And in normal clothes again.\nThat armor pinches in places I'd rather not discuss. Not built for comfort, that's for sure.",
+      "choice-tmi": "TMI, Vlad",
+      "vlad-small-talk": "So... I never asked. What brings you to these parts? Just happened to be wandering by when a desperate groom needed help with a ring-thieving goblin?",
+      "choice-lucky-timing": "Just lucky timing, I guess",
+      "vlad-timing": "Well, whatever brought you here, your timing couldn't have been better.\nDanielle would've killed me if I'd lost those rings. A goblin thief would've been a terrible excuse.",
+      "choice-happy-to-help": "Happy to help",
+      "vlad-marriage": "You know, I still can't believe I'm getting married.\nOne minute you're living your life, next you're solving goblin riddles to save your wedding. Not in the planning books, that one.",
+      "choice-life-fast": "Life comes at you fast",
+      "vlad-invitation-setup": "You literally saved it from a goblin catastrophe.\nThere'll be good food, music, dancing at the wedding... and thanks to you, a groom who still has rings to exchange.",
+      "choice-honored": "I'd be honored",
+      "vlad-final-invitation": "Great! Consider yourself officially invited. Just don't tell anyone about the goblin thing.\nDanielle thinks I keep the rings in a safe the whole time. If she knew a goblin had them, she'd never let me live it down.",
+      "choice-secret-safe": "Your secret is safe with me",
+
+      // Invitation
+      "invitation-title": "Danielle & Vlad",
+      "invitation-request": "Request the honor of your presence",
+      "invitation-date": "Tuesday · 22 July 2025",
+      "invitation-location": "Kerem Maharal Castle",
+      "invitation-tagline": "An evening of quests, music & magic",
+      "invitation-thanks": "For your invaluable assistance with puzzle-solving\nand the safe return of our rings",
+      "print-invite": "Print",
+      "continue": "Continue",
+      "congratulations": "Congratulations!",
+      "rings-recovered": "You've recovered the wedding rings!",
+      "return-home": "Return to Home",
+
+      // Riddles
+      "riddle1-question": "I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?",
+      "riddle1-option1": "Echo",
+      "riddle1-option2": "Shadow",
+      "riddle1-option3": "Thought",
+      "riddle1-option4": "Dream",
+      "riddle2-question": "The more you take, the more you leave behind. What am I?",
+      "riddle2-option1": "Money",
+      "riddle2-option2": "Time",
+      "riddle2-option3": "Footsteps",
+      "riddle2-option4": "Memories",
+      "riddle3-question": "I am taken from a mine, and shut up in a wooden case, from which I am never released, and yet I am used by almost every person. What am I?",
+      "riddle3-option1": "Gold",
+      "riddle3-option2": "Diamond",
+      "riddle3-option3": "Pencil lead",
+      "riddle3-option4": "Coal"
+    },
+
+    ru: {
+      // Navigation
+      "prologue": "Пролог",
+      "quests": "Квесты",
+      "ceremony": "Церемония",
+      "travel": "Путешествие",
+      "rsvp": "RSVP",
+
+      // Riddles
+      "riddle-number": "Загадка №",
+
+      // Dialogue and choices
+      "goblin-greeting": "Хе-хе-хе! Большие люди всегда топают там, где им не место!\nПещера Гримбла, правила Гримбла! Пришли забрать красивые кружочки Гримбла?",
+      "choice-never-yours": "Они никогда не были твоими, гоблин",
+      "vlad-negotiate": "Слушай... Гримбл, да? Я имел дело с гоблинами раньше. Не хотелось бы применять силу.\nЭти кольца важны для нас, людей. Они для свадебной церемонии.",
+      "choice-negotiate": "Можем договориться?",
+      "goblin-challenge": "Гримбл не отдает сокровища просто так! Но Гримбл любит хорошие игры.\nТри загадки. Ответишь правильно, блестящие колечки возвращаются к скучным людям. Гримблу они уже надоели.",
+      "choice-lets-do-this": "Хорошо. Давай начнем",
+      "goblin-first-success": "Хм. Неплохо для неуклюжих людей с маленькими мозгами.\nНо эту следующую загадку дала Гримблу его гоблинская бабушка. Намного, намного сложнее!",
+      "choice-try-us": "Давай, гоблин",
+      "goblin-second-success": "Что?! Нечестно! Ты наверняка слышал эту загадку раньше!\nНикто не отгадывает загадки Гримбла так быстро... никто! Гримбл чует обман!",
+      "choice-final-riddle": "Последняя загадка, Гримбл",
+      "goblin-defeated": "Три из трех?! Невозможно! Ты... ты как-то жульничал!\nНо Гримбл держит слово. Даже когда люди подозрительно умные.",
+      "choice-rings-please": "Кольца, пожалуйста",
+      "vlad-thanks": "Спасибо, Гримбл. Надеюсь, без обид?\nДолжен сказать, я встречал много гоблинов, но ни одного с таким вкусом к загадкам.",
+      "choice-leave-before-change": "Уйдем, пока он не передумал",
+      "vlad-forest": "Прошло лучше, чем ожидалось. Думал, придется хотя бы раз взмахнуть мечом.\nКто знал, что гоблины такие энтузиасты? Обычно они больше любят бить вещи.",
+      "choice-everyone-except-you": "Все, кроме тебя, видимо",
+      "vlad-back-castle": "Ах, хорошо быть дома. И в обычной одежде.\nЭти доспехи жмут в местах, о которых я предпочитаю не говорить. Не для комфорта созданы.",
+      "choice-tmi": "Слишком много информации, Влад",
+      "vlad-small-talk": "Так... я ещё не спрашивал. Что привело тебя в эти края? Просто случайно проходил мимо, когда отчаявшемуся жениху понадобилась помощь с гоблином-вором колец?",
+      "choice-lucky-timing": "Просто удачное время, наверное",
+      "vlad-timing": "Ну, что бы тебя сюда ни привело, это не могло быть лучше.\nДаниэль убила бы меня, если бы я потерял эти кольца. Гоблин-вор был бы ужасным оправданием.",
+      "choice-happy-to-help": "Рад помочь",
+      "vlad-marriage": "Знаешь, я до сих пор не могу поверить, что женюсь.\nВот живешь себе, а потом решаешь загадки гоблинов, чтобы спасти свою свадьбу. Этого не было в планах.",
+      "choice-life-fast": "Жизнь быстро меняется",
+      "vlad-invitation-setup": "Ты буквально спас ее от гоблинской катастрофы.\nНа свадьбе будет хорошая еда, музыка, танцы... и благодаря тебе, жених, у которого все еще есть кольца для обмена.",
+      "choice-honored": "Буду рад",
+      "vlad-final-invitation": "Отлично! Считай себя официально приглашенным. Только никому не рассказывай про гоблина.\nДаниэль думает, что я все время держал кольца в сейфе. Если она узнает, что они были у гоблина...",
+      "choice-secret-safe": "Твой секрет в безопасности",
+
+      // Invitation
+      "invitation-title": "Даниэль и Влад",
+      "invitation-request": "Просят честь вашего присутствия",
+      "invitation-date": "Вторник · 22 июль 2025",
+      "invitation-location": "Замок Керем Махарал",
+      "invitation-tagline": "Вечер квестов, музыки и волшебства",
+      "invitation-thanks": "За вашу неоценимую помощь в решении головоломок\nи безопасное возвращение наших колец",
+      "print-invite": "Печать",
+      "continue": "Продолжить",
+      "congratulations": "Поздравляем!",
+      "rings-recovered": "Вы вернули обручальные кольца!",
+      "return-home": "Вернуться на сайт",
+
+      // Riddles
+      "riddle1-question": "Я говорю без рта и слышу без ушей. У меня нет тела, но я оживаю с ветром. Что я?",
+      "riddle1-option1": "Эхо",
+      "riddle1-option2": "Тень",
+      "riddle1-option3": "Мысль",
+      "riddle1-option4": "Сон",
+      "riddle2-question": "Чем больше берешь, тем больше оставляешь позади. Что я?",
+      "riddle2-option1": "Деньги",
+      "riddle2-option2": "Время",
+      "riddle2-option3": "Следы",
+      "riddle2-option4": "Воспоминания",
+      "riddle3-question": "Меня добывают из шахты и запирают в деревянном футляре, откуда меня никогда не освобождают, и все же меня используют почти все люди. Что я?",
+      "riddle3-option1": "Золото",
+      "riddle3-option2": "Алмаз",
+      "riddle3-option3": "Грифель карандаша",
+      "riddle3-option4": "Уголь"
+    },
+
+    he: {
+      // Navigation
+      "prologue": "פרולוג",
+      "quests": "חידות",
+      "ceremony": "טקס",
+      "travel": "נסיעה",
+      "rsvp": "אישור הגעה",
+
+      // Riddles
+      "riddle-number": "חידה מס׳",
+
+      // Dialogue and choices
+      "goblin-greeting": "הה-הה-הה! בני אדם גדולים תמיד דורכים במקומות שלא שייכים להם!\nהמערה של גרימבל, החוקים של גרימבל! באתם לקחת את העיגולים היפים של גרימבל?",
+      "choice-never-yours": "הן מעולם לא היו שלך, גובלין",
+      "vlad-negotiate": "תקשיב... גרימבל, נכון? התמודדתי עם גובלינים בעבר. אני מעדיף לא להיות אלים.\nהטבעות האלה חשובות לנו בני האדם. הן לטקס חתונה.",
+      "choice-negotiate": "אפשר לנהל משא ומתן?",
+      "goblin-challenge": "גרימבל לא נותן אוצרות בחינם! אבל גרימבל אוהב משחק טוב.\nשלוש חידות. תענה נכון, הטבעות הבוהקות חוזרות לבני האדם המשעממים. גרימבל משתעמם מהן בכל מקרה.",
+      "choice-lets-do-this": "בסדר. תתחיל",
+      "goblin-first-success": "הממ. לא רע לבני אדם מגושמים עם מוחות קטנים.\nאבל הסבתא הגובלינית של גרימבל נתנה לו את החידה הבאה. הרבה, הרבה יותר קשה!",
+      "choice-try-us": "נסה אותנו, גובלין",
+      "goblin-second-success": "מה?! לא הוגן! בטח שמעת את זה קודם!\nאף אחד לא פותר את החידות של גרימבל כל כך מהר... אף אחד! גרימבל מריח רמאות!",
+      "choice-final-riddle": "החידה האחרונה, גרימבל",
+      "goblin-defeated": "שלוש מתוך שלוש?! בלתי אפשרי! אתה... רימית איכשהו!\nאבל גרימבל שומר על המילה שלו. גם כשבני אדם חכמים באופן חשוד.",
+      "choice-rings-please": "הטבעות, בבקשה",
+      "vlad-thanks": "תודה, גרימבל. בלי עלבונות.\nחייב לומר, פגשתי הרבה גובלינים, אבל אף אחד עם הטעם שלך בחידות.",
+      "choice-leave-before-change": "בואו נלך לפני שהוא משנה את דעתו",
+      "vlad-forest": "זה הלך טוב יותר מהצפוי. חשבתי שאצטרך להניף חרב על הגובלין הזה לפחות פעם אחת.\nמי ידע שגובלינים הם כאלה חובבי חידות? בדרך כלל הם יותר אוהבים להכות דברים.",
+      "choice-everyone-except-you": "כולם חוץ ממך, כנראה",
+      "vlad-back-castle": "אה, טוב להיות בבית. ובבגדים רגילים שוב.\nהשריון הזה לוחץ במקומות שאני מעדיף לא לדבר עליהם. לא בנוי לנוחות.",
+      "choice-tmi": "יותר מדי מידע, ולאד",
+      "vlad-small-talk": "אז... לא שאלתי עדיין. מה מביא אותך לכאן? סתם קרה שהסתובבת כשחתן נואש צריך עזרה עם גובלין גנב טבעות?",
+      "choice-lucky-timing": "סתם עיתוי, אני מניח",
+      "vlad-timing": "ובכן, מה שלא הביא אותך לכאן, העיתוי שלך לא יכול היה להיות טוב יותר.\nדניאל הייתה הורגת אותי אם הייתי מאבד את הטבעות האלה. גנב גובלין היה תירוץ נורא.",
+      "choice-happy-to-help": "שמח לעזור",
+      "vlad-marriage": "אתה יודע, אני עדיין לא מאמין שאני מתחתן.\nרגע אחד אתה חי את החיים שלך, ברגע הבא אתה פותר חידות גובלין כדי להציל את החתונה שלך. זה לא היה בתכניות.",
+      "choice-life-fast": "החיים בלתי צפויים",
+      "vlad-invitation-setup": "אתה ממש הצלת אותה מקטסטרופת גובלין.\nיהיה אוכל טוב, מוזיקה, ריקודים בחתונה... ובזכותך, חתן שעדיין יש לו טבעות.",
+      "choice-honored": "אשמח לבוא",
+      "vlad-final-invitation": "נהדר! תחשוב על עצמך כמוזמן רשמית. רק אל תספר לאף אחד על עניין הגובלין.\nדניאל חושבת שאני שומר את הטבעות בכספת כל הזמן. אם היא תדע שגובלין גנב אותן...",
+      "choice-secret-safe": "הסוד שלך שמור איתי",
+
+      // Invitation
+      "invitation-title": "דניאל וולאד",
+      "invitation-request": "מבקשים את כבוד נוכחותכם",
+      "invitation-date": "יום שלישי · 22 ביולי 2025",
+      "invitation-location": "טירת כרם מהר״ל",
+      "invitation-tagline": "ערב של חידות, מוזיקה וקסם",
+      "invitation-thanks": "על עזרתכם הלא-יסולא-בפז בפתרון חידות\nוהחזרה בטוחה של הטבעות שלנו",
+      "print-invite": "הדפס",
+      "continue": "המשך",
+      "congratulations": "מזל טוב!",
+      "rings-recovered": "החזרתם את טבעות הנישואין!",
+      "return-home": "חזור הביתה",
+
+      // Riddles
+      "riddle1-question": "אני מדבר בלי פה ושומע בלי אוזניים. אין לי גוף, אבל אני מתעורר עם רוח. מה אני?",
+      "riddle1-option1": "הד",
+      "riddle1-option2": "צל",
+      "riddle1-option3": "מחשבה",
+      "riddle1-option4": "חלום",
+      "riddle2-question": "ככל שלוקחים יותר, כך משאירים יותר מאחור. מה אני?",
+      "riddle2-option1": "כסף",
+      "riddle2-option2": "זמן",
+      "riddle2-option3": "עקבות",
+      "riddle2-option4": "זכרונות",
+      "riddle3-question": "אותי לוקחים ממכרה, וסוגרים אותי בקופסה מעץ, ממנה אף פעם לא משחררים אותי, ובכל זאת כמעט כל אדם משתמש בי. מה אני?",
+      "riddle3-option1": "זהב",
+      "riddle3-option2": "יהלום",
+      "riddle3-option3": "עופרת עיפרון",
+      "riddle3-option4": "פחם"
+    }
+  };
+
+  // Language settings with emoji flags
+  const languageSettings = {
+    en: { name: "English", icon: "🇬🇧", dir: "ltr" },
+    ru: { name: "Русский", icon: "🇷🇺", dir: "ltr" },
+    he: { name: "עברית", icon: "🇮🇱", dir: "rtl" }
+  };
+
+  // Function to apply translations
+  function applyTranslations(lang) {
+    const elements = document.querySelectorAll('[data-key]');
+
+    elements.forEach(element => {
+      const key = element.getAttribute('data-key');
+      if (translations[lang][key]) {
+        element.textContent = translations[lang][key];
+      }
+    });
+
+    // Set text direction
+    document.documentElement.dir = languageSettings[lang].dir;
+    document.documentElement.lang = lang;
+  }
+
+  // Initialize language from session storage
+  function initLanguage() {
+    const savedLanguage = sessionStorage.getItem('wedding-language') || 'en';
+    if (translations[savedLanguage]) {
+      applyTranslations(savedLanguage);
+    }
+  }
+
+  // Define scenes with translation keys
+  const scenes = [
+    // 0 - First encounter in the cave
+    {
+      bg: 'GroomAssets/bg-cave.png',
+      char1: 'GroomAssets/goblin-angry.png',
+      char2: 'GroomAssets/Vlad-armored.png',
+      speaker: 'Goblin',
+      textKey: 'goblin-greeting',
+      choices: [{ textKey: 'choice-never-yours', action: () => goto(1) }]
+    },
+    // 1 - Vlad responds
+    {
+      bg: 'GroomAssets/bg-cave.png',
+      char1: 'GroomAssets/goblin-neutral.png',
+      char2: 'GroomAssets/Vlad-armored.png',
+      speaker: 'Vlad',
+      textKey: 'vlad-negotiate',
+      choices: [{ textKey: 'choice-negotiate', action: () => goto(2) }]
+    },
+    // 2 - Grimble proposes the challenge
+    {
+      bg: 'GroomAssets/bg-cave.png',
+      char1: 'GroomAssets/goblin-neutral.png',
+      char2: 'GroomAssets/Vlad-armored.png',
+      speaker: 'Goblin',
+      textKey: 'goblin-challenge',
+      choices: [{ textKey: 'choice-lets-do-this', action: () => startRiddle(0) }]
+    },
+    // 3 - After first riddle
+    {
+      bg: 'GroomAssets/bg-cave.png',
+      char1: 'GroomAssets/goblin-neutral.png',
+      char2: 'GroomAssets/Vlad-armored.png',
+      speaker: 'Goblin',
+      textKey: 'goblin-first-success',
+      choices: [{ textKey: 'choice-try-us', action: () => startRiddle(1) }]
+    },
+    // 4 - After second riddle
+    {
+      bg: 'GroomAssets/bg-cave.png',
+      char1: 'GroomAssets/goblin-worried.png',
+      char2: 'GroomAssets/Vlad-armored.png',
+      speaker: 'Goblin',
+      textKey: 'goblin-second-success',
+      choices: [{ textKey: 'choice-final-riddle', action: () => startRiddle(2) }]
+    },
+    // 5 - After third riddle
+    {
+      bg: 'GroomAssets/bg-cave.png',
+      char1: 'GroomAssets/goblin-defeated.png',
+      char2: 'GroomAssets/Vlad-armored.png',
+      speaker: 'Goblin',
+      textKey: 'goblin-defeated',
+      choices: [{ textKey: 'choice-rings-please', action: () => showRings() }]
+    },
+    // 6 - Rings returned, still in cave
+    {
+      bg: 'GroomAssets/bg-cave.png',
+      char1: 'GroomAssets/goblin-neutral.png',
+      char2: 'GroomAssets/Vlad-armored.png',
+      speaker: 'Vlad',
+      textKey: 'vlad-thanks',
+      choices: [{ textKey: 'choice-leave-before-change', action: () => goto(7) }]
+    },
+    // 7 - Transition back to castle
+    {
+      bg: 'GroomAssets/bg-forest.png',
+      char1: '',
+      char2: 'GroomAssets/Vlad-armored.png',
+      speaker: 'Vlad',
+      textKey: 'vlad-forest',
+      choices: [{ textKey: 'choice-everyone-except-you', action: () => goto(8) }]
+    },
+    // 8 - Back at the castle, casual Vlad
+    {
+      bg: 'GroomAssets/bg-castle.png',
+      char1: '',
+      char2: 'GroomAssets/Vlad-neutral.png',
+      speaker: 'Vlad',
+      textKey: 'vlad-back-castle',
+      choices: [{ textKey: 'choice-tmi', action: () => goto(9) }]
+    },
+    // 9 - Small talk at castle
+    {
+      bg: 'GroomAssets/bg-castle.png',
+      char1: '',
+      char2: 'GroomAssets/Vlad-happy.png',
+      speaker: 'Vlad',
+      textKey: 'vlad-small-talk',
+      choices: [{ textKey: 'choice-lucky-timing', action: () => goto(10) }]
+    },
+    // 10 - More small talk
+    {
+      bg: 'GroomAssets/bg-castle.png',
+      char1: '',
+      char2: 'GroomAssets/Vlad-happy.png',
+      speaker: 'Vlad',
+      textKey: 'vlad-timing',
+      choices: [{ textKey: 'choice-happy-to-help', action: () => goto(11) }]
+    },
+    // 11 - More casual conversation
+    {
+      bg: 'GroomAssets/bg-castle.png',
+      char1: '',
+      char2: 'GroomAssets/Vlad-happy.png',
+      speaker: 'Vlad',
+      textKey: 'vlad-marriage',
+      choices: [{ textKey: 'choice-life-fast', action: () => goto(12) }]
+    },
+    // 12 - Invitation setup
+    {
+      bg: 'GroomAssets/bg-castle.png',
+      char1: '',
+      char2: 'GroomAssets/Vlad-happy.png',
+      speaker: 'Vlad',
+      textKey: 'vlad-invitation-setup',
+      choices: [{ textKey: 'choice-honored', action: () => goto(13) }]
+    },
+    // 13 - Final invitation
+    {
+      bg: 'GroomAssets/bg-castle.png',
+      char1: '',
+      char2: 'GroomAssets/Vlad-happy.png',
+      speaker: 'Vlad',
+      textKey: 'vlad-final-invitation',
+      choices: [{ textKey: 'choice-secret-safe', action: () => showInvitation() }]
+    }
+  ];
+
+  // Riddles with translation keys
+  const riddles = [
+    {
+      questionKey: "riddle1-question",
+      optionKeys: ["riddle1-option1", "riddle1-option2", "riddle1-option3", "riddle1-option4"],
+      answer: 0 // Echo
+    },
+    {
+      questionKey: "riddle2-question",
+      optionKeys: ["riddle2-option1", "riddle2-option2", "riddle2-option3", "riddle2-option4"],
+      answer: 2 // Footsteps
+    },
+    {
+      questionKey: "riddle3-question",
+      optionKeys: ["riddle3-option1", "riddle3-option2", "riddle3-option3", "riddle3-option4"],
+      answer: 2 // Pencil lead
+    }
+  ];
+
+  let idx = 0;
+  let currentRiddle = 0;
+  let currentLanguage = 'en';
+
+  // Get DOM elements
+  const sceneEl = document.getElementById('scene');
+  const goblinEl = document.getElementById('goblin');
+  const vladEl = document.getElementById('vlad');
+  const diaEl = document.getElementById('dialogue');
+  const textEl = document.getElementById('dialogue-text');
+  const labelEl = document.getElementById('dialogue-label');
+  const chEl = document.getElementById('choices');
+  const riddleUI = document.getElementById('riddle-ui');
+  const riddleNumber = document.getElementById('riddle-number');
+  const riddleQuestion = document.getElementById('riddle-question');
+  const riddleOptions = document.getElementById('riddle-options');
+  const ringsContainer = document.getElementById('rings-container');
+
+  // Mobile menu functionality
+  const burger = document.getElementById("burger");
+  const mobileMenu = document.getElementById("mobileMenu");
+
+  burger.addEventListener("click", function() {
+    burger.classList.toggle('active');
+    mobileMenu.classList.toggle("hidden");
+  });
+
+  // Close menu when clicking a link
+  mobileMenu.querySelectorAll("a").forEach(a => {
+    a.addEventListener("click", function() {
+      burger.classList.remove('active');
+      mobileMenu.classList.add("hidden");
+    });
+  });
+
+  // Core game functions
+  function render() {
+    const s = scenes[idx];
+    currentLanguage = document.documentElement.lang || 'en';
+
+    // Set background
+    if (s.bg) {
+      sceneEl.style.backgroundImage = `url('${s.bg}')`;
+    }
+
+    // Set characters
+    if (s.char1) {
+      goblinEl.src = s.char1;
+      goblinEl.style.display = "block";
+    } else {
+      goblinEl.style.display = "none";
+    }
+
+    if (s.char2) {
+      vladEl.src = s.char2;
+      vladEl.style.display = "block";
+      if (s.char2.includes('armored')) {
+        vladEl.style.transform = "scaleX(-1)";
+      } else {
+        vladEl.style.transform = "";
+      }
+    } else {
+      vladEl.style.display = "none";
+    }
+
+    // Set dialogue
+    if (s.textKey !== undefined) {
+      diaEl.style.display = "block";
+
+      // Translate speaker name
+      let speakerName = s.speaker || '';
+      if (speakerName === 'Vlad') {
+        const vladTranslations = {
+          'en': 'Vlad',
+          'ru': 'Влад',
+          'he': 'ולאד'
+        };
+        speakerName = vladTranslations[currentLanguage] || 'Vlad';
+      } else if (speakerName === 'Goblin') {
+        const goblinTranslations = {
+          'en': 'Goblin',
+          'ru': 'Гоблин',
+          'he': 'גובלין'
+        };
+        speakerName = goblinTranslations[currentLanguage] || 'Goblin';
+      }
+      labelEl.textContent = speakerName;
+
+      // Get translated text
+      const translatedText = translations[currentLanguage][s.textKey];
+      textEl.textContent = translatedText || s.textKey;
+
+      // Set choices
+      chEl.innerHTML = '';
+      (s.choices || []).forEach(c => {
+        const btn = document.createElement('span');
+        const translatedChoice = translations[currentLanguage][c.textKey];
+        btn.textContent = translatedChoice || c.textKey;
+        btn.className = 'choice';
+        btn.onclick = c.action;
+        chEl.appendChild(btn);
+      });
+    } else {
+      diaEl.style.display = "none";
+    }
+  }
+
+  function goto(i) {
+    idx = i;
+    render();
+  }
+
+  function startRiddle(riddleIndex) {
+    currentRiddle = riddleIndex;
+    currentLanguage = document.documentElement.lang || 'en';
+
+    // Hide dialogue
+    diaEl.style.display = "none";
+
+    // Show riddle UI
+    riddleUI.classList.remove('hidden');
+
+    // Set riddle content
+    const riddleNumberText = translations[currentLanguage]['riddle-number'];
+    riddleNumber.textContent = `${riddleNumberText} ${riddleIndex + 1}`;
+
+    riddleQuestion.textContent = translations[currentLanguage][riddles[riddleIndex].questionKey];
+
+    // Clear and add new options
+    riddleOptions.innerHTML = '';
+    riddles[riddleIndex].optionKeys.forEach((optionKey, i) => {
+      const btn = document.createElement('button');
+      btn.textContent = translations[currentLanguage][optionKey];
+      btn.className = 'riddle-option';
+      btn.onclick = () => checkAnswer(i);
+      riddleOptions.appendChild(btn);
+    });
+  }
+
+  function checkAnswer(selectedIndex) {
+    // Always count as correct (we want players to succeed)
+    const isCorrect = true;
+
+    // Hide riddle UI
+    riddleUI.classList.add('hidden');
+
+    // Show dialogue
+    diaEl.style.display = "block";
+
+    // Go to next scene based on current riddle
+    goto(currentRiddle + 3);
+  }
+
+  function showRings() {
+    // Show the rings floating
+    ringsContainer.classList.remove('hidden');
+
+    // Go to next scene after a delay
+    setTimeout(() => {
+      ringsContainer.classList.add('hidden');
+      goto(6);
+    }, 3000);
+  }
+
+  function showInvitation() {
+    currentLanguage = document.documentElement.lang || 'en';
+
+    // Determine which invitation to use based on language
+    let invitationSrc;
+    switch(currentLanguage) {
+      case 'ru':
+        invitationSrc = 'invitations/ru.png';
+        break;
+      case 'he':
+        invitationSrc = 'invitations/he.png';
+        break;
+      default:
+        invitationSrc = 'invitations/en.png';
+    }
+
+    // Create wedding invitation popup
+    const invitation = document.createElement('div');
+    invitation.style.position = 'fixed';
+    invitation.style.top = '50%';
+    invitation.style.left = '50%';
+    invitation.style.transform = 'translate(-50%, -50%)';
+    invitation.style.width = '90%';
+    invitation.style.maxWidth = '600px';
+    invitation.style.maxHeight = '80vh';
+    invitation.style.overflowY = 'auto';
+    invitation.style.backgroundColor = '#fff';
+    invitation.style.border = '3px solid #d6c09c';
+    invitation.style.borderRadius = '1rem';
+    invitation.style.padding = '2rem';
+    invitation.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+    invitation.style.zIndex = '2000';
+    invitation.style.textAlign = 'center';
+    invitation.style.fontFamily = "'Playfair Display', serif";
+
+    const printBtnText = translations[currentLanguage]['print-invite'];
+    const continueBtnText = translations[currentLanguage]['continue'];
+
+    invitation.innerHTML = `
+      <div class="print-area">
+        <img src="${invitationSrc}" alt="Wedding Invitation" />
+      </div>
+      <div style="margin-top:2rem;display:flex;justify-content:center;gap:1rem" class="no-print">
+        <button id="print-invite" style="padding:0.75rem 1.5rem;background:#f5f5f5;border:2px solid #d6c09c;color:#2e3238;border-radius:30px;cursor:pointer;font-family:'Playfair Display',serif">
+          <span style="display:flex;align-items:center;gap:0.5rem">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2 2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            ${printBtnText}
+          </span>
+        </button>
+        <button id="continue-btn" style="padding:0.75rem 1.5rem;background:#d6c09c;border:none;color:white;border-radius:30px;cursor:pointer;font-family:'Playfair Display',serif">${continueBtnText}</button>
+      </div>
+    `;
+
+    document.body.appendChild(invitation);
+
+    // Add event listeners
+    document.getElementById('print-invite').addEventListener('click', () => {
+      window.print();
+    });
+
+    document.getElementById('continue-btn').addEventListener('click', () => {
+      invitation.remove();
+
+      // Show completion message
+      const completion = document.createElement('div');
+      completion.style.position = 'fixed';
+      completion.style.inset = '0';
+      completion.style.backgroundColor = 'rgba(0,0,0,0.8)';
+      completion.style.display = 'flex';
+      completion.style.flexDirection = 'column';
+      completion.style.justifyContent = 'center';
+      completion.style.alignItems = 'center';
+      completion.style.zIndex = '3000';
+      completion.style.color = 'white';
+      completion.style.textAlign = 'center';
+
+      const congratsText = translations[currentLanguage]['congratulations'];
+      const recoveredText = translations[currentLanguage]['rings-recovered'];
+      const returnText = translations[currentLanguage]['return-home'];
+
+      completion.innerHTML = `
+        <h1 style="font-family:'Playfair Display',serif;color:#d6c09c;font-size:48px;margin-bottom:1rem">${congratsText}</h1>
+        <p style="font-family:'Merriweather Sans',sans-serif;font-size:24px;margin-bottom:2rem">${recoveredText}</p>
+        <button id="return-home" style="padding:1rem 2rem;background:#d6c09c;border:none;color:white;border-radius:30px;cursor:pointer;font-family:'Playfair Display',serif;font-size:18px">${returnText}</button>
+      `;
+
+      document.body.appendChild(completion);
+
+      document.getElementById('return-home').addEventListener('click', () => {
+        window.location.href = 'index.html';
+      });
+    });
+  }
+
+  // Initialize the game
+  document.addEventListener('DOMContentLoaded', function() {
+    initLanguage();
+    render();
+  });
+
+  // Initialize immediately
+  initLanguage();
+  render();
+</script>
+</body>
+</html>

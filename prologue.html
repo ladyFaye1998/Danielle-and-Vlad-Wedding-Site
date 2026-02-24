@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>D & V — Prologue</title>
+    <link rel="icon" type="image/png" href="assets/crest.png" />
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com/3.4.4"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { ink: "#2e3238", honey: "#d6c09c", parchment: "#faf8f5" },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', "serif"],
+                        body: ['"Merriweather Sans"', "sans-serif"],
+                        script: ['"Dancing Script"', "cursive"],
+                        hebrew: ['"Heebo"', '"Noto Sans Hebrew"', "sans-serif"],
+                        russian: ['"Inter"', '"Noto Sans"', "sans-serif"]
+                    },
+                    screens: {
+                        'xs': '475px',
+                    }
+                }
+            }
+        };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Merriweather+Sans:wght@400;500&family=Dancing+Script:wght@600&family=Heebo:wght@400;500;700&family=Inter:wght@400;500;700&family=Noto+Sans+Hebrew:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <style>
+        html {
+            background: #faf8f5;
+            scroll-padding-top: 4rem;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--tw-body);
+            transition: font-family 0.3s ease;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--tw-serif);
+            margin: 0;
+        }
+
+        /* Language-specific styles */
+        .lang-hebrew {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+            direction: rtl;
+        }
+
+        .lang-hebrew h1,
+        .lang-hebrew h2,
+        .lang-hebrew h3,
+        .lang-hebrew h4 {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+            font-weight: 700;
+        }
+
+        .lang-hebrew .font-script {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+            font-style: normal;
+        }
+
+        .lang-russian {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            direction: ltr;
+        }
+
+        .lang-russian h1,
+        .lang-russian h2,
+        .lang-russian h3,
+        .lang-russian h4 {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            font-weight: 700;
+        }
+
+        .lang-russian .font-script {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            font-style: italic;
+        }
+
+        /* animated underline for nav links */
+        .link {
+            position: relative;
+            padding-bottom: 2px;
+            transition: .3s;
+        }
+
+        .link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 1px;
+            background: #d6c09c;
+            transform: scaleX(0);
+            transition: .3s;
+        }
+
+        .link:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* RTL adjustments */
+        [dir="rtl"] .link::after {
+            right: 0;
+            left: 0;
+        }
+
+        [dir="rtl"] .text-right {
+            text-align: left;
+        }
+
+        [dir="rtl"] .text-left {
+            text-align: right;
+        }
+
+        [dir="rtl"] .pr-12 {
+            padding-right: 0;
+            padding-left: 3rem;
+        }
+
+        [dir="rtl"] .pl-12 {
+            padding-left: 0;
+            padding-right: 3rem;
+        }
+
+        [dir="rtl"] .flex-col.items-end {
+            align-items: flex-start;
+        }
+
+        /* arrow draw animation */
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+
+        /* Timeline dots positioning */
+        .dot::before{
+            content:"";
+            position:absolute;
+            left:50vw;
+            top:calc(50% + var(--shift,0px));
+            transform:translate(-50%,-50%);
+            width:14px;height:14px;border-radius:50%;
+            background:#d6c09c;
+            pointer-events:none;
+        }
+
+        .dot:not(:last-child)::after{
+            content:"";
+            position:absolute;
+            left:50vw;
+            top:calc(50% + var(--shift,0px));
+            transform:translateX(-50%);
+            height:calc(100vh - var(--shift,0px) + 1px);
+            width:2px;background:#d6c09c40;
+            pointer-events:none;
+        }
+
+        .penultimate::after {
+            display: none !important;
+        }
+
+        .slides {
+            width: max-content;
+            overflow: hidden;
+        }
+
+        @keyframes carousel {
+            from { transform: translate3d(0, 0, 0); }
+            to   { transform: translate3d(-50%, 0, 0); }
+        }
+
+        .animate-carousel {
+            animation: carousel 30s linear infinite;
+        }
+
+        .will-change-transform {
+            will-change: transform;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            html {
+                scroll-padding-top: 3rem;
+            }
+
+            /* Mobile timeline adjustments */
+            .dot::before {
+                left: 1rem;
+                transform: translate(-50%, -50%);
+            }
+
+            .dot:not(:last-child)::after {
+                left: 1rem;
+                transform: translateX(-50%);
+            }
+
+            /* Mobile section layouts */
+            .mobile-stack {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+
+            .mobile-stack .w-1\/2 {
+                width: 100%;
+                padding: 0;
+                margin-bottom: 2rem;
+            }
+
+            .mobile-stack .order-2 {
+                order: 1;
+            }
+
+            .mobile-stack .order-1 {
+                order: 2;
+            }
+
+            /* Mobile carousel */
+            .carousel-wrapper {
+                height: 20rem;
+                max-width: 90vw;
+            }
+
+            /* Mobile image containers */
+            .mobile-image {
+                max-width: 280px;
+                height: 20rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carousel-wrapper {
+                height: 16rem;
+            }
+
+            .mobile-image {
+                height: 16rem;
+            }
+
+            /* Smaller text on very small screens */
+            .mobile-text-sm {
+                font-size: 1rem;
+            }
+
+            .mobile-title-sm {
+                font-size: 1.5rem;
+            }
+        }
+
+        .carousel-track {
+            direction: ltr; /* force LTR layout */
+            display: flex;
+            flex-direction: row;
+        }
+
+        /* Carousel styles */
+        #s0 .carousel-track {
+            height: 100%;
+            gap: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        #s0 .carousel-track .slide {
+            flex: 0 0 auto;
+            height: 100%;
+            object-fit: contain;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css"/>
+</head>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js"></script>
+
+<div id="chat-container" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50"></div>
+
+<body class="antialiased bg-parchment">
+
+<!-- ░ NAV ░ -->
+<div id="navbar"></div>
+<script>
+    fetch('navbar.html')
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('navbar').innerHTML = html;
+
+            // Initialize navbar language after it's loaded
+            setTimeout(() => {
+                const savedLang = sessionStorage.getItem('wedding-language');
+                if (savedLang) {
+                    updateNavbarLanguage(savedLang);
+                }
+                initNavbarMobileMenu();
+            }, 100);
+        })
+        .catch(err => console.log('Navbar not found:', err));
+
+    // Function to update navbar language
+    function updateNavbarLanguage(lang) {
+        const navbarElements = document.querySelectorAll('#navbar [data-en]');
+        navbarElements.forEach(element => {
+            const text = element.getAttribute(`data-${lang}`);
+            if (text) {
+                element.textContent = text;
+            }
+        });
+    }
+
+    // Function to initialize navbar mobile menu
+    function initNavbarMobileMenu() {
+        const burger = document.querySelector('#navbar #burger');
+        const mobileMenu = document.querySelector('#navbar #mobileMenu');
+
+        if (!burger || !mobileMenu) return;
+
+        function toggleMobileMenu() {
+            burger.classList.toggle('active');
+            mobileMenu.classList.toggle('visible');
+        }
+
+        burger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleMobileMenu();
+        });
+
+        document.addEventListener('click', function(e) {
+            if (mobileMenu.classList.contains('visible') &&
+                !mobileMenu.contains(e.target) &&
+                !burger.contains(e.target)) {
+                toggleMobileMenu();
+            }
+        });
+
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                toggleMobileMenu();
+            });
+        });
+
+        mobileMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768 && mobileMenu.classList.contains('visible')) {
+                toggleMobileMenu();
+            }
+        });
+    }
+</script>
+
+<main class="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth">
+
+    <!-- ─── Slide 0: Prologue ─── -->
+    <section
+            id="s0"
+            class="snap-start h-screen flex flex-col items-center justify-start pt-16 sm:pt-20 md:pt-24 relative dot px-4"
+            style="--shift:280px;"
+    >
+        <!-- Heading -->
+        <h1 class="text-3xl sm:text-4xl md:text-5xl text-honey mb-2"
+            data-en="Prologue"
+            data-he="פרולוג"
+            data-ru="Пролог">Prologue</h1>
+        <h2 class="text-lg sm:text-xl md:text-2xl font-script text-ink/80 mb-6 sm:mb-8 md:mb-10"
+            data-en="Our Story"
+            data-he="הסיפור שלנו"
+            data-ru="Наша история">Our Story</h2>
+
+        <!-- Carousel wrapper -->
+        <div class="w-full max-w-5xl carousel-wrapper h-[20rem] sm:h-[30rem] md:h-[40rem] lg:h-[48rem] overflow-hidden rounded-xl shadow-lg mb-8 sm:mb-12 md:mb-20">
+            <div class="carousel-track flex">
+                <img src="assets/photo1.jpg" class="slide" alt="">
+                <img src="assets/photo2.jpg" class="slide" alt="">
+                <img src="assets/photo3.jpg" class="slide" alt="">
+                <img src="assets/photo4.jpg" class="slide" alt="">
+                <img src="assets/photo5.jpg" class="slide" alt="">
+            </div>
+        </div>
+
+        <p class="text-lg sm:text-2xl md:text-3xl lg:text-4xl text-ink/80 font-script italic text-center mt-4 sm:mt-6 mb-6 sm:mb-8 md:mb-10 px-4 max-w-4xl"
+           data-en="A story not planned, only lived—one small step at a time."
+           data-he="סיפור שלא תוכנן, רק נחיה—צעד קטן אחד בכל פעם."
+           data-ru="История, которая не была запланирована, а просто прожита—шаг за шагом.">
+            A story not planned, only lived—one small step at a time.
+        </p>
+    </section>
+
+    <!-- ░ Slide 1 ░ -->
+    <section class="snap-start h-screen flex items-center px-4 sm:px-6 md:px-8 relative dot mobile-stack">
+        <!-- LEFT (content) -->
+        <div class="w-1/2 pr-0 sm:pr-6 md:pr-12 text-right flex flex-col items-end">
+            <h4 class="text-xl sm:text-2xl md:text-3xl text-honey mb-2 mobile-title-sm"
+                data-en="23 March 2016"
+                data-he="23 במרץ 2016"
+                data-ru="23 марта 2016">23 March 2016</h4>
+            <p class="text-sm sm:text-base md:text-lg text-ink/90 max-w-xs italic mobile-text-sm"
+               data-en="Just a 'Hello'… and somehow it became everything."
+               data-he="רק היי ואיכשהו זה הפך להכל"
+               data-ru="Просто Привет... и вдруг это стало всем.">
+                Just a "Hello"… and somehow it became everything.
+            </p>
+        </div>
+
+        <!-- RIGHT (image) -->
+        <div class="w-1/2 flex items-center justify-center">
+            <div class="w-full max-w-md mobile-image h-[20rem] sm:h-[24rem] md:h-[28rem] rounded-xl overflow-hidden shadow-lg">
+                <img src="assets/Whatsapp.jpeg"
+                     alt="First chat screenshot"
+                     class="w-full h-full object-cover" />
+            </div>
+        </div>
+    </section>
+
+    <!-- ░ Slide 2 ░ -->
+    <section class="snap-start h-screen flex items-center px-4 sm:px-6 md:px-8 relative dot mobile-stack">
+        <!-- LEFT (image) -->
+        <div class="w-1/2 flex items-center justify-center order-2 md:order-1">
+            <div class="w-full max-w-md mobile-image h-[20rem] sm:h-[24rem] md:h-[28rem] rounded-xl overflow-hidden shadow-lg">
+                <img src="assets/tea.jpg"
+                     alt="Vanilla Rooibos Tea moment"
+                     class="w-full h-full object-cover" />
+            </div>
+        </div>
+
+        <!-- RIGHT (content) -->
+        <div class="w-1/2 pl-0 sm:pl-6 md:pl-12 order-1 md:order-2">
+            <h4 class="text-xl sm:text-2xl md:text-3xl text-honey mb-2 mobile-title-sm"
+                data-en="27 May 2016"
+                data-he="27 במאי 2016"
+                data-ru="27 мая 2016">27 May 2016</h4>
+            <p class="text-sm sm:text-base md:text-lg text-ink/90 max-w-xs italic mobile-text-sm"
+               data-en="Vanilla rooibos and Dalí on a quiet afternoon—nothing made sense, but everything felt right."
+               data-he="רויבוש וניל ודאלי באחר צהריים שקט אחד—שום דבר לא ניראה הגיוני, אבל הכל הרגיש נכון."
+               data-ru="Ванильный ройбуш и Дали —ничего не имело смысла, но все ощущалось правильно.">
+                Vanilla rooibos and Dalí on a quiet afternoon—nothing made sense, but everything felt right.
+            </p>
+        </div>
+    </section>
+
+    <!-- ░ Slide 3 ░ -->
+    <section class="snap-start h-screen flex items-center px-4 sm:px-6 md:px-8 relative dot mobile-stack">
+        <!-- LEFT (content) -->
+        <div class="w-1/2 pr-0 sm:pr-6 md:pr-12 text-right flex flex-col items-end">
+            <h4 class="text-xl sm:text-2xl md:text-3xl text-honey mb-2 mobile-title-sm"
+                data-en="17 October 2019"
+                data-he="17 באוקטובר 2019"
+                data-ru="17 октября 2019">17 October 2019</h4>
+            <p class="text-sm sm:text-base md:text-lg text-ink/90 max-w-xs italic mobile-text-sm"
+               data-en="In olive-scented air, we whispered our vows—soft, certain, and ours."
+               data-he="באוויר עצי הזית, לחשנו את נדרינו."
+               data-ru="В воздухе, пропитанном морским бризом, мы шептали клятвы — тихие и только наши.">
+                In olive-scented air, we whispered our vows—soft, certain, and ours.
+            </p>
+        </div>
+
+        <!-- RIGHT (image) -->
+        <div class="w-1/2 flex items-center justify-center">
+            <div class="w-full max-w-md mobile-image h-[20rem] sm:h-[24rem] md:h-[28rem] rounded-xl overflow-hidden shadow-lg">
+                <img src="assets/wed.jpg"
+                     alt="Larnaca wedding vows"
+                     class="w-full h-full object-cover" />
+            </div>
+        </div>
+    </section>
+
+    <!-- ░ Slide 4 ░ -->
+    <section class="snap-start h-screen flex items-center px-4 sm:px-6 md:px-8 relative dot penultimate mobile-stack" style="--shift: 20px;">
+        <!-- LEFT (image) -->
+        <div class="w-1/2 flex items-center justify-center order-2 md:order-1">
+            <div class="w-full max-w-md mobile-image h-[20rem] sm:h-[24rem] md:h-[28rem] rounded-xl overflow-hidden shadow-lg">
+                <img src="assets/castle.jpg"
+                     alt="Castle preview"
+                     class="w-full h-full object-cover" />
+            </div>
+        </div>
+
+        <!-- RIGHT (content) -->
+        <div class="w-1/2 pl-0 sm:pl-6 md:pl-12 order-1 md:order-2">
+            <h4 class="text-xl sm:text-2xl md:text-3xl text-honey mb-2 mobile-title-sm"
+                data-en="22 July 2025"
+                data-he="22 ביולי 2025"
+                data-ru="22 июль 2025">22 June 2025</h4>
+            <p class="text-sm sm:text-base md:text-lg text-ink/90 max-w-xs italic mobile-text-sm"
+               data-en="A castle, a return, and the next chapter—written in stone and stars."
+               data-he="טירה, והפרק הבא—כתוב באבן ובכוכבים."
+               data-ru="Замок и следующая глава—написанная в звездах.">
+                A castle, a return, and the next chapter—written in stone and stars.
+            </p>
+        </div>
+    </section>
+
+    <!-- ░ Slide 5 ░ -->
+    <section
+            id="choose-quest"
+            class="snap-start h-screen flex flex-col items-center justify-center relative px-4"
+            style="--shift:-80px;"
+    >
+        <!-- timeline stem "eraser" -->
+        <span
+                style="
+            position:absolute;
+            left:50vw;
+            top:calc(50% + var(--shift) + 7px);
+            transform:translateX(-50%);
+            width:2px;height:100vh;
+            background:#faf8f5;
+            z-index:5;
+            pointer-events:none;"
+        ></span>
+
+        <!-- timeline dot -->
+        <span
+                style="
+            position:absolute;
+            left:50vw;
+            top:calc(50% + var(--shift));
+            transform:translate(-50%,-50%);
+            width:14px;height:14px;
+            border-radius:50%;
+            background:#d6c09c;
+            z-index:10;"
+        ></span>
+
+        <!-- headline + CTA -->
+        <h3 class="text-lg sm:text-xl md:text-2xl text-ink/80 mb-4 sm:mb-6 text-center"
+            data-en="Ready to choose your quest?"
+            data-he="מוכנים לבחור את המשימה שלכם?"
+            data-ru="Готовы выбрать свое приключение?">Ready to choose your quest?</h3>
+
+        <div class="relative z-20">
+            <a
+                    id="questBtn"
+                    href="index.html#quests"
+                    class="px-6 sm:px-8 md:px-10 py-3 sm:py-4 border-2 border-honey text-honey rounded-full font-medium shadow-md
+                   hover:bg-honey hover:text-ink transition text-sm sm:text-base"
+                    data-en="Begin the story →"
+                    data-he="התחל את הסיפור ←"
+                    data-ru="Начать историю →"
+            >
+                Begin the story →
+            </a>
+        </div>
+
+        <svg
+                viewBox="0 0 1600 1000"
+                class="absolute inset-0 w-full h-full pointer-events-none block"
+                preserveAspectRatio="none"
+                style="direction: ltr">
+        >
+            <defs>
+                <marker id="arrowHead"
+                        viewBox="0 0 10 10"
+                        refX="5" refY="5"
+                        markerWidth="6" markerHeight="6"
+                        orient="auto">
+                    <path d="M0 0 L10 5 L0 10Z" fill="#d6c09c"/>
+                </marker>
+            </defs>
+
+            <path
+                    id="questPath"
+                    d="
+                M120 80
+                C180 240  90 380 200 520
+                C310 660 480 630 580 480
+                C680 330 830 270 940 360
+                C1050 450 960 620 780 680
+                C600 740 500 880 620 960
+                C740 1040 980 1020 1120 900
+                C1260 780 1290 580 1160 480
+                C1030 380 870 430 850 450
+            "
+                    fill="none"
+                    stroke="#d6c09c"
+                    stroke-opacity="0.95"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+            />
+        </svg>
+    </section>
+
+</main>
+
+<!-- ░ Saeriel Chat Inject ░ -->
+<script src="injectChat.js"></script>
+
+<!-- Language Support Script -->
+<script>
+    // Language management
+    class LanguageManager {
+        constructor() {
+            this.currentLang = 'en';
+            this.init();
+        }
+
+        init() {
+            // Check sessionStorage for language choice from index.html
+            const savedLang = sessionStorage.getItem('wedding-language');
+            const urlLang = new URLSearchParams(window.location.search).get('lang');
+
+            if (urlLang && ['en', 'he', 'ru'].includes(urlLang)) {
+                this.currentLang = urlLang;
+            } else if (savedLang && ['en', 'he', 'ru'].includes(savedLang)) {
+                this.currentLang = savedLang;
+            }
+
+            this.applyLanguage();
+            this.setupLanguageObserver();
+        }
+
+        applyLanguage() {
+            const html = document.documentElement;
+            const body = document.body;
+
+            body.classList.remove('lang-hebrew', 'lang-russian');
+            html.classList.remove('lang-hebrew', 'lang-russian');
+
+            if (this.currentLang === 'he') {
+                html.setAttribute('dir', 'rtl');
+                html.setAttribute('lang', 'he');
+                body.classList.add('lang-hebrew');
+                html.classList.add('lang-hebrew');
+            } else if (this.currentLang === 'ru') {
+                html.setAttribute('dir', 'ltr');
+                html.setAttribute('lang', 'ru');
+                body.classList.add('lang-russian');
+                html.classList.add('lang-russian');
+            } else {
+                html.setAttribute('dir', 'ltr');
+                html.setAttribute('lang', 'en');
+            }
+
+            this.updateTextContent();
+            sessionStorage.setItem('wedding-language', this.currentLang);
+
+            // Update navbar language as well
+            if (typeof updateNavbarLanguage === 'function') {
+                updateNavbarLanguage(this.currentLang);
+            }
+        }
+
+        updateTextContent() {
+            const elements = document.querySelectorAll('[data-en]');
+            elements.forEach(element => {
+                const text = element.getAttribute(`data-${this.currentLang}`);
+                if (text) {
+                    element.textContent = text;
+                }
+            });
+
+            const titles = {
+                en: 'D & V — Prologue',
+                he: 'ד & ו — פרולוג',
+                ru: 'Д & В — Пролог'
+            };
+            document.title = titles[this.currentLang] || titles.en;
+        }
+
+        setLanguage(lang) {
+            if (['en', 'he', 'ru'].includes(lang)) {
+                this.currentLang = lang;
+                this.applyLanguage();
+            }
+        }
+
+        setupLanguageObserver() {
+            window.addEventListener('languageChanged', (event) => {
+                this.setLanguage(event.detail.language);
+            });
+
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'wedding-language') {
+                    this.currentLang = event.newValue || 'en';
+                    this.applyLanguage();
+                }
+            });
+        }
+
+        getCurrentLanguage() {
+            return this.currentLang;
+        }
+    }
+
+    const languageManager = new LanguageManager();
+    window.languageManager = languageManager;
+
+    // Responsive utilities
+    function handleResize() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    window.addEventListener('orientationchange', () => {
+        setTimeout(handleResize, 100);
+    });
+</script>
+
+<!-- Carousel Script -->
+<script>
+    (function(){
+        const track = document.querySelector('#s0 .carousel-track');
+        const carousel = track.parentElement;
+        const originalSlides = Array.from(track.querySelectorAll('.slide'));
+
+        function setSlideWidths() {
+            const carouselHeight = carousel.offsetHeight;
+            originalSlides.forEach(slide => {
+                const aspectRatio = slide.naturalWidth / slide.naturalHeight;
+                slide.style.width = `${carouselHeight * aspectRatio}px`;
+            });
+        }
+
+        function initCarousel() {
+            let loaded = 0;
+            const checkLoad = () => {
+                loaded++;
+                if(loaded === originalSlides.length) startCarousel();
+            };
+
+            originalSlides.forEach(img => {
+                if(img.complete) checkLoad();
+                else img.addEventListener('load', checkLoad);
+            });
+        }
+
+        function startCarousel() {
+            setSlideWidths();
+
+            const clonedSlides = originalSlides.map(slide => slide.cloneNode(true));
+            track.append(...clonedSlides);
+
+            let pos = 0;
+            const speed = 0.8;
+
+            function tick() {
+                pos -= speed;
+                const resetPosition = track.scrollWidth / 2;
+
+                if(pos <= -resetPosition) {
+                    pos = 0;
+                    track.style.transition = 'none';
+                    track.style.transform = `translateX(0px)`;
+                    void track.offsetHeight;
+                    track.style.transition = '';
+                }
+
+                track.style.transform = `translateX(${pos}px)`;
+                requestAnimationFrame(tick);
+            }
+
+            tick();
+        }
+
+        setTimeout(initCarousel, 100);
+    })();
+</script>
+
+<!-- Quest Path Animation Script -->
+<script>
+    (function () {
+        const slide  = document.getElementById("choose-quest");
+        const path   = document.getElementById("questPath");
+        if (!path) return; // Skip if no path element
+
+        const len    = path.getTotalLength();
+        const speedS = 36;
+
+        path.style.strokeDasharray  = len;
+        path.style.strokeDashoffset = len;
+
+        path.addEventListener("transitionend", (e) => {
+            if (e.propertyName === "stroke-dashoffset") {
+                path.setAttribute("marker-end", "url(#arrowHead)");
+            }
+        });
+
+        const io = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.intersectionRatio === 1) {
+                    path.style.transition = `stroke-dashoffset ${speedS}s linear`;
+
+                    requestAnimationFrame(() => {
+                        path.style.strokeDashoffset = 0;
+                    });
+
+                    io.unobserve(slide);
+                }
+            },
+            { threshold: 1 }
+        );
+        io.observe(slide);
+    })();
+</script>
+
+</body>
+</html>

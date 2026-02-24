@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Danielle & Vlad — Wedding Invitation</title>
+    <link rel="icon" type="image/png" href="assets/crest.png" />
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com/3.4.4"></script>
+    <script>
+        tailwind.config = {
+            theme:{
+                extend:{
+                    colors:{ ink:"#2e3238", honey:"#d6c09c" },
+                    fontFamily:{
+                        serif:['"Playfair Display"',"serif"],
+                        body:['"Merriweather Sans"',"sans-serif"],
+                        script:['"Dancing Script"',"cursive"],
+                        hebrew:['"Noto Serif Hebrew"',"serif"],
+                        russian:['"Roboto"',"sans-serif"]
+                    }
+                }
+            }
+        };
+    </script>
+
+    <!-- Google Fonts with Extended Language Support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Merriweather+Sans:wght@400;500&family=Dancing+Script:wght@600&family=Roboto:wght@400;500;700&family=Noto+Serif+Hebrew:wght@400;600;700&display=swap" rel="stylesheet"/>
+
+    <style>
+        html {
+            background: #faf8f5;
+            color: var(--tw-ink);
+            scroll-behavior: smooth;
+        }
+
+        h1,h2,h3 {
+            font-family: "Playfair Display", serif;
+        }
+
+        /* RTL Support for Hebrew */
+        html[dir="rtl"] {
+            font-family: 'Noto Serif Hebrew', serif;
+        }
+
+        html[dir="rtl"] h1,
+        html[dir="rtl"] h2,
+        html[dir="rtl"] h3 {
+            font-family: 'Noto Serif Hebrew', serif;
+        }
+
+        /* Russian language support */
+        html[lang="ru"] .font-body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        html[lang="ru"] h1,
+        html[lang="ru"] h2,
+        html[lang="ru"] h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Mobile menu styles */
+        #mobileMenu {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+
+        #mobileMenu.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Burger animation */
+        .burger-line {
+            transition: all 0.3s ease;
+        }
+
+        .burger.active .burger-line:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .burger.active .burger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger.active .burger-line:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* Link hover effect */
+        .link {
+            position: relative;
+            padding-bottom: 2px;
+            transition: .3s;
+        }
+
+        .link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 1px;
+            background: #d6c09c;
+            transform: scaleX(0);
+            transition: .3s;
+        }
+
+        .link:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* Language selector styling */
+        #language-selector {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .language-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .language-option:hover {
+            transform: scale(1.05);
+        }
+
+        /* Responsive design improvements */
+        @media (max-width: 768px) {
+            .grid-cols-1 {
+                gap: 2rem;
+            }
+
+            #hero h1 {
+                font-size: 2.5rem;
+            }
+
+            #hero p {
+                font-size: 1rem;
+            }
+
+            #count {
+                gap: 0.75rem;
+            }
+
+            #count span {
+                min-width: 70px;
+                padding: 0.5rem 0.75rem;
+            }
+
+            #count strong {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="font-body">
+
+<!-- ░ LANGUAGE SELECTOR OVERLAY ░ -->
+<div id="language-selector" class="z-[1001]">
+    <!-- Elegant parchment-style card that matches your site -->
+    <div class="relative bg-gradient-to-b from-[#faf8f5] to-[#f5f2ec] p-12 rounded-3xl shadow-2xl max-w-md w-11/12 text-center border-4 border-honey/30">
+
+        <!-- Royal crest at top -->
+        <img src="assets/crest.png" alt="Wedding crest" class="h-10 mx-auto mb-6 drop-shadow-md" />
+
+        <!-- Elegant title -->
+        <h2 class="text-3xl font-serif text-ink mb-2">Welcome, Dear Guest</h2>
+        <p class="text-honey font-script text-xl mb-6">Choose your preferred tongue</p>
+
+        <!-- Language options in vertical layout -->
+        <div class="space-y-4">
+            <button class="language-option w-full group bg-white/80 hover:bg-honey/10 border-2 border-honey/20 hover:border-honey rounded-2xl p-4 transition-all duration-300 flex items-center justify-center gap-4" data-lang="en">
+                <span class="text-2xl">🇬🇧</span>
+                <span class="font-serif text-lg text-ink group-hover:text-honey transition-colors">English</span>
+            </button>
+
+            <button class="language-option w-full group bg-white/80 hover:bg-honey/10 border-2 border-honey/20 hover:border-honey rounded-2xl p-4 transition-all duration-300 flex items-center justify-center gap-4" data-lang="ru">
+                <span class="text-2xl">🇷🇺</span>
+                <span class="font-serif text-lg text-ink group-hover:text-honey transition-colors">Русский</span>
+            </button>
+
+            <button class="language-option w-full group bg-white/80 hover:bg-honey/10 border-2 border-honey/20 hover:border-honey rounded-2xl p-4 transition-all duration-300 flex items-center justify-center gap-4" data-lang="he">
+                <span class="text-2xl">🇮🇱</span>
+                <span class="font-serif text-lg text-ink group-hover:text-honey transition-colors">עברית</span>
+            </button>
+        </div>
+
+        <!-- Decorative footer -->
+        <p class="mt-8 text-ink/50 text-sm italic font-body">Your choice shall guide this tale</p>
+    </div>
+</div>
+
+<!--══════════ NAV BAR ══════════-->
+<nav id="topNav" class="fixed inset-x-0 top-0 z-50 flex items-center justify-between
+                      px-4 sm:px-8 py-3
+                      bg-white/50 backdrop-blur-lg
+                      border-b border-white/30
+                      shadow-md">
+
+    <!-- Crest + monogram on the left -->
+    <a href="#hero" class="flex items-center gap-3">
+        <img src="assets/crest.png" alt="Wedding crest" class="h-2 drop-shadow-md" />
+        <span class="hidden sm:inline-block font-serif text-xl text-ink">D&nbsp;&amp;&nbsp;V</span>
+    </a>
+
+    <a href="#hero" class="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+        <img src="assets/crest.png" alt="Wedding crest" class="h-64 drop-shadow-md" style="margin-top: 140px;" />
+    </a>
+    <!-- Desktop links (right) -->
+    <ul class="hidden md:flex gap-6 lg:gap-8 text-base font-medium">
+        <li><a href="prologue.html#s0" class="link" data-key="prologue">Prologue</a></li>
+        <li><a href="radio_camelot_page.html" class="link" data-key="radio-camelot">🎙️ Radio Camelot</a></li>
+        <li><a href="#quests" class="link" data-key="quests">Quests</a></li>
+        <li><a href="#ceremony" class="link" data-key="ceremony">Ceremony</a></li>
+        <li><a href="#travel" class="link" data-key="travel">Travel</a></li>
+        <li><a href="#rsvp" class="link" data-key="rsvp">RSVP</a></li>
+    </ul>
+
+    <!-- Mobile burger -->
+    <button id="burger" class="burger md:hidden flex flex-col gap-1.5 p-2" aria-label="Menu">
+        <span class="burger-line w-6 h-[2px] bg-ink"></span>
+        <span class="burger-line w-6 h-[2px] bg-ink"></span>
+        <span class="burger-line w-6 h-[2px] bg-ink"></span>
+    </button>
+</nav>
+
+<!-- 2. ADD THIS - New fixed language button at bottom left -->
+<button id="language-button" class="fixed left-4 bottom-4 z-50 bg-honey/20 hover:bg-honey/40 transition-colors px-3 py-1 rounded-full text-sm flex items-center gap-1 shadow-md">
+    <span id="current-language-icon">🇬🇧</span>
+    <span id="current-language-text" class="hidden sm:inline">English</span>
+</button>
+
+<!-- Mobile drop-down menu -->
+<div id="mobileMenu" class="fixed z-40 flex-col gap-4 bg-white/95 backdrop-blur-md shadow-lg
+                          right-4 top-16 py-5 px-8 rounded-lg text-sm
+                          border border-honey/20">
+    <ul class="flex flex-col gap-5">
+        <li><a href="prologue.html#s0" class="block py-1 hover:text-honey transition-colors" data-key="prologue">Prologue</a></li>
+        <li><a href="radio_camelot_page.html" class="block py-1 hover:text-honey transition-colors" data-key="radio-camelot">🎙️ Radio Camelot</a></li>
+        <li><a href="#quests" class="block py-1 hover:text-honey transition-colors" data-key="quests">Quests</a></li>
+        <li><a href="#ceremony" class="block py-1 hover:text-honey transition-colors" data-key="ceremony">Ceremony</a></li>
+        <li><a href="#travel" class="block py-1 hover:text-honey transition-colors" data-key="travel">Travel</a></li>
+        <li><a href="#rsvp" class="block py-1 hover:text-honey transition-colors" data-key="rsvp">RSVP</a></li>
+    </ul>
+</div>
+
+<main class="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth">
+
+    <!--══════════ HERO ══════════-->
+    <section id="hero" class="snap-start h-screen flex flex-col items-center justify-center text-center relative z-[1]">
+        <!-- Background image -->
+        <img src="assets/castle-dusk.jpg" class="absolute inset-0 w-full h-full object-cover z-[-10]" alt="Castle at dusk" />
+
+        <!-- Golden sunset gradient overlay -->
+        <div class="absolute inset-0 bg-gradient-to-b from-white/10 via-honey/30 to-honey/50 -z-10 mix-blend-overlay"></div>
+
+        <!-- Royal ornamental divider -->
+        <div class="w-48 md:w-64 h-8 bg-[url('assets/royal-divider.png')] bg-contain bg-no-repeat bg-center mb-4"></div>
+
+        <!-- Hero content -->
+        <h1 class="text-4xl sm:text-5xl md:text-7xl text-white font-serif drop-shadow-[0_2px_5px_rgba(0,0,0,0.5)]">
+            <span data-key="bride-name">Danielle</span> <span class="font-script text-white">&amp;</span> <span data-key="groom-name">Vlad</span>
+        </h1>
+
+        <p class="mt-3 text-white tracking-wide text-lg sm:text-xl drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+            <span data-key="wedding-date">22&nbsp;July&nbsp;2025</span> • <span data-key="wedding-location">Kerem&nbsp;Maharal Castle</span>
+        </p>
+
+        <p class="max-w-xl px-4 text-white mt-5 mb-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]" data-key="wedding-tagline">
+            An evening of quests, music&nbsp;&amp;&nbsp;magic
+        </p>
+
+        <!-- Styled button with golden glow -->
+        <a href="#quests" class="px-6 sm:px-8 py-3 rounded-full bg-honey/20 backdrop-blur-sm border-2 border-honey text-white
+                            hover:bg-honey hover:text-ink transition duration-300
+                            font-medium shadow-[0_0_15px_rgba(214,192,156,0.5)]" data-key="begin-button">
+            Begin the story
+        </a>
+
+        <!-- Redesigned countdown -->
+        <div id="count" class="mt-8 md:mt-12 flex gap-3 sm:gap-8 text-lg sm:text-xl">
+            <!-- The JavaScript will populate this -->
+        </div>
+
+        <!-- Royal corner embellishments - hidden on mobile, visible on larger screens -->
+        <div class="absolute top-24 left-24 w-16 md:w-24 h-16 md:h-24 bg-[url('assets/corner-ornament.png')] bg-contain bg-no-repeat opacity-50 hidden md:block"></div>
+        <div class="absolute top-24 right-24 w-16 md:w-24 h-16 md:h-24 bg-[url('assets/corner-ornament.png')] bg-contain bg-no-repeat opacity-50 rotate-90 hidden md:block"></div>
+        <div class="absolute bottom-24 left-24 w-16 md:w-24 h-16 md:h-24 bg-[url('assets/corner-ornament.png')] bg-contain bg-no-repeat opacity-50 -rotate-90 hidden md:block"></div>
+        <div class="absolute bottom-24 right-24 w-16 md:w-24 h-16 md:h-24 bg-[url('assets/corner-ornament.png')] bg-contain bg-no-repeat opacity-50 rotate-180 hidden md:block"></div>
+    </section>
+
+    <!-- Add this CSS to your existing style tag in the head -->
+    <style>
+        /* Enhance countdown styling */
+        #count span {
+            position: relative;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(214,192,156,0.2));
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(214,192,156,0.3);
+            border-radius: 12px;
+            padding: 0.5rem 0.75rem;
+            min-width: 70px;
+        }
+
+        @media (min-width: 640px) {
+            #count span {
+                padding: 0.75rem 1.5rem;
+                min-width: 100px;
+            }
+        }
+
+        #count strong {
+            font-size: 1.5rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        @media (min-width: 640px) {
+            #count strong {
+                font-size: 2.5rem;
+            }
+        }
+
+        #count small {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        @media (min-width: 640px) {
+            #count small {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Add a subtle golden highlight to links in the navigation */
+        .link:hover {
+            color: var(--tw-honey);
+            text-shadow: 0 0 10px rgba(214,192,156,0.5);
+        }
+    </style>
+
+    <!--══════════ QUESTS ══════════-->
+    <section id="quests" class="snap-start min-h-screen py-20 sm:py-32 px-4 sm:px-8 flex flex-col items-center justify-center text-center bg-parchment">
+        <h2 class="text-4xl sm:text-6xl text-honey mb-4 sm:mb-8 font-serif" data-key="choose-path">Choose Your Path</h2>
+        <p class="mb-12 sm:mb-20 max-w-3xl text-lg sm:text-xl text-ink/70 italic px-4" data-key="choose-adventure">
+            Two destinies await—select your adventure.
+        </p>
+
+        <div class="max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-20 px-4">
+            <!-- HIS PATH -->
+            <a href="groomQuest.html" class="group block rounded-3xl overflow-hidden border-4 border-honey shadow-xl hover:shadow-2xl hover:scale-105 sm:hover:scale-110 transition-all duration-300 bg-[url('assets/parchment.jpg')] bg-cover bg-center p-8 sm:p-16 flex flex-col items-center">
+                <img src="assets/avatar-his-full.png" alt="Vlad avatar" class="w-48 sm:w-64 h-auto mb-6 sm:mb-10" />
+
+                <h3 class="text-3xl sm:text-4xl text-ink font-serif mb-4 sm:mb-6 group-hover:text-honey transition" data-key="his-path">
+                    His Path
+                </h3>
+                <p class="text-xl sm:text-2xl italic text-ink/60 group-hover:text-ink/80 transition" data-key="his-tagline">
+                    Return what's ours.
+                </p>
+            </a>
+
+            <!-- HER PATH -->
+            <a href="brideQuest.html" class="group block rounded-3xl overflow-hidden border-4 border-honey shadow-xl hover:shadow-2xl hover:scale-105 sm:hover:scale-110 transition-all duration-300 bg-[url('assets/parchment.jpg')] bg-cover bg-center p-8 sm:p-16 flex flex-col items-center">
+                <img src="assets/avatar-her-full.png" alt="Dani avatar" class="w-48 sm:w-64 h-auto mb-6 sm:mb-10" />
+
+                <h3 class="text-3xl sm:text-4xl text-ink font-serif mb-4 sm:mb-6 group-hover:text-honey transition" data-key="her-path">
+                    Her Path
+                </h3>
+                <p class="text-xl sm:text-2xl italic text-ink/60 group-hover:text-ink/80 transition" data-key="her-tagline">
+                    Let's ParTea
+                </p>
+            </a>
+        </div>
+    </section>
+
+    <!--══════════ CEREMONY ══════════-->
+    <section id="ceremony" class="snap-start min-h-screen py-20 sm:py-24 px-4 flex flex-col items-center justify-center text-center">
+        <h2 class="text-3xl sm:text-4xl text-honey mb-4 sm:mb-6 font-serif" data-key="ceremony-title">Ceremony &amp; Celebration</h2>
+        <p class="font-medium text-lg text-ink" data-key="ceremony-date">Tuesday · 22 July 2025</p>
+        <p class="italic text-ink/70 mb-6 sm:mb-10" data-key="ceremony-location">Kerem Maharal Castle, Carmel Mountains</p>
+
+        <div class="border-l-4 border-honey pl-4 sm:pl-8 space-y-4 text-base sm:text-lg text-ink/90 text-left max-w-md">
+            <p><span class="text-honey">16:00</span> · <span data-key="schedule-welcome">Welcome drinks in the garden</span></p>
+            <p><span class="text-honey">18:30</span> · <span data-key="schedule-ceremony">Ceremony beneath the open sky</span></p>
+            <p><span class="text-honey">19:00</span> · <span data-key="schedule-dinner">A shared meal in the Grand Hall</span></p>
+            <p><span class="text-honey">20:30</span> · <span data-key="schedule-dancing">Desserts, music, and dancing</span></p>
+            <p><span class="text-honey">23:00</span> · <span data-key="schedule-farewell">A gentle farewell beneath the stars</span></p>
+        </div>
+    </section>
+
+    <!--══════════ TRAVEL ══════════-->
+    <section id="travel" class="snap-start min-h-screen px-4 py-20 sm:py-24 flex flex-col items-center justify-center text-center">
+        <h2 class="text-3xl sm:text-4xl text-honey mb-6 sm:mb-10 font-serif" data-key="travel-title">Travel &amp; Accommodation</h2>
+
+        <div class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 text-left">
+            <!-- ░░ LEFT: TRANSPORT ░░ -->
+            <div class="space-y-6">
+                <h3 class="text-xl sm:text-2xl font-serif text-honey mb-3 sm:mb-4" data-key="getting-there">Getting There</h3>
+
+                <p class="text-ink/90" data-key="transport-info">
+                    We're happy to arrange shuttles from central locations, based on demand. They may not depart from your exact address,
+                    but we'll do our best to make the journey smooth and fair.
+                </p>
+
+                <!-- Shuttle Interest Form -->
+                <form id="shuttleForm" class="bg-white/70 backdrop-blur-lg rounded-xl p-4 sm:p-6 shadow-md space-y-4 text-left max-w-md mx-auto">
+                    <input name="name" required placeholder="Your name, traveler?" class="w-full px-4 py-2 sm:py-3 rounded-lg border border-honey/40 placeholder-ink/40 text-ink bg-blue-50 font-serif" data-placeholder="name-placeholder" />
+                    <input name="guests" required placeholder="How many in your delegation?" class="w-full px-4 py-2 sm:py-3 rounded-lg border border-honey/40 placeholder-ink/40 text-ink bg-white font-serif" data-placeholder="guests-placeholder" />
+                    <input name="city" required placeholder="Where does your journey begin?" class="w-full px-4 py-2 sm:py-3 rounded-lg border border-honey/40 placeholder-ink/40 text-ink bg-blue-50 font-serif" data-placeholder="city-placeholder" />
+                    <input name="contact" required placeholder="A whisper back (email or phone)" class="w-full px-4 py-2 sm:py-3 rounded-lg border border-honey/40 placeholder-ink/40 text-ink bg-white font-serif" data-placeholder="contact-placeholder" />
+
+                    <button type="submit" class="mt-2 px-4 sm:px-6 py-2 sm:py-3 rounded-full border border-honey text-honey hover:bg-honey hover:text-ink transition font-medium shadow" data-key="send-intention">
+                        Send your intention ✨
+                    </button>
+                    <div id="shuttleStatus" class="text-sm mt-2 italic"></div>
+                </form>
+
+                <!-- Driving directions -->
+                <h4 class="mt-6 sm:mt-8 text-base sm:text-lg font-medium text-honey" data-key="driving-yourself">Driving yourself?</h4>
+                <div class="flex flex-wrap gap-3 sm:gap-4 mt-2">
+                    <a href="https://www.google.com/maps/dir//HaTel+St,+Kerem+Maharal" target="_blank"
+                       class="flex items-center gap-2 px-3 sm:px-4 py-2 border border-honey rounded-full text-honey hover:bg-honey hover:text-ink transition">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Google_Maps_icon_%282020%29.svg" alt="Google Maps" class="w-5 h-5" />
+                        <span data-key="google-maps">Google Maps</span>
+                    </a>
+                    <a href="https://ul.waze.com/ul?place=ChIJWe8E5f6mHRURSnKnv74f-f8&ll=32.64439340%2C34.98883520" target="_blank"
+                       class="flex items-center gap-2 px-3 sm:px-4 py-2 border border-honey rounded-full text-honey hover:bg-honey hover:text-ink transition">
+                        <img src="https://img.utdstc.com/icon/b39/6f7/b396f720a7eac6d988e7ef38efcb49028e9d99c54598d7033dc6fe8f2279dfd9:100" alt="Waze" class="w-5 h-5" />
+                        <span data-key="waze">Waze</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ░░ RIGHT: ACCOMMODATION ░░ -->
+            <div class="space-y-6">
+                <h3 class="text-xl sm:text-2xl font-serif text-honey mb-3 sm:mb-4" data-key="where-to-stay">Where to Stay</h3>
+
+                <!-- Hotel 1 -->
+                <a href="https://www.booking.com/hotel/il/carmel-forest-spa-resort.he.html" target="_blank"
+                   class="block overflow-hidden rounded-2xl shadow-lg border border-honey hover:scale-[1.01] transition">
+                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/464084809.jpg?k=ba1210536b2b4227c525fd1f8e579cb99d3c23ba0278cdfdf343d15f624759f3&o=&hp=1" alt="Carmel Forest Spa" class="w-full h-32 sm:h-48 object-cover" />
+                    <div class="p-4 bg-white">
+                        <h4 class="font-serif text-lg sm:text-xl text-ink mb-1" data-key="hotel1-name">Carmel Forest Spa Resort</h4>
+                        <p class="text-ink/70 text-sm italic" data-key="hotel1-desc">Hidden among olive groves, where rest becomes ritual.</p>
+                    </div>
+                </a>
+
+                <!-- Hotel 2 -->
+                <a href="https://www.booking.com/hotel/il/elma-arts-complex-luxury.he.html" target="_blank"
+                   class="block overflow-hidden rounded-2xl shadow-lg border border-honey hover:scale-[1.01] transition">
+                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/649666984.jpg?k=fd6d23d748517ca3e056c013d78a3b54dbd00dd8984717971b5fa419e959c690&o=&hp=1" alt="Elma Arts Hotel" class="w-full h-32 sm:h-48 object-cover" />
+                    <div class="p-4 bg-white">
+                        <h4 class="font-serif text-lg sm:text-xl text-ink mb-1" data-key="hotel2-name">Elma Arts Complex Luxury Hotel</h4>
+                        <p class="text-ink/70 text-sm italic" data-key="hotel2-desc">Where modern lines meet mountain mist and music.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Contact note -->
+        <p class="mt-8 sm:mt-10 text-ink/60 text-sm italic text-center max-w-xl px-4" data-key="contact-note">If you need help with bookings or directions, whisper to us — we'll guide you.</p>
+    </section>
+
+    <!--══════════ RSVP ══════════-->
+    <section id="rsvp" class="snap-start min-h-screen py-20 sm:py-24 px-4 flex flex-col items-center justify-center text-center">
+        <h2 class="text-3xl sm:text-4xl text-honey mb-4 sm:mb-6 font-serif" data-key="rsvp-title">RSVP by 15 July 2025</h2>
+
+        <form id="rsvpForm" class="w-full max-w-md space-y-4">
+            <input name="name" required placeholder="Your name, traveler?" class="w-full border border-honey/50 rounded px-3 py-2 bg-blue-50 placeholder-ink/40 font-serif" data-placeholder="rsvp-name-placeholder" />
+            <input name="party" required placeholder="How many in your party?" class="w-full border border-honey/50 rounded px-3 py-2 bg-white placeholder-ink/40 font-serif" data-placeholder="rsvp-party-placeholder" />
+            <input name="email" type="email" required placeholder="A whisper back—where shall it find you?" class="w-full border border-honey/50 rounded px-3 py-2 bg-blue-50 placeholder-ink/40 font-serif" data-placeholder="rsvp-email-placeholder" />
+
+            <select name="attending" required class="w-full border border-honey/50 rounded px-3 py-2 bg-white font-serif">
+                <option value="" data-key="rsvp-attending">Are you coming?</option>
+                <option value="yes" data-key="rsvp-yes">With bells on!</option>
+                <option value="no" data-key="rsvp-no">Alas, cannot</option>
+            </select>
+
+            <input name="song" placeholder="A song for the dance (optional)" class="w-full border border-honey/50 rounded px-3 py-2 bg-white/70 placeholder-ink/40 font-serif" data-placeholder="rsvp-song-placeholder" />
+            <textarea name="notes" placeholder="Leave us a note, if you wish..." class="w-full border border-honey/50 rounded px-3 py-2 bg-blue-50 placeholder-ink/40 font-serif" data-placeholder="rsvp-notes-placeholder"></textarea>
+
+            <button type="submit" class="w-full py-2 rounded-full border border-honey text-honey hover:bg-honey hover:text-ink transition font-medium shadow" data-key="send-rsvp">
+                Send raven 🕊️
+            </button>
+
+            <div id="rsvpStatus" class="text-sm mt-2 italic"></div>
+        </form>
+    </section>
+
+    <!--══════════ TRANSLATIONS ══════════-->
+    <script>
+        // Multi-language support
+        const translations = {
+            en: {
+                // Navigation
+                "prologue": "Prologue",
+                "quests": "Quests",
+                "ceremony": "Ceremony",
+                "travel": "Travel",
+                "rsvp": "RSVP",
+
+                // Hero section
+                "bride-name": "Danielle",
+                "groom-name": "Vlad",
+                "wedding-date": "22 July 2025",
+                "wedding-location": "Kerem Maharal Castle",
+                "wedding-tagline": "An evening of quests, music & magic",
+                "begin-button": "Begin the story",
+
+                // Countdown
+                "days": "Days",
+                "hours": "Hours",
+                "minutes": "Minutes",
+                "seconds": "Seconds",
+
+                // Quests section
+                "choose-path": "Choose Your Path",
+                "choose-adventure": "Two destinies await—select your adventure.",
+                "his-path": "His Path",
+                "his-tagline": "Return what's ours.",
+                "her-path": "Her Path",
+                "her-tagline": "Let's ParTea",
+
+                // Ceremony section
+                "ceremony-title": "Ceremony & Celebration",
+                "ceremony-date": "Tuesday · 22 July 2025",
+                "ceremony-location": "Kerem Maharal Castle, Carmel Mountains",
+                "schedule-welcome": "Welcome drinks in the garden",
+                "schedule-ceremony": "Ceremony beneath the open sky",
+                "schedule-dinner": "A shared meal in the Grand Hall",
+                "schedule-dancing": "Desserts, music, and dancing",
+                "schedule-farewell": "A gentle farewell beneath the stars",
+
+                // Travel section
+                "travel-title": "Travel & Accommodation",
+                "getting-there": "Getting There",
+                "transport-info": "We're happy to arrange shuttles from central locations, based on demand. They may not depart from your exact address, but we'll do our best to make the journey smooth and fair.",
+                "driving-yourself": "Driving yourself?",
+                "google-maps": "Google Maps",
+                "waze": "Waze",
+                "where-to-stay": "Where to Stay",
+                "hotel1-name": "Carmel Forest Spa Resort",
+                "hotel1-desc": "Hidden among olive groves, where rest becomes ritual.",
+                "hotel2-name": "Elma Arts Complex Luxury Hotel",
+                "hotel2-desc": "Where modern lines meet mountain mist and music.",
+                "contact-note": "If you need help with bookings or directions, whisper to us — we'll guide you.",
+
+                // Form placeholders
+                "name-placeholder": "Your name, traveler?",
+                "guests-placeholder": "How many in your delegation?",
+                "city-placeholder": "Where does your journey begin?",
+                "contact-placeholder": "A whisper back (email or phone)",
+                "send-intention": "Send your intention ✨",
+
+                // RSVP section
+                "rsvp-title": "RSVP by 15 July 2025",
+                "rsvp-name-placeholder": "Your name, traveler?",
+                "rsvp-party-placeholder": "How many in your party?",
+                "rsvp-email-placeholder": "A whisper back—where shall it find you?",
+                "rsvp-attending": "Are you coming?",
+                "rsvp-yes": "With bells on!",
+                "rsvp-no": "Alas, cannot",
+                "rsvp-song-placeholder": "A song for the dance (optional)",
+                "rsvp-notes-placeholder": "Leave us a note, if you wish...",
+                "send-rsvp": "Send raven 🕊️"
+            },
+
+            ru: {
+                // Navigation
+                "prologue": "Пролог",
+                "quests": "Квесты",
+                "ceremony": "Церемония",
+                "travel": "Путешествие",
+                "rsvp": "RSVP",
+
+                // Hero section
+                "bride-name": "Даниэль",
+                "groom-name": "Влад",
+                "wedding-date": "22 июль 2025",
+                "wedding-location": "Замок Керем Махарал",
+                "wedding-tagline": "Вечер квестов, музыки и волшебства",
+                "begin-button": "Начать историю",
+
+                // Countdown
+                "days": "Дней",
+                "hours": "Часов",
+                "minutes": "Минут",
+                "seconds": "Секунд",
+
+                // Quests section
+                "choose-path": "Выберите свой путь",
+                "choose-adventure": "Две судьбы ждут — выберите свое приключение.",
+                "his-path": "Его путь",
+                "his-tagline": "Вернуть то, что наше.",
+                "her-path": "Её путь",
+                "her-tagline": "Давайте устроим чаепитие",
+
+                // Ceremony section
+                "ceremony-title": "Церемония и Празднование",
+                "ceremony-date": "Вторник · 22 июль 2025",
+                "ceremony-location": "Замок Керем Махарал, горы Кармель",
+                "schedule-welcome": "Приветственные напитки в саду",
+                "schedule-ceremony": "Церемония под открытым небом",
+                "schedule-dinner": "Общий ужин в Большом зале",
+                "schedule-dancing": "Десерты, музыка и танцы",
+                "schedule-farewell": "Прощание под звездами",
+
+                // Travel section
+                "travel-title": "Транспорт и Проживание",
+                "getting-there": "Как добраться",
+                "transport-info": "Мы рады организовать шаттлы из центральных мест по запросу. Они могут не отправляться прямо от вашего адреса, но мы сделаем все возможное, чтобы ваше путешествие было комфортным.",
+                "driving-yourself": "Едете сами?",
+                "google-maps": "Google Карты",
+                "waze": "Waze",
+                "where-to-stay": "Где остановиться",
+                "hotel1-name": "Спа-курорт Кармель Форест",
+                "hotel1-desc": "Спрятан среди оливковых рощ, где отдых становится ритуалом.",
+                "hotel2-name": "Отель Elma Arts Complex Luxury",
+                "hotel2-desc": "Где современные линии встречаются с горным туманом и музыкой.",
+                "contact-note": "Если вам нужна помощь с бронированием или направлениями, свяжитесь с нами — мы поможем.",
+
+                // Form placeholders
+                "name-placeholder": "Ваше имя, путешественник?",
+                "guests-placeholder": "Сколько человек в вашей делегации?",
+                "city-placeholder": "Откуда начинается ваше путешествие?",
+                "contact-placeholder": "Как с вами связаться (email или телефон)",
+                "send-intention": "Отправить запрос ✨",
+
+                // RSVP section
+                "rsvp-title": "RSVP до 15 июль 2025",
+                "rsvp-name-placeholder": "Ваше имя, путешественник?",
+                "rsvp-party-placeholder": "Сколько человек в вашей группе?",
+                "rsvp-email-placeholder": "Как с вами связаться?",
+                "rsvp-attending": "Вы придете?",
+                "rsvp-yes": "С радостью!",
+                "rsvp-no": "К сожалению, нет",
+                "rsvp-song-placeholder": "Песня для танцев (по желанию)",
+                "rsvp-notes-placeholder": "Оставьте нам сообщение, если хотите...",
+                "send-rsvp": "Отправить ответ 🕊️"
+            },
+
+            he: {
+                // Direction is set separately with dir="rtl"
+
+                // Navigation
+                "prologue": "פרולוג",
+                "quests": "חידות",
+                "ceremony": "טקס",
+                "travel": "נסיעה",
+                "rsvp": "אישור הגעה",
+
+                // Hero section
+                "bride-name": "דניאל",
+                "groom-name": "ולאד",
+                "wedding-date": "22 ביולי 2025",
+                "wedding-location": "טירת כרם מהר״ל",
+                "wedding-tagline": "ערב של חידות, מוזיקה וקסם",
+                "begin-button": "התחל את הסיפור",
+
+                // Countdown
+                "days": "ימים",
+                "hours": "שעות",
+                "minutes": "דקות",
+                "seconds": "שניות",
+
+                // Quests section
+                "choose-path": "בחר את הדרך",
+                "choose-adventure": "שני גורלות מחכים — בחר את ההרפתקה שלך.",
+                "his-path": "הדרך שלו",
+                "his-tagline": "להחזיר את מה ששלנו.",
+                "her-path": "הדרך שלה",
+                "her-tagline": "בואו נשתה תה",
+
+                // Ceremony section
+                "ceremony-title": "טקס וחגיגה",
+                "ceremony-date": "יום שלישי · 22 ביולי 2025",
+                "ceremony-location": "טירת כרם מהר״ל, הרי הכרמל",
+                "schedule-welcome": "קבלת פנים",
+                "schedule-ceremony": "טקס תחת כיפת השמיים",
+                "schedule-dinner": "משתה",
+                "schedule-dancing": "קינוחים, מוזיקה וריקודים",
+                "schedule-farewell": "סיום הערב תחת שמי הלילה",
+
+                // Travel section
+                "travel-title": "נסיעה ולינה",
+                "getting-there": "איך להגיע",
+                "transport-info": "אנחנו שמחים לארגן הסעות ממקומות מרכזיים, בהתאם לביקוש. ייתכן שהן לא יצאו מהכתובת המדויקת, אבל נעשה כמיטב יכולתנו להפוך את המסע לחלק ונוח.",
+                "driving-yourself": "נוהגים בעצמכם?",
+                "google-maps": "גוגל מפות",
+                "waze": "Waze",
+                "where-to-stay": "איפה לישון",
+                "hotel1-name": "ספא-ריזורט יערות הכרמל",
+                "hotel1-desc": "חבוי בין חורשות זיתים, שם המנוחה הופכת לטקס.",
+                "hotel2-name": "מלון אלמא ארטס קומפלקס",
+                "hotel2-desc": "היכן שקווים מודרניים פוגשים ערפל הרים ומוזיקה.",
+                "contact-note": "אם אתם זקוקים לעזרה עם הזמנות או הוראות הדעה, תשלחו גלויה — אנחנו נשמח לעזור.",
+
+                // Form placeholders
+                "name-placeholder": "השם שלך, הרפתקן?",
+                "guests-placeholder": "כמה אנשים במשלחת שלך?",
+                "city-placeholder": "מאיפה מתחיל המסע שלך?",
+                "contact-placeholder": "דרך ליצור קשר (אימייל או טלפון)",
+                "send-intention": "שלח את הגלויה ✨",
+
+                // RSVP section
+                "rsvp-title": "אישור הגעה עד 15 ביולי 2025",
+                "rsvp-name-placeholder": "השם שלך, הרפתקן?",
+                "rsvp-party-placeholder": "כמה אנשים בקבוצה שלך?",
+                "rsvp-email-placeholder": "דרך ליצור קשר?",
+                "rsvp-attending": "האם אתה מגיע?",
+                "rsvp-yes": "בשמחה!",
+                "rsvp-no": "לצערי, לא",
+                "rsvp-song-placeholder": "שיר לריקוד (אופציונלי)",
+                "rsvp-notes-placeholder": "השאר לנו גלויה, אם תרצה...",
+                "send-rsvp": "שלח עורב 🕊️"
+            }
+        };
+
+        // Language settings with emoji flags
+        const languageSettings = {
+            en: { name: "English", icon: "🇬🇧", dir: "ltr" },
+            ru: { name: "Русский", icon: "🇷🇺", dir: "ltr" },
+            he: { name: "עברית", icon: "🇮🇱", dir: "rtl" }
+        };
+
+        // Function to apply translations
+        function applyTranslations(lang) {
+            const elements = document.querySelectorAll('[data-key]');
+            const placeholders = document.querySelectorAll('[data-placeholder]');
+
+            // Apply text content translations
+            elements.forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            // Apply placeholder translations
+            placeholders.forEach(element => {
+                const key = element.getAttribute('data-placeholder');
+                if (translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+
+            // Apply to select options
+            const selects = document.querySelectorAll('select');
+            selects.forEach(select => {
+                Array.from(select.options).forEach(option => {
+                    const key = option.getAttribute('data-key');
+                    if (key && translations[lang][key]) {
+                        option.textContent = translations[lang][key];
+                    }
+                });
+            });
+
+            // Update countdown labels
+            updateCountdownLabels(lang);
+
+            // Update language button
+            document.getElementById('current-language-icon').textContent = languageSettings[lang].icon;
+            document.getElementById('current-language-text').textContent = languageSettings[lang].name;
+
+            // Set text direction
+            document.documentElement.dir = languageSettings[lang].dir;
+            document.documentElement.lang = lang;
+
+            // Save language preference
+            // Save language preference for this browser session
+            sessionStorage.setItem('wedding-language', lang);
+        }
+
+        // Function to update countdown labels
+        function updateCountdownLabels(lang) {
+            const countdownElements = document.querySelectorAll('#count small');
+            const labels = ["days", "hours", "minutes", "seconds"];
+
+            countdownElements.forEach((element, index) => {
+                if (translations[lang][labels[index]]) {
+                    element.textContent = translations[lang][labels[index]];
+                }
+            });
+        }
+
+        // Initialize language
+        function initLanguage() {
+            // Check if user has a language preference for this browser session
+            const savedLanguage = sessionStorage.getItem('wedding-language');
+            const languageSelector = document.getElementById('language-selector');
+
+            if (savedLanguage && translations[savedLanguage]) {
+                // Use saved session preference
+                applyTranslations(savedLanguage);
+                languageSelector.style.display = 'none';
+            } else {
+                // Show language selector - new browser session
+                languageSelector.style.display = 'flex';
+            }
+
+            // Add event listeners to language options
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const lang = this.getAttribute('data-lang');
+                    console.log('Language selected:', lang);
+                    applyTranslations(lang);
+                    languageSelector.style.display = 'none';
+                    return false;
+                };
+            });
+        }
+
+        // Language button click handler
+        document.getElementById('language-button').addEventListener('click', function() {
+            document.getElementById('language-selector').style.display = 'flex';
+        });
+    </script>
+
+    <!--══════════ JS: countdown, burger, RSVP alert ══════════-->
+    <script>
+        /* live countdown */
+        const tgt = new Date("2025-07-22T13:00:00Z");
+        const pad = n => String(n).padStart(2,"0");
+
+        function tick() {
+            const d = tgt - Date.now();
+            const [dd, hh, mm, ss] = [
+                Math.max(0, Math.floor(d/864e5)),
+                Math.max(0, Math.floor(d%864e5/36e5)),
+                Math.max(0, Math.floor(d%36e5/6e4)),
+                Math.max(0, Math.floor(d%6e4/1e3)),
+            ];
+
+            // Get language for labels
+            const currentLang = document.documentElement.lang || 'en';
+            const labelDays = translations[currentLang]["days"] || "Days";
+            const labelHours = translations[currentLang]["hours"] || "Hours";
+            const labelMinutes = translations[currentLang]["minutes"] || "Minutes";
+            const labelSeconds = translations[currentLang]["seconds"] || "Seconds";
+
+            document.getElementById("count").innerHTML =
+                [labelDays, labelHours, labelMinutes, labelSeconds].map((k,i) => `<span class='flex flex-col items-center'>
+            <strong>${pad([dd,hh,mm,ss][i])}</strong><small>${k}</small></span>`).join("");
+        }
+
+        tick();
+        setInterval(tick, 1e3);
+
+        /* burger menu */
+        const burger = document.getElementById("burger");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        burger.addEventListener("click", function() {
+            burger.classList.toggle('active');
+            mobileMenu.classList.toggle("visible");
+        });
+
+        // Close menu when clicking a link
+        mobileMenu.querySelectorAll("a").forEach(a => {
+            a.addEventListener("click", function() {
+                burger.classList.remove('active');
+                mobileMenu.classList.remove("visible");
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (mobileMenu.classList.contains('visible') &&
+                !mobileMenu.contains(e.target) &&
+                !burger.contains(e.target)) {
+                burger.classList.remove('active');
+                mobileMenu.classList.remove("visible");
+            }
+        });
+
+        // Prevent menu from closing when clicking inside it
+        mobileMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        /* RSVP form submission */
+        document.getElementById("rsvpForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const form = e.target;
+            const status = document.getElementById("rsvpStatus");
+
+            const data = {
+                name: form.name.value.trim(),
+                party: form.party.value.trim(),
+                email: form.email.value.trim(),
+                attending: form.attending.value,
+                song: form.song.value.trim(),
+                notes: form.notes.value.trim()
+            };
+
+            const query = new URLSearchParams(data).toString();
+            const url = `https://script.google.com/macros/s/AKfycbwesNBEMd8GsMkxs7qffaUl-3_ymv0v10Vxzj9OTulFtejQFnInO3uUxDP2Ky1hVDqc/exec?${query}`;
+
+            status.textContent = "🕊️ Sending your raven...";
+            status.className = "text-honey italic mt-2";
+
+            try {
+                const res = await fetch(url);
+                const result = await res.json();
+
+                if (result.status === "success") {
+                    status.textContent = "🌿 Your message was received with grace.";
+                    form.reset();
+                } else {
+                    throw new Error(result.message || "Unknown error");
+                }
+            } catch (err) {
+                status.textContent = "⚠️ Alas, the raven lost its way. Please try again.";
+                status.className = "text-red-500 italic mt-2";
+            }
+        });
+
+        /* Shuttle form submission */
+        document.getElementById("shuttleForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const form = e.target;
+            const status = document.getElementById("shuttleStatus");
+
+            const data = {
+                name: form.name.value.trim(),
+                guests: form.guests.value.trim(),
+                city: form.city.value.trim(),
+                contact: form.contact.value.trim()
+            };
+
+            const query = new URLSearchParams(data).toString();
+            const url = `https://script.google.com/macros/s/AKfycbwA_vHadfmGbjA_1zkhWDFloKtDSazylhKVQp23_Ea0PGhxGpYLOPJ5y9kwU48xFY1bEQ/exec?${query}`;
+
+            status.textContent = "✨ Sending your intention...";
+            status.className = "text-honey italic mt-2";
+
+            try {
+                const res = await fetch(url);
+                const result = await res.json();
+
+                if (result.status === "success") {
+                    status.textContent = "🌿 Your intention was received with gratitude.";
+                    form.reset();
+                } else {
+                    throw new Error("Not successful");
+                }
+            } catch {
+                status.textContent = "⚠️ Failed to connect. Try again later.";
+                status.className = "text-red-500 italic mt-2";
+            }
+        });
+
+        // Initialize language after the page loads
+        document.addEventListener('DOMContentLoaded', initLanguage);
+    </script>
+
+</main>
+<!-- ░ Saeriel Chat Inject ░ -->
+<script src="injectChat.js"></script>
+</body>
+</html>

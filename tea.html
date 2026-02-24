@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>D &amp; V — Her Quest: Tea Brewing</title>
+    <link rel="icon" type="image/png" href="assets/crest.png" />
+
+    <!-- Tailwind + Fonts (same as index.html) -->
+    <script src="https://cdn.tailwindcss.com/3.4.4"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { ink: "#2e3238", honey: "#d6c09c", parchment: "#faf8f5" },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', "serif"],
+                        body: ['"Merriweather Sans"', "sans-serif"],
+                        script: ['"Dancing Script"', "cursive"],
+                        hebrew: ['"Heebo"', '"Noto Sans Hebrew"', "sans-serif"],
+                        russian: ['"Inter"', '"Noto Sans"', "sans-serif"]
+                    },
+                    screens: {
+                        'xs': '475px',
+                    }
+                },
+            },
+        };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Merriweather+Sans:wght@400;500&family=Dancing+Script:wght@600&family=Heebo:wght@400;500;700&family=Inter:wght@400;500;700&family=Noto+Sans+Hebrew:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <style>
+        html {
+            background: #faf8f5;
+            scroll-padding-top: 4rem;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--tw-body);
+            transition: font-family 0.3s ease;
+        }
+
+        h1,h2,h3,h4 {
+            font-family: var(--tw-serif);
+            margin: 0;
+        }
+
+        /* Language-specific styles */
+        .lang-hebrew {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+            direction: rtl;
+        }
+
+        .lang-hebrew h1,
+        .lang-hebrew h2,
+        .lang-hebrew h3,
+        .lang-hebrew h4 {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+            font-weight: 700;
+        }
+
+        .lang-hebrew .font-script {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+            font-style: normal;
+        }
+
+        .lang-russian {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            direction: ltr;
+        }
+
+        .lang-russian h1,
+        .lang-russian h2,
+        .lang-russian h3,
+        .lang-russian h4 {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            font-weight: 700;
+        }
+
+        .lang-russian .font-script {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            font-style: italic;
+        }
+
+        .link {
+            position: relative;
+            padding-bottom: 2px;
+            transition: .3s;
+        }
+
+        .link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 1px;
+            background: #d6c09c;
+            transform: scaleX(0);
+            transition: .3s;
+        }
+
+        .link:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* RTL adjustments */
+        [dir="rtl"] .link::after {
+            right: 0;
+            left: 0;
+        }
+
+        /* Return button */
+        .return-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #d6c09c;
+            color: white;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-family: 'Playfair Display', serif;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .return-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        /* RTL adjustments for return button */
+        [dir="rtl"] .return-button {
+            right: auto;
+            left: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            html {
+                scroll-padding-top: 3rem;
+            }
+        }
+    </style>
+
+    <!-- Redirect Script -->
+    <script>
+        // Redirect to the tea simulator page
+        window.onload = function() {
+            window.location.href = "loose tea simulator/teaMain.html";
+        }
+    </script>
+</head>
+
+<body class="antialiased bg-parchment text-ink">
+
+<!-- NAVBAR -->
+<div id="navbar"></div>
+<script>
+    fetch('navbar.html')
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('navbar').innerHTML = html;
+
+            // Initialize navbar language after it's loaded
+            setTimeout(() => {
+                const savedLang = sessionStorage.getItem('wedding-language');
+                if (savedLang) {
+                    updateNavbarLanguage(savedLang);
+                }
+                initNavbarMobileMenu();
+            }, 100);
+        })
+        .catch(err => console.log('Navbar not found:', err));
+
+    // Function to update navbar language
+    function updateNavbarLanguage(lang) {
+        const navbarElements = document.querySelectorAll('#navbar [data-en]');
+        navbarElements.forEach(element => {
+            const text = element.getAttribute(`data-${lang}`);
+            if (text) {
+                element.textContent = text;
+            }
+        });
+    }
+
+    // Function to initialize navbar mobile menu
+    function initNavbarMobileMenu() {
+        const burger = document.querySelector('#navbar #burger');
+        const mobileMenu = document.querySelector('#navbar #mobileMenu');
+
+        if (!burger || !mobileMenu) return;
+
+        function toggleMobileMenu() {
+            burger.classList.toggle('active');
+            mobileMenu.classList.toggle('visible');
+        }
+
+        burger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleMobileMenu();
+        });
+
+        document.addEventListener('click', function(e) {
+            if (mobileMenu.classList.contains('visible') &&
+                !mobileMenu.contains(e.target) &&
+                !burger.contains(e.target)) {
+                toggleMobileMenu();
+            }
+        });
+
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                toggleMobileMenu();
+            });
+        });
+
+        mobileMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768 && mobileMenu.classList.contains('visible')) {
+                toggleMobileMenu();
+            }
+        });
+    }
+</script>
+
+<main class="pt-24 relative">
+    <div class="text-center p-8">
+        <h1 class="text-3xl font-serif mb-4"
+            data-en="Redirecting to Tea Brewing Simulator..."
+            data-he="מפנה לסימולטור הכנת תה..."
+            data-ru="Перенаправление в симулятор заваривания чая...">
+            Redirecting to Tea Brewing Simulator...
+        </h1>
+        <p data-en="If you are not redirected automatically,"
+           data-he="אם לא תועבר אוטומטית,"
+           data-ru="Если вы не перенаправлены автоматически,">
+            If you are not redirected automatically,
+        </p>
+        <a href="loose tea simulator/teaMain.html" class="text-honey hover:underline"
+           data-en="click here"
+           data-he="לחץ כאן"
+           data-ru="нажмите здесь">
+            click here
+        </a>
+    </div>
+</main>
+
+<!-- Saeriel Chat -->
+<div id="chat-container"></div>
+<script src="injectChat.js"></script>
+
+<!-- Language Support Script -->
+<script>
+    // Language management
+    class LanguageManager {
+        constructor() {
+            this.currentLang = 'en';
+            this.init();
+        }
+
+        init() {
+            // Check sessionStorage for language choice from index.html
+            const savedLang = sessionStorage.getItem('wedding-language');
+            const urlLang = new URLSearchParams(window.location.search).get('lang');
+
+            if (urlLang && ['en', 'he', 'ru'].includes(urlLang)) {
+                this.currentLang = urlLang;
+            } else if (savedLang && ['en', 'he', 'ru'].includes(savedLang)) {
+                this.currentLang = savedLang;
+            }
+
+            this.applyLanguage();
+            this.setupLanguageObserver();
+        }
+
+        applyLanguage() {
+            const html = document.documentElement;
+            const body = document.body;
+
+            body.classList.remove('lang-hebrew', 'lang-russian');
+            html.classList.remove('lang-hebrew', 'lang-russian');
+
+            if (this.currentLang === 'he') {
+                html.setAttribute('dir', 'rtl');
+                html.setAttribute('lang', 'he');
+                body.classList.add('lang-hebrew');
+                html.classList.add('lang-hebrew');
+            } else if (this.currentLang === 'ru') {
+                html.setAttribute('dir', 'ltr');
+                html.setAttribute('lang', 'ru');
+                body.classList.add('lang-russian');
+                html.classList.add('lang-russian');
+            } else {
+                html.setAttribute('dir', 'ltr');
+                html.setAttribute('lang', 'en');
+            }
+
+            this.updateTextContent();
+            sessionStorage.setItem('wedding-language', this.currentLang);
+
+            // Update navbar language as well
+            if (typeof updateNavbarLanguage === 'function') {
+                updateNavbarLanguage(this.currentLang);
+            }
+        }
+
+        updateTextContent() {
+            const elements = document.querySelectorAll('[data-en]');
+            elements.forEach(element => {
+                const text = element.getAttribute(`data-${this.currentLang}`);
+                if (text) {
+                    element.textContent = text;
+                }
+            });
+
+            const titles = {
+                en: 'D & V — Her Quest: Tea Brewing',
+                he: 'ד & ו — המשימה שלה: הכנת תה',
+                ru: 'Д & В — Её квест: Заваривание чая'
+            };
+            document.title = titles[this.currentLang] || titles.en;
+        }
+
+        setLanguage(lang) {
+            if (['en', 'he', 'ru'].includes(lang)) {
+                this.currentLang = lang;
+                this.applyLanguage();
+            }
+        }
+
+        setupLanguageObserver() {
+            window.addEventListener('languageChanged', (event) => {
+                this.setLanguage(event.detail.language);
+            });
+
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'wedding-language') {
+                    this.currentLang = event.newValue || 'en';
+                    this.applyLanguage();
+                }
+            });
+        }
+
+        getCurrentLanguage() {
+            return this.currentLang;
+        }
+    }
+
+    const languageManager = new LanguageManager();
+    window.languageManager = languageManager;
+</script>
+
+</body>
+</html>

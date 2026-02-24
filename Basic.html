@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" type="image/png" href="assets/crest.png" />
+
+    <!-- Tailwind + Fonts -->
+    <script src="https://cdn.tailwindcss.com/3.4.4"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { ink: "#2e3238", honey: "#d6c09c", parchment: "#faf8f5" },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', "serif"],
+                        body: ['"Merriweather Sans"', "sans-serif"],
+                        script: ['"Dancing Script"', "cursive"],
+                        hebrew: ['"Heebo"', '"Noto Sans Hebrew"', "sans-serif"],
+                        russian: ['"Inter"', '"Noto Sans"', "sans-serif"]
+                    },
+                    screens: {
+                        'xs': '475px',
+                    }
+                },
+            },
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Merriweather+Sans:wght@400;500&family=Dancing+Script:wght@600&family=Heebo:wght@400;500;700&family=Inter:wght@400;500;700&family=Noto+Sans+Hebrew:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap"
+            rel="stylesheet"
+    />
+
+    <style>
+        html {
+            background: #faf8f5;
+            scroll-padding-top: 4rem;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--tw-body);
+            transition: font-family 0.3s ease;
+        }
+
+        h1,h2,h3,h4 {
+            font-family: var(--tw-serif);
+            margin: 0;
+        }
+
+        .link {
+            position: relative;
+            padding-bottom: 2px;
+            transition: .3s;
+        }
+
+        .link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 1px;
+            background: #d6c09c;
+            transform: scaleX(0);
+            transition: .3s;
+        }
+
+        .link:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* Language-specific styles */
+        .lang-hebrew {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+            direction: rtl;
+        }
+
+        .lang-hebrew h1,
+        .lang-hebrew h2,
+        .lang-hebrew h3,
+        .lang-hebrew h4 {
+            font-family: 'Heebo', 'Noto Sans Hebrew', sans-serif;
+            font-weight: 700;
+        }
+
+        .lang-russian {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            direction: ltr;
+        }
+
+        .lang-russian h1,
+        .lang-russian h2,
+        .lang-russian h3,
+        .lang-russian h4 {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            html {
+                scroll-padding-top: 3rem;
+            }
+        }
+
+        /* RTL adjustments for Hebrew */
+        [dir="rtl"] .link::after {
+            right: 0;
+            left: 0;
+        }
+
+        /* Mobile-first responsive utilities */
+        .container-responsive {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .container-responsive {
+                padding: 0 1.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container-responsive {
+                padding: 0 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased bg-parchment text-ink">
+
+<!-- NAVBAR -->
+<div id="navbar"></div>
+<script>
+    fetch('navbar.html')
+        .then(res => res.text())
+        .then(html => document.getElementById('navbar').innerHTML = html)
+        .catch(err => console.log('Navbar not found:', err));
+</script>
+
+<main class="pt-16 sm:pt-20 md:pt-24">
+    <div class="container-responsive">
+        <!-- Content will go here -->
+        <div class="min-h-screen flex items-center justify-center">
+            <div class="text-center space-y-4 sm:space-y-6">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif text-ink" data-en="Welcome to Her Quest" data-he="ברוכים הבאים למסעה" data-ru="Добро пожаловать в её поиски">Welcome to Her Quest</h1>
+                <p class="text-sm sm:text-base md:text-lg text-ink/80 max-w-2xl mx-auto px-4" data-en="Embark on an epic journey of discovery and adventure." data-he="יציאה למסע אפי של גילוי והרפתקאות." data-ru="Отправьтесь в эпическое путешествие открытий и приключений.">Embark on an epic journey of discovery and adventure.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Saeriel Chat -->
+<div id="chat-container" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50"></div>
+<script src="injectChat.js"></script>
+
+<!-- Language Support Script -->
+<script>
+    // Language management
+    class LanguageManager {
+        constructor() {
+            this.currentLang = 'en';
+            this.init();
+        }
+
+        init() {
+            // Try to get language from localStorage or URL parameter
+            const savedLang = localStorage.getItem('selectedLanguage');
+            const urlLang = new URLSearchParams(window.location.search).get('lang');
+
+            if (urlLang && ['en', 'he', 'ru'].includes(urlLang)) {
+                this.currentLang = urlLang;
+            } else if (savedLang && ['en', 'he', 'ru'].includes(savedLang)) {
+                this.currentLang = savedLang;
+            }
+
+            this.applyLanguage();
+            this.setupLanguageObserver();
+        }
+
+        applyLanguage() {
+            const html = document.documentElement;
+            const body = document.body;
+
+            // Remove existing language classes
+            body.classList.remove('lang-hebrew', 'lang-russian');
+            html.classList.remove('lang-hebrew', 'lang-russian');
+
+            // Set direction and language attributes
+            if (this.currentLang === 'he') {
+                html.setAttribute('dir', 'rtl');
+                html.setAttribute('lang', 'he');
+                body.classList.add('lang-hebrew');
+                html.classList.add('lang-hebrew');
+            } else if (this.currentLang === 'ru') {
+                html.setAttribute('dir', 'ltr');
+                html.setAttribute('lang', 'ru');
+                body.classList.add('lang-russian');
+                html.classList.add('lang-russian');
+            } else {
+                html.setAttribute('dir', 'ltr');
+                html.setAttribute('lang', 'en');
+            }
+
+            // Update text content
+            this.updateTextContent();
+
+            // Save language preference
+            localStorage.setItem('selectedLanguage', this.currentLang);
+        }
+
+        updateTextContent() {
+            const elements = document.querySelectorAll('[data-en]');
+            elements.forEach(element => {
+                const text = element.getAttribute(`data-${this.currentLang}`);
+                if (text) {
+                    element.textContent = text;
+                }
+            });
+
+            // Update page title if needed
+            const titles = {
+                en: 'D & V — Her Quest',
+                he: 'ד & ו — המסע שלה',
+                ru: 'Д & В — Её поиски'
+            };
+            document.title = titles[this.currentLang] || titles.en;
+        }
+
+        setLanguage(lang) {
+            if (['en', 'he', 'ru'].includes(lang)) {
+                this.currentLang = lang;
+                this.applyLanguage();
+            }
+        }
+
+        setupLanguageObserver() {
+            // Listen for language changes from other parts of the application
+            window.addEventListener('languageChanged', (event) => {
+                this.setLanguage(event.detail.language);
+            });
+
+            // Listen for storage changes (for cross-tab synchronization)
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'selectedLanguage') {
+                    this.currentLang = event.newValue || 'en';
+                    this.applyLanguage();
+                }
+            });
+        }
+
+        getCurrentLanguage() {
+            return this.currentLang;
+        }
+    }
+
+    // Initialize language manager
+    const languageManager = new LanguageManager();
+
+    // Make it globally available
+    window.languageManager = languageManager;
+
+    // Responsive utilities
+    function handleResize() {
+        // Add any custom resize handling here
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial call
+
+    // Handle orientation change on mobile
+    window.addEventListener('orientationchange', () => {
+        setTimeout(handleResize, 100);
+    });
+</script>
+
+</body>
+</html>
