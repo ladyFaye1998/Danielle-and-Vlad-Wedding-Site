@@ -74,3 +74,15 @@ Yes - I wrote this ceremony.
 ## 🤝 Let's Build a Story Together
 
 Have/want a unique concept? Talk to me. DM for a price offer (just story, just branding, just something, we will talk, or even just a concept site). Let's build a story-driven experience together.
+
+---
+
+### ⚔️ P.S. The Lore Continues...
+The Camelot aesthetic wasn't just a one-day wedding theme. I hold an MA in Celtic Studies from the University of Wales Trinity Saint David, so I take my medieval history quite seriously. 
+
+So seriously, in fact, that after the wedding, the natural next step was taking up **Buhurt** (full-contact historical medieval combat in actual steel armor). 
+
+*(Click the image to see the armor)*
+<br>
+[![Buhurt Armor](./assets/buhurt.jpg)](https://www.instagram.com/p/DPElDvLjN1g/?igsh=bjZkMmMzamNnM3Qy)
+
