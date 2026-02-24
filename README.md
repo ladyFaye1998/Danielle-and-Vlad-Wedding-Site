@@ -16,7 +16,7 @@ Want to see more about the wedding?: [Here are the photos!](https://idanhassonph
 ### 🎥 The Wedding Video
 *(Click to watch!)*
 <br>
-[![Watch the Wedding Video]]([https://www.youtube.com/watch?v=YOUR_YOUTUBE_VIDEO_ID](https://youtu.be/bKf9_9C-JPE))
+[![Watch the Wedding Video](https://img.youtube.com/vi/bKf9_9C-JPE/maxresdefault.jpg)](https://youtu.be/bKf9_9C-JPE)
 
 ## 📖 The Concept
 Why send a boring paper invitation when you can make your guests work for it? 
@@ -64,18 +64,10 @@ The story didn't end there. We had wedding-themed perfume, a journal, and live g
 Yes - I wrote this ceremony.
 
 ### 📖 The Wedding Journal 
-*(Click the crest to read the full lore journal)*
-<br>
-<a href="./assets/Wedding%20Journal%20V&D.pdf">
-  <img src="./assets/crest.png" width="120" alt="Wedding Journal">
-</a>
+[📘 Click here to read the full lore journal](./assets/Wedding%20Journal%20V&D.pdf)
 
 ### 🍽️ The Feast Menu
-*(Click the crest to view the menu)*
-<br>
-<a href="./assets/menu.pdf">
-  <img src="./assets/crest.png" width="120" alt="Feast Menu">
-</a>
+[📜 Click here to view the menu](./assets/menu.pdf)
 
 ---
 
