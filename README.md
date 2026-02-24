@@ -16,7 +16,7 @@ Want to see more about the wedding?: [Here are the photos!](https://idanhassonph
 ### 🎥 The Wedding Video
 *(Click to watch!)*
 <br>
-[![Watch the Wedding Video](https://img.youtube.com/vi/bKf9_9C-JPE/maxresdefault.jpg)](https://youtu.be/bKf9_9C-JPE)
+[![Watch the Wedding Video]([https://img.youtube.com/vi/bKf9_9C-JPE/maxresdefault.jpg](https://img.youtube.com/vi/bKf9_9C-JPE/maxresdefault.jpg))](https://youtu.be/bKf9_9C-JPE)
 
 ## 📖 The Concept
 Why send a boring paper invitation when you can make your guests work for it? 
@@ -74,3 +74,4 @@ Yes - I wrote this ceremony.
 ## 🤝 Let's Build a Story Together
 
 Have/want a unique concept? Talk to me. DM for a price offer (just story, just branding, just something, we will talk, or even just a concept site). Let's build a story-driven experience together.
+
