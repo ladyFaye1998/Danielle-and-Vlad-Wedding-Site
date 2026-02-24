@@ -14,7 +14,9 @@
 Want to see more about the wedding?: [Here are the photos!](https://idanhassonphotographer.pic-time.com/-2207)
 
 ### 🎥 The Wedding Video
-<video src="./assets/video.mp4" width="100%" controls="controls"></video>
+*(Click to watch!)*
+<br>
+[![Watch the Wedding Video]]([https://www.youtube.com/watch?v=YOUR_YOUTUBE_VIDEO_ID](https://youtu.be/bKf9_9C-JPE))
 
 ## 📖 The Concept
 Why send a boring paper invitation when you can make your guests work for it? 
@@ -62,21 +64,21 @@ The story didn't end there. We had wedding-themed perfume, a journal, and live g
 Yes - I wrote this ceremony.
 
 ### 📖 The Wedding Journal 
-*(Click the cover to read the full lore journal)*
+*(Click the crest to read the full lore journal)*
 <br>
 <a href="./assets/Wedding%20Journal%20V&D.pdf">
-  <img src="./assets/journal-cover.jpg" width="300" alt="Wedding Journal Cover">
+  <img src="./assets/crest.png" width="120" alt="Wedding Journal">
 </a>
 
 ### 🍽️ The Feast Menu
-*(Click the cover to view the menu)*
+*(Click the crest to view the menu)*
 <br>
 <a href="./assets/menu.pdf">
-  <img src="./assets/menu-cover.jpg" width="300" alt="Feast Menu Cover">
+  <img src="./assets/crest.png" width="120" alt="Feast Menu">
 </a>
 
 ---
 
 ## 🤝 Let's Build a Story Together
 
-Have/want a unique concept? Talk to me. DM for a price offer (just story, just מיתוג, just something, we will talk, or even just a concept site). Let's build a story-driven experience together.
+Have/want a unique concept? Talk to me. DM for a price offer (just story, just branding, just something, we will talk, or even just a concept site). Let's build a story-driven experience together.
